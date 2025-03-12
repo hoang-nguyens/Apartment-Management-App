@@ -27,9 +27,9 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Arrays.stream(springContext.getBeanDefinitionNames()).sorted().forEach(System.out::println);
+//        Arrays.stream(springContext.getBeanDefinitionNames()).sorted().forEach(System.out::println);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/fee-management.fxml"));
-//        fxmlLoader.setControllerFactory(springContext::getBean);
+        fxmlLoader.setControllerFactory(springContext::getBean);
         Scene scene = new Scene(fxmlLoader.load(), 400, 300);
         primaryStage.setTitle("Quản lý khoản thu");
         primaryStage.setScene(scene);
@@ -45,4 +45,5 @@ public class MainApplication extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 }

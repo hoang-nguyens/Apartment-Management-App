@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.FeeViewController">
+    <!-- TableView hiển thị danh sách Fee -->
     <TableView fx:id="feeTable">
         <columns>
             <TableColumn text="ID" fx:id="idColumn"/>
@@ -11,13 +11,40 @@
             <TableColumn text="Loại" fx:id="categoryColumn"/>
             <TableColumn text="Số tiền" fx:id="amountColumn"/>
             <TableColumn text="Trạng thái" fx:id="statusColumn"/>
-            <TableColumn text="Trạng thái" fx:id="feeTypeColumn"/>
+            <TableColumn text="Loại phí" fx:id="feeTypeColumn"/> <!-- Sửa tiêu đề để phù hợp -->
         </columns>
     </TableView>
 
-    <HBox spacing="10">
-        <Button text="Thêm" onAction="#handleAdd"/>
-        <Button text="Sửa" onAction="#handleEdit"/>
-        <Button text="Xóa" onAction="#handleDelete"/>
+    <!-- Form nhập liệu -->
+    <GridPane hgap="10" vgap="10">
+        <children>
+            <Label text="Tên khoản thu:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <Label text="Loại:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <TextField fx:id="categoryField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+            <Label text="Số tiền:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <TextField fx:id="amountField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+            <Label text="Đơn vị:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <ComboBox fx:id="unitComboBox" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+            <Label text="Loại phí:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+            <ComboBox fx:id="feeTypeComboBox" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+            <Label text="Mô tả:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+            <TextArea fx:id="descriptionArea" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+        </children>
+    </GridPane>
+
+    <!-- Các nút điều khiển -->
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="addButton" text="Thêm" onAction="#handleAdd"/>
+        <Button fx:id="updateButton" text="Sửa" onAction="#handleEdit"/>
+        <Button fx:id="deleteButton" text="Xóa" onAction="#handleDelete"/>
     </HBox>
+
+    <!-- Label hiển thị trạng thái -->
+    <Label fx:id="statusLabel" text="Trạng thái"/>
 </VBox>

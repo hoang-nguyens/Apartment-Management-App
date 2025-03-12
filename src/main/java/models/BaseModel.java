@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public abstract class BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", columnDefinition = "BIGINT")
     private Long id;
 
     @Column(nullable = false, updatable = false)

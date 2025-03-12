@@ -1,5 +1,6 @@
 package controllers;
 
+import app.MainApplication;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -22,6 +23,10 @@ import java.util.List;
 public class FeeViewController {
     @Autowired
     private FeeService feeService;
+
+//    public FeeViewController() {
+//        this.feeService = MainApplication.getBean(FeeService.class);
+//    }
 
 //    public FeeViewController(FeeService feeService) {
 //        this.feeService = feeService;
