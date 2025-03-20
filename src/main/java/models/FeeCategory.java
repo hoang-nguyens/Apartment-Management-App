@@ -13,10 +13,15 @@ public class FeeCategory extends BaseModel{
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "parent", nullable = false)
+    @JoinColumn(name = "parent")
     private FeeCategory parent;
 
     public FeeCategory() {}
+
+    public FeeCategory(String name) {
+        this.name = name;
+        this.parent = null;
+    }
 
     public FeeCategory(String name, FeeCategory parent) {
         this.name = name;
