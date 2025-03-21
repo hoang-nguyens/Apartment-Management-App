@@ -1,5 +1,7 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -18,6 +20,10 @@ import services.FeeCategoryService;
 import services.FeeService;
 
 import java.math.BigDecimal;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +34,9 @@ public class FeeViewController {
     private FeeService feeService;
     @Autowired
     private FeeCategoryService feeCategoryService;
+
+    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
 //    public FeeViewController() {
 //        this.feeService = MainApplication.getBean(FeeService.class);
@@ -211,14 +220,54 @@ public class FeeViewController {
             String selectedCategory = categoryComboBox.getValue();
             String selectedSubCategory = subCategoryComboBox.getValue();
 
-            Fee savedFee = feeService.createFee(
-                    selectedCategory, selectedSubCategory, new BigDecimal(amountField.getText()),
-                    unitComboBox.getValue(), billPeriodComboBox.getValue(), descriptionArea.getText(),
-                    startDatePicker.getValue(), endDatePicker.getValue());
+//            Fee savedFee = feeService.createFee(
+//                    selectedCategory, selectedSubCategory, new BigDecimal(amountField.getText()),
+//                    unitComboBox.getValue(), billPeriodComboBox.getValue(), descriptionArea.getText(),
+//                    startDatePicker.getValue(), endDatePicker.getValue());
+            Fee newFee = new Fee();
+            newFee.setCategory(selectedCategory);
+            newFee.setSubCategory(selectedSubCategory);
 
-            feeList.add(savedFee);
-            feeTable.refresh();
-            statusLabel.setText("Thêm khoản thu thành công!");
+            String amountText = amountField.getText();
+            if (amountText == null || amountText.trim().isEmpty()) {
+                statusLabel.setText("Vui lòng nhập số tiền!");
+                return;
+            }
+            BigDecimal amount = new BigDecimal(amountText);
+            newFee.setAmount(amount);
+
+            newFee.setUnit(unitComboBox.getValue());
+            newFee.setBillPeriod(billPeriodComboBox.getValue());
+            newFee.setDescription(descriptionArea.getText());
+            newFee.setStartDate(startDatePicker.getValue());
+            newFee.setEndDate(endDatePicker.getValue());
+
+            String requestBody = objectMapper.writeValueAsString(newFee);
+            System.out.println(requestBody);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/api/fee"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+            if (response.statusCode() == 200) {
+                feeList.add(newFee);
+                feeTable.refresh();
+                statusLabel.setText("Thêm khoản thu thành công!");
+            } else {
+                System.out.println(response.body());
+                statusLabel.setText("Lỗi: " + response.body());
+            }
+
+//            feeList.add(newFee);
+//            feeTable.refresh();
+//            statusLabel.setText("Thêm khoản thu thành công!");
+        } catch (NumberFormatException e) {
+            statusLabel.setText("Lỗi nhập liệu: Số tiền không hợp lệ!");
+        } catch (IllegalArgumentException e) {
+            statusLabel.setText("Lỗi nhập liệu: " + e.getMessage());
         } catch (Exception e) {
             statusLabel.setText("Lỗi: " + e.getMessage());
         }

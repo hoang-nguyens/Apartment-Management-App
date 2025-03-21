@@ -1129,7 +1129,7 @@ parent</ColNames>
     <column id="316" parent="298" name="unit">
       <NotNull>1</NotNull>
       <Position>5</Position>
-      <StoredType>enum(&apos;MONTHLY&apos;, &apos;PER_SQUARE_METER_MONTHLY&apos;, &apos;PER_VEHICLE_MONTHLY&apos;)|0e</StoredType>
+      <StoredType>enum(&apos;M2&apos;, &apos;PERSON&apos;, &apos;VEHICLE&apos;, &apos;APARTMENT&apos;, &apos;KWH&apos;, &apos;M3&apos;, &apos;FIXED&apos;)|0e</StoredType>
     </column>
     <column id="317" parent="298" name="bill_period">
       <NotNull>1</NotNull>
@@ -1138,7 +1138,7 @@ parent</ColNames>
     </column>
     <column id="318" parent="298" name="description">
       <Position>7</Position>
-      <StoredType>text|0s</StoredType>
+      <StoredType>tinytext|0s</StoredType>
     </column>
     <column id="319" parent="298" name="start_date">
       <NotNull>1</NotNull>
