@@ -16,6 +16,7 @@ import models.enums.FeeType;
 import models.enums.FeeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import services.FeeCategoryService;
 import services.FeeService;
 
@@ -28,23 +29,20 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Controller
 public class FeeViewController {
+    private final FeeService feeService;
+    private final FeeCategoryService feeCategoryService;
     @Autowired
-    private FeeService feeService;
-    @Autowired
-    private FeeCategoryService feeCategoryService;
+    public FeeViewController(FeeService feeService, FeeCategoryService feeCategoryService) {
+        this.feeService = feeService;
+        this.feeCategoryService = feeCategoryService;
+    }
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
-//    public FeeViewController() {
-//        this.feeService = MainApplication.getBean(FeeService.class);
-//    }
 
-//    public FeeViewController(FeeService feeService) {
-//        this.feeService = feeService;
-//    }
 
     // sửa lại các cột phải map từ fxml qua controller (đủ cột, not null)
     @FXML
@@ -229,11 +227,16 @@ public class FeeViewController {
             newFee.setSubCategory(selectedSubCategory);
 
             String amountText = amountField.getText();
-            if (amountText == null || amountText.trim().isEmpty()) {
-                statusLabel.setText("Vui lòng nhập số tiền!");
-                return;
+            BigDecimal amount = null;
+            if (!selectedCategory.equals("Đóng Góp")) {
+                if (amountText == null || amountText.trim().isEmpty()) {
+                    statusLabel.setText("Vui lòng nhập số tiền!");
+                    return;
+                }
+                amount = new BigDecimal(amountText);
+            } else if (amountText != null && !amountText.trim().isEmpty()) {
+                amount = new BigDecimal(amountText);
             }
-            BigDecimal amount = new BigDecimal(amountText);
             newFee.setAmount(amount);
 
             newFee.setUnit(unitComboBox.getValue());
@@ -249,6 +252,7 @@ public class FeeViewController {
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
+            System.out.println(request.toString());
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(response.body());
@@ -258,7 +262,7 @@ public class FeeViewController {
                 statusLabel.setText("Thêm khoản thu thành công!");
             } else {
                 System.out.println(response.body());
-                statusLabel.setText("Lỗi: " + response.body());
+                statusLabel.setText("Lỗi request: " + response.body());
             }
 
 //            feeList.add(newFee);

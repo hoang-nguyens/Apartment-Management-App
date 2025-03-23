@@ -34,4 +34,28 @@ public interface FeeRepository extends JpaRepository<Fee, Long> {
             @Param("newStart") LocalDate newStart,
             @Param("newEnd") LocalDate newEnd
     );
+
+    @Query("""
+        SELECT f FROM Fee f 
+        WHERE (:category IS NULL OR f.category = :category)
+          AND (:subCategory IS NULL OR f.subCategory = :subCategory)
+    """)
+    List<Fee> findByCategoryAndSubCategory(
+            @Param("category") String category,
+            @Param("subCategory") String subCategory
+    );
+
+    @Query("""
+        SELECT f FROM Fee f 
+        WHERE (:category IS NULL OR f.category = :category)
+          AND (:subCategory IS NULL OR f.subCategory = :subCategory)
+          AND f.startDate <= CURRENT_DATE 
+          AND (f.endDate > CURRENT_DATE OR f.endDate IS NULL)
+    """)
+    List<Fee> findByCategoryAndSubCategoryAndIsActive(
+            @Param("category") String category,
+            @Param("subCategory") String subCategory
+    );
+
+    List<Fee> findByCategoryNot(String category);
 }

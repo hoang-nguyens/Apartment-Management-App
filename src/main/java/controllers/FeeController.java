@@ -17,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/fee")
-@Validated
 public class FeeController {
     @Autowired
     private final FeeService feeService;
@@ -40,6 +39,7 @@ public class FeeController {
     @PostMapping
     public ResponseEntity<?> createFee(@RequestBody Fee fee) {
         try {
+            System.out.println(fee.toString());
             feeService.createFee(fee);
             return ResponseEntity.ok(feeService.getFeeById(fee.getId()));
         } catch (Exception e) {

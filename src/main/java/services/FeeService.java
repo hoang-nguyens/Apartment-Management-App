@@ -20,7 +20,9 @@ public class FeeService {
     private FeeRepository feeRepository;
 
 //    @Autowired
-//    private FeeCategoryRepository feeCategoryRepository;
+//    public FeeService(FeeRepository feeRepository) {
+//        this.feeRepository = feeRepository;
+//    }
 
     public Fee createFee(String feeCategory,
                          String feeSubCategory,
@@ -37,6 +39,7 @@ public class FeeService {
 
     public Fee createFee(Fee fee){
         validateFee(fee);
+        System.out.println("Fee created");
         return feeRepository.save(fee);
     }
 
@@ -87,4 +90,15 @@ public class FeeService {
         return feeRepository.findAllActiveFees();
     }
 
+    public List<Fee> getAllFeesByCategoryAndSubCategory(String category, String subCategory) {
+        return feeRepository.findByCategoryAndSubCategory(category, subCategory);
+    }
+
+    public List<Fee> getAllActiveFeesByCategoryAndSubCategory(String category, String subCategory) {
+        return feeRepository.findByCategoryAndSubCategoryAndIsActive(category, subCategory);
+    }
+
+    public List<Fee> getAllActiveForcedFees(){
+        return feeRepository.findByCategoryNot("Đóng góp");
+    }
 }

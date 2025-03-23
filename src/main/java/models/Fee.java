@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Entity
 @Table(name = "fees")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Fee extends BaseModel{
 
     @NotBlank(message = "Danh mục không được để trống")
@@ -24,10 +26,10 @@ public class Fee extends BaseModel{
     @Column(nullable = false, length = 50)
     private String subCategory;
 
-    @NotNull(message = "Số tiền không được để trống")
+//    @NotNull(message = "Số tiền không được để trống")
     @DecimalMin(value = "0.01", message = "Số tiền phải lớn hơn 0")
     @DecimalMax(value = "1000000", message = "Số tiền không được vượt quá 1 triệu")
-    @Column(nullable = false)
+    @Column(nullable = true)
     private BigDecimal amount;
 
     @NotNull(message = "Đơn vị không được để trống")
@@ -70,8 +72,14 @@ public class Fee extends BaseModel{
     }
 
     public void setAmount(BigDecimal amount) {
-        if (amount == null || amount.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Số tiền phải > 0.");
+        if (!category.equals("Đóng Góp")) {
+            if (amount == null || amount.compareTo(BigDecimal.ZERO) < 0) {
+                throw new IllegalArgumentException("Số tiền phải > 0.");
+            }
+        } else {
+            if (amount != null && amount.compareTo(BigDecimal.ZERO) < 0) {
+                throw new IllegalArgumentException("Số tiền phải > 0.");
+            }
         }
         this.amount = amount;
     }
