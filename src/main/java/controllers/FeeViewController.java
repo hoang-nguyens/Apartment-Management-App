@@ -10,15 +10,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.Fee;
 import models.FeeCategory;
+import models.User;
 import models.enums.BillPeriod;
-import models.enums.FeeStatus;
-import models.enums.FeeType;
 import models.enums.FeeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import services.FeeCategoryService;
 import services.FeeService;
+import services.UserService;
 
 import java.math.BigDecimal;
 import java.net.URI;
@@ -27,16 +26,18 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class FeeViewController {
     private final FeeService feeService;
     private final FeeCategoryService feeCategoryService;
+
+    private final UserService userService;
     @Autowired
-    public FeeViewController(FeeService feeService, FeeCategoryService feeCategoryService) {
+    public FeeViewController(FeeService feeService, FeeCategoryService feeCategoryService, UserService userService) {
         this.feeService = feeService;
         this.feeCategoryService = feeCategoryService;
+        this.userService = userService;
     }
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
@@ -217,7 +218,8 @@ public class FeeViewController {
         try {
             String selectedCategory = categoryComboBox.getValue();
             String selectedSubCategory = subCategoryComboBox.getValue();
-
+//            User currentUser = userService.getCurrentUser();
+//            System.out.println(currentUser.toString());
 //            Fee savedFee = feeService.createFee(
 //                    selectedCategory, selectedSubCategory, new BigDecimal(amountField.getText()),
 //                    unitComboBox.getValue(), billPeriodComboBox.getValue(), descriptionArea.getText(),

@@ -2,14 +2,21 @@ package controllers;
 
 import app.MainApplication;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+//import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import models.User;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 import java.net.URL;
@@ -57,16 +64,23 @@ public class LoginController {
             loginStatusLabel.setText("Mật khẩu sai!");
         } else {
             loginStatusLabel.setText("Đăng nhập thành công!");
-//            try {
-//                Stage stage = (Stage) usernameField.getScene().getWindow();
-//                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/fee-management.fxml"));
-//                fxmlLoader.setControllerFactory(MainApplication.springContext::getBean);
-//                Scene feeScene = new Scene(fxmlLoader.load(), 400, 300);
-//                stage.setScene(feeScene);
-//                stage.setTitle("Quản lý khoản thu");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
+            Optional<User> user = userService.loginUser(username, password);
+            if (user.isPresent()) {
+                Authentication auth = new UsernamePasswordAuthenticationToken(user.get(), null, null);
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+
+
+            try {
+                Stage stage = (Stage) usernameField.getScene().getWindow();
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/fee-management.fxml"));
+                fxmlLoader.setControllerFactory(MainApplication.springContext::getBean);
+                Scene feeScene = new Scene(fxmlLoader.load(), 400, 300);
+                stage.setScene(feeScene);
+                stage.setTitle("Quản lý khoản thu");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

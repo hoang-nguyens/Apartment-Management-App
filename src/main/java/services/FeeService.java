@@ -99,6 +99,6 @@ public class FeeService {
     }
 
     public List<Fee> getAllActiveForcedFees(){
-        return feeRepository.findByCategoryNot("Đóng góp");
+        return feeRepository.findByCategoryNot("Đóng Góp");
     }
 }

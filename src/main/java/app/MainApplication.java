@@ -31,6 +31,8 @@ public class MainApplication extends Application {
 //        Arrays.stream(springContext.getBeanDefinitionNames()).sorted().forEach(System.out::println);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/fee-management.fxml"));
 //        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/LoginView.fxml"));
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/HomePage.fxml"));
+
 
         fxmlLoader.setControllerFactory(springContext::getBean);
         Scene scene = new Scene(fxmlLoader.load(), 400, 300);
