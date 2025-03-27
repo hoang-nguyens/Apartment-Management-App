@@ -77,11 +77,11 @@ public class UserService {
         return userRepository.findByRole(Role.USER);
     }
 
-    public User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof User) {
-            return (User) authentication.getPrincipal();
-        }
-        return null;
-    }
+//    public User getCurrentUser() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication != null && authentication.getPrincipal() instanceof User) {
+//            return (User) authentication.getPrincipal();
+//        }
+//        return null;
+//    }
 }

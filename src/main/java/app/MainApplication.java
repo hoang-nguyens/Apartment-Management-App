@@ -29,7 +29,7 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 //        Arrays.stream(springContext.getBeanDefinitionNames()).sorted().forEach(System.out::println);
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/fee-management.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/fee-management.fxml"));
 //        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/LoginView.fxml"));
 //        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/HomePage.fxml"));
 
