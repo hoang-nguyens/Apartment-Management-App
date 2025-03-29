@@ -32,6 +32,7 @@
 <!--        <ComboBox fx:id="filterStatusComboBox" />-->
 
         <Button fx:id="searchButton" text="Tìm kiếm" onAction="#handleSearch" />
+        <Button fx:id="resetButton" onAction="#handleReset" text="Xem tất cả" />
     </HBox>
     <!-- TableView hiển thị danh sách Fee -->
     <TableView fx:id="feeTable">

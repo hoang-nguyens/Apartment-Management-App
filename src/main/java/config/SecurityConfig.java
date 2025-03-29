@@ -19,4 +19,5 @@ public class SecurityConfig {
                 .httpBasic().disable(); // Không sử dụng Basic Auth
         return http.build();
     }
+
 }

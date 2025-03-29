@@ -68,6 +68,7 @@ public class LoginController {
             if (user.isPresent()) {
                 Authentication auth = new UsernamePasswordAuthenticationToken(user.get(), null, null);
                 SecurityContextHolder.getContext().setAuthentication(auth);
+                System.out.println("Đã lưu user: " + user.get().getUsername());
             }
 
 
