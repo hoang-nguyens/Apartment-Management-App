@@ -54,7 +54,7 @@ public class FeeViewController {
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
-    Set<Role> adminRoles = Set.of(Role.ADMIN, Role.ADMIN_ROOT);
+    private final Set<Role> adminRoles = Set.of(Role.ADMIN, Role.ADMIN_ROOT);
     // sửa lại các cột phải map từ fxml qua controller (đủ cột, not null)
     @FXML
     private TableView<Fee> feeTable;

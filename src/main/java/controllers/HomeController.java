@@ -23,6 +23,11 @@ public class HomeController {
         loadPage("/view/fee-management.fxml");
     }
 
+    @FXML
+    private void onManageBills(){
+        loadPage("/view/bill-management.fxml");
+    }
+
     // Sự kiện khi click vào "Danh sách Người Dùng"
     @FXML
     private void onUserList() {
