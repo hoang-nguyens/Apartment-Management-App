@@ -10,6 +10,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import services.EmailService;
@@ -63,7 +66,9 @@ public class LoginController {
             if (userOpt.isPresent()) {
                 setLoginSuccess("Đăng nhập thành công!");
                 // Thực hiện chuyển hướng hoặc các hành động tiếp theo
-
+                Authentication auth = new UsernamePasswordAuthenticationToken(userOpt.get(), null, null);
+                SecurityContextHolder.getContext().setAuthentication(auth);
+                System.out.println("Đã lưu user: " + userOpt.get().getUsername());
                 openHomePage();
 
             } else {
