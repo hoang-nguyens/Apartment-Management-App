@@ -55,7 +55,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button layoutX="17.0" layoutY="280.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@css/homepage.css" text="Bill" textAlignment="CENTER" textFill="WHITE">
+                  <Button layoutX="17.0" layoutY="280.0" mnemonicParsing="false" onAction="#onManageBills" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@css/homepage.css" text="Bill" textAlignment="CENTER" textFill="WHITE">
                      <graphic>
                         <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                            <image>

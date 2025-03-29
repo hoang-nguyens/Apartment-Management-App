@@ -18,6 +18,7 @@
                 <TableColumn text="Mã Hóa Đơn" fx:id="invoiceIdColumn" prefWidth="100"/>
                 <TableColumn text="Ngày lập" fx:id="issueDateColumn" prefWidth="120"/>
                 <TableColumn text="Hạn thanh toán" fx:id="dueDateColumn" prefWidth="120"/>
+                <TableColumn text="Loại khoản thu" fx:id="categoryColumn" prefWidth="120"/>
                 <TableColumn text="Số tiền" fx:id="amountColumn" prefWidth="100"/>
                 <TableColumn text="Trạng thái" fx:id="statusColumn" prefWidth="100"/>
             </columns>

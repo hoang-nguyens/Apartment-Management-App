@@ -101,7 +101,7 @@ public class FeeViewController {
 
     @FXML
     public void initialize() {
-        invoiceService.createMonthlyInvoices();
+//        invoiceService.createMonthlyInvoices();
         // Setup table columns
 //        System.out.println("OK !!!!");
         idColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getId()));

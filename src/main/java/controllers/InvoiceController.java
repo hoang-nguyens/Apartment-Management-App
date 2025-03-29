@@ -9,7 +9,7 @@ import services.InvoiceService;
 import java.util.List;
 
 @RestController
-//@RequestMapping("api/invoice")
+@RequestMapping("api/invoices")
 public class InvoiceController {
     private final InvoiceService invoiceService;
     @Autowired

@@ -110,7 +110,7 @@ public class InvoiceViewController {
                 invoiceTable.setItems(invoiceList);
                 statusLabel.setText("Tải lên dữ liệu thành công.");
             } else {
-                statusLabel.setText("Tải lên dữ liệu thất bại.");
+                statusLabel.setText("Tải lên dữ liệu thất bại." + response.statusCode());
             }
         } catch (Exception e) {
             e.printStackTrace();
