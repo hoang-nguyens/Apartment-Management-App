@@ -305,9 +305,11 @@ public class FeeInsertController {
 
             // Kiểm tra Ngày bắt đầu
             LocalDate startDate = startDatePicker.getValue();
-            if (startDate == null || startDate.isBefore(LocalDate.now())) {
-                statusLabel.setText("Ngày bắt đầu phải từ hôm nay trở đi!");
-                return false;
+            if (! startDatePicker.isDisabled()){
+                if (startDate == null || startDate.isBefore(LocalDate.now())) {
+                    statusLabel.setText("Ngày bắt đầu phải từ hôm nay trở đi!");
+                    return false;
+                }
             }
 
             // Kiểm tra Ngày kết thúc
