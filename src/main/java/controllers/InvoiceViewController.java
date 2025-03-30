@@ -29,7 +29,6 @@ import java.util.Set;
 
 @Controller
 public class InvoiceViewController {
-    private final InvoiceService invoiceService;
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
     private final Set<Role> adminRoles = Set.of(Role.ADMIN, Role.ADMIN_ROOT);
@@ -63,14 +62,8 @@ public class InvoiceViewController {
 
     private ObservableList<Invoice> invoiceList = FXCollections.observableArrayList();
 
-    @Autowired
-    public InvoiceViewController(InvoiceService invoiceService) {
-        this.invoiceService = invoiceService;
-    }
-
     @FXML
     public void initialize() {
-        invoiceService.createMonthlyInvoices();
         setupTableColumns();
         loadInvoices();
         updateTotalAmount();

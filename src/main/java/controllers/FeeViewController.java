@@ -23,7 +23,6 @@ import models.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import services.FeeCategoryService;
-import services.InvoiceService;
 import utils.UserUtils;
 
 import java.math.BigDecimal;
@@ -34,23 +33,15 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 public class FeeViewController {
-    private final FeeCategoryService feeCategoryService;
     private final FeeInsertController feeInsertController;
-    private final InvoiceService invoiceService;
 
     @Autowired
-    public FeeViewController(FeeCategoryService feeCategoryService, FeeInsertController feeInsertController, InvoiceService invoiceService) {
-        this.feeCategoryService = feeCategoryService;
+    public FeeViewController(FeeInsertController feeInsertController) {
         this.feeInsertController = feeInsertController;
-
-        this.invoiceService = invoiceService;
     }
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
@@ -105,7 +96,6 @@ public class FeeViewController {
 
     @FXML
     public void initialize() {
-//        invoiceService.createMonthlyInvoices();
         // Setup table columns
 //        System.out.println("OK !!!!");
         idColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getId()));
@@ -206,18 +196,51 @@ public class FeeViewController {
     }
 
     private void loadCategories() {
-        List<String> categories = feeCategoryService.getParentCategoryNames();
-        categoryList.setAll(categories);
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/api/categories/parent"))
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                String[] categories = objectMapper.readValue(response.body(), String[].class);
+                categoryList.setAll(categories);
+                System.out.println(Arrays.toString(categories));
+//                statusLabel.setText("Tải lên dữ liệu thành công.");
+            } else {
+                statusLabel.setText("Tải lên dữ liệu các loại khoản thu thất bại.");
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            statusLabel.setText("Lỗi tải lên dữ liệu !");
+        }
     }
 
     private void loadSubCategories() {
+
         String selectedCategory = categoryComboBox.getValue();
         System.out.println(selectedCategory);
         if (!selectedCategory.isEmpty()) {
-            List<String> subCategories = feeCategoryService.getSubCategoriesNames(selectedCategory);
-            System.out.println(subCategories);
-            subCategoryList.setAll(subCategories);
-            subCategoryComboBox.setItems(subCategoryList);
+            try {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create("http://localhost:8080/api/categories/sub" + "?parentCategory="+URLEncoder.encode(selectedCategory, StandardCharsets.UTF_8)))
+                        .header("Content-Type", "application/json")
+                        .GET()
+                        .build();
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                if (response.statusCode() == 200) {
+                    String[] subCategories = objectMapper.readValue(response.body(), String[].class);
+                    System.out.println(Arrays.toString(subCategories));
+                    subCategoryList.setAll(subCategories);
+                    subCategoryComboBox.setItems(subCategoryList);
+                } else {
+                    statusLabel.setText("Tải lên dữ liệu các loại khoản thu thất bại.");
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                statusLabel.setText("Lỗi tải lên dữ liệu !");
+            }
         }
     }
 
