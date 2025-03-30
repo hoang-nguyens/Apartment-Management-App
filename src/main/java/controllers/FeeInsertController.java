@@ -96,10 +96,19 @@ public class FeeInsertController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    public void setFee(Fee fee){
+
+    public void setFee(Fee fee, int mode){
         this.fee = fee;
         if (fee != null) {
             populateForm(fee);
+        }
+        if (mode == 1) {
+            amountField.setDisable(true);
+            unitComboBox.setDisable(true);
+            billPeriodComboBox.setDisable(true);
+            endDatePicker.setDisable(true);
+            descriptionArea.setDisable(true);
+            saveButton.setVisible(false);
         }
     }
     public Fee getFee() {
