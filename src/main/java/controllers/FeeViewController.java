@@ -28,9 +28,11 @@ import utils.UserUtils;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -337,8 +339,8 @@ public class FeeViewController {
 
         String url = "http://localhost:8080/api/fees";
         List<String> queryParams = new ArrayList<>();
-        if (filterCategory != null && !filterCategory.isEmpty()) queryParams.add("category=" + filterCategory);
-        if (filterSubCategory != null && !filterSubCategory.isEmpty()) queryParams.add("subCategory=" + filterSubCategory);
+        if (filterCategory != null && !filterCategory.isEmpty()) queryParams.add("category=" + URLEncoder.encode(filterCategory, StandardCharsets.UTF_8));
+        if (filterSubCategory != null && !filterSubCategory.isEmpty()) queryParams.add("subCategory=" + URLEncoder.encode(filterSubCategory, StandardCharsets.UTF_8));
         if (!queryParams.isEmpty()) {
             url += "?" + String.join("&", queryParams);
         }
