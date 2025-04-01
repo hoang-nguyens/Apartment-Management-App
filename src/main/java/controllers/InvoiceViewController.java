@@ -75,7 +75,7 @@ public class InvoiceViewController {
     public void initialize() {
         currentUser = UserUtils.getCurrentUser();
 
-        invoiceService.createMonthlyInvoices();
+        invoiceService.createMonthlyInvoices(currentUser);
         setupTableColumns();
         loadInvoices();
         updateTotalAmount();

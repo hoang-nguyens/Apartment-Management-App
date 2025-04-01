@@ -80,6 +80,31 @@ public class InvoiceService {
         }
     }
 
+    public void createMonthlyInvoices(User user) {
+        List<String> categories = List.of("Quản Lý", "Dịch Vụ");
+        for (String category : categories) {
+            if (checkExistedInvoice(user, category)) {
+                continue;
+            }
+            BigDecimal totalFee = BigDecimal.ZERO;
+            List<Fee> feeList = feeService.getAllActiveFeesByCategoryAndSubCategory(category, null);
+            for (Fee fee : feeList) {
+                BigDecimal amount = calculateAmount(user, fee);
+
+                if (amount.compareTo(BigDecimal.ZERO) > 0) {
+                    System.out.println(amount.toPlainString());
+                    totalFee = totalFee.add(amount);
+                    // goi invoice service them vao db
+
+                }
+            }
+            if (totalFee.compareTo(BigDecimal.ZERO) > 0) {
+                Invoice invoice = new Invoice(user, monthlyIssueDate, monthyDueDate, category, totalFee);
+                createInvoice(invoice);
+            }
+        }
+    }
+
     private boolean checkExistedInvoice(User user, String category){
         return invoiceRepository.existsByUserAndCategoryAndIssueDate(user, category, monthlyIssueDate);
     }
