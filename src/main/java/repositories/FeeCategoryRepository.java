@@ -16,6 +16,7 @@ public interface FeeCategoryRepository extends JpaRepository<FeeCategory, Long> 
     FeeCategory findByNameAndParentIsNull(String name);
 
     List<FeeCategory> findByFeeTypeAndParentIsNull(FeeType feeType);
+    List<FeeCategory> findByFeeTypeNotAndParentIsNull(FeeType feeType);
 
     @Query("SELECT f FROM FeeCategory f WHERE f.parent.name = :parentName AND f.parent.parent IS NULL")
     List<FeeCategory> findSubCategoriesOfTopLevel(@Param("parentName") String parentName);

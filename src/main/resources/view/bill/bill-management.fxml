@@ -8,6 +8,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
 <AnchorPane prefHeight="475.0" prefWidth="867.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.InvoiceViewController">
 
     <VBox alignment="TOP_CENTER" layoutX="130.0" layoutY="19.0" prefHeight="378.0" prefWidth="657.0" spacing="10" >
@@ -17,7 +19,10 @@
         <Button fx:id="markAsPaidButton" onAction="#markAsPaid" text="Đã thanh toán" />
 
         <HBox alignment="CENTER" spacing="10">
-
+            <TextField fx:id="apartmentField" promptText="Số phòng"/>
+            <ComboBox fx:id="categoryComboBox" promptText="Loại khoản thu"/>
+            <ComboBox fx:id="invoiceStatusComboBox" promptText="Trạng thái"/>
+            <Button fx:id="searchButton" onAction="#handleSearch" text="Tìm kiếm" />
         </HBox>
 
         <!-- Bảng hiển thị hóa đơn -->

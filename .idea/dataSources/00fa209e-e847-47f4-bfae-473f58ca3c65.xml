@@ -1361,7 +1361,7 @@ parent</ColNames>
     </column>
     <column id="363" parent="301" name="payment_method">
       <Position>6</Position>
-      <StoredType>enum(&apos;cash&apos;, &apos;bank_transfer&apos;, &apos;credit_card&apos;)|0e</StoredType>
+      <StoredType>enum(&apos;CASH&apos;, &apos;BANK_TRANSFER&apos;, &apos;CREDIT_CARD&apos;)|0e</StoredType>
     </column>
     <column id="364" parent="301" name="transaction_id">
       <Position>7</Position>

@@ -157,7 +157,15 @@ public class InvoiceService {
         return invoiceRepository.findByUser(user);
     }
 
-    public List<Invoice> getInvoiceByUserId(long userId) {
+    public List<Invoice> getInvoiceByUserId(Long userId) {
         return invoiceRepository.findByUserId(userId);
+    }
+
+    public List<Invoice> getFilterInvoice(Long apartmentId, String category, InvoiceStatus status) {
+        return invoiceRepository.findFilteredInvoices(apartmentId, category, status);
+    }
+
+    public Invoice getInvoiceById(Long id) {
+        return invoiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Invoice not found"));
     }
 }
