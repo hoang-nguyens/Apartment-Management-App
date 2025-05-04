@@ -43,18 +43,16 @@ import java.util.Set;
 public class FeeViewController {
     private final FeeCategoryService feeCategoryService;
     private final FeeInsertController feeInsertController;
-    private final InvoiceService invoiceService;
 
     @Autowired
-    public FeeViewController(FeeCategoryService feeCategoryService, FeeInsertController feeInsertController, InvoiceService invoiceService) {
+    public FeeViewController(FeeCategoryService feeCategoryService, FeeInsertController feeInsertController) {
         this.feeCategoryService = feeCategoryService;
         this.feeInsertController = feeInsertController;
-
-        this.invoiceService = invoiceService;
     }
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+    private User currentUser;
 
     private final Set<Role> adminRoles = Set.of(Role.ADMIN, Role.ADMIN_ROOT);
     // sửa lại các cột phải map từ fxml qua controller (đủ cột, not null)
@@ -108,6 +106,7 @@ public class FeeViewController {
 //        invoiceService.createMonthlyInvoices();
         // Setup table columns
 //        System.out.println("OK !!!!");
+
         idColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getId()));
         categoryColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategory()));
         subCategoryColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSubCategory()));
@@ -168,8 +167,7 @@ public class FeeViewController {
                 }
             }
         });
-
-        User currentUser = UserUtils.getCurrentUser();
+        currentUser = UserUtils.getCurrentUser();
         if (currentUser==null || !adminRoles.contains(currentUser.getRole())) {
             actionColumn.setVisible(false);
             addButton.setVisible(false);
@@ -185,8 +183,13 @@ public class FeeViewController {
 
     private void loadFees() {
         try {
+            String url = "http://localhost:8080/api/fees";
+
+            if (!currentUser.getRole().equals(Role.ADMIN_ROOT)) {
+                url += "/active";
+            }
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8080/api/fees"))
+                    .uri(URI.create(url))
                     .header("Content-Type", "application/json")
                     .GET()
                     .build();

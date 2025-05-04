@@ -2,6 +2,7 @@ package services;
 
 import jakarta.persistence.EntityNotFoundException;
 import models.FeeCategory;
+import models.enums.FeeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repositories.FeeCategoryRepository;
@@ -35,6 +36,10 @@ public class FeeCategoryService {
 
     public List<FeeCategory> getAllFeeCategories() {
         return feeCategoryRepository.findAll();
+    }
+
+    public List<FeeCategory> getFeeCategoriesByType(FeeType type) {
+        return feeCategoryRepository.findByFeeTypeAndParentIsNull(type);
     }
 
     public List<String> getSubCategoriesNames(String parentName) {

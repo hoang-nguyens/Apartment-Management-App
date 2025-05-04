@@ -31,6 +31,14 @@ public class FeeController {
         return ResponseEntity.ok(feeService.getAllFeesByCategoryAndSubCategory(category, subCategory));
     }
 
+    @GetMapping("/active")
+    public ResponseEntity<List<Fee>> getActiveFees(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String subCategory
+    ) {
+        return ResponseEntity.ok(feeService.getAllActiveFeesByCategoryAndSubCategory(category, subCategory));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Fee> getFeeById(@PathVariable Long id) {
         return ResponseEntity.ok(feeService.getFeeById(id));

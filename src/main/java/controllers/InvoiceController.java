@@ -1,6 +1,7 @@
 package controllers;
 
 import models.Invoice;
+import models.enums.InvoiceStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,4 +29,15 @@ public class InvoiceController {
         }
     }
 
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<?> updateStatus(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "PAID") InvoiceStatus status
+    ) {
+        try {
+            return ResponseEntity.ok(invoiceService.updateStatus(id ,status));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

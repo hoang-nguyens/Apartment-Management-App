@@ -1,5 +1,6 @@
 package repositories;
 
+import models.Apartment;
 import models.Fee;
 import models.Invoice;
 import models.User;
@@ -17,6 +18,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long>{
     List<Invoice> findByUser(User user);
     List<Invoice> findByUserId(Long id);
 
-    boolean existsByUserAndCategoryAndIssueDate(User user, String category, LocalDate issueDate);
+    boolean existsByApartmentAndCategoryAndIssueDate(Apartment apartment, String category, LocalDate issueDate);
     List<Invoice> findByDueDateBeforeAndStatusNot(LocalDate dueDate, InvoiceStatus status);
 }

@@ -20,6 +20,10 @@ public class Invoice extends BaseModel{
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "apartment_id", referencedColumnName = "id", nullable = false)
+    private Apartment apartment;
+
     @Column(nullable = false)
     private String category;
 
@@ -38,12 +42,13 @@ public class Invoice extends BaseModel{
 
     private LocalDate paidDate;
 
-    public Invoice(User user, LocalDate issueDate, LocalDate dueDate, String category, BigDecimal amount) {
+    public Invoice(User user, LocalDate issueDate, LocalDate dueDate, String category, BigDecimal amount, Apartment apartment) {
         this.user = user;
         this.issueDate = issueDate;
         this.dueDate = dueDate;
         this.category = category;
         this.amount = amount;
+        this.apartment = apartment;
     }
 
     public Invoice() {
