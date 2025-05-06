@@ -66,11 +66,6 @@ public class ConfirmController {
         this.user = user;
     }
 
-    @FXML
-    public void initialize() {
-        startCountdown();
-    }
-
     public void startCountdown() {
         if (countdownTimeline != null) {
             countdownTimeline.stop();

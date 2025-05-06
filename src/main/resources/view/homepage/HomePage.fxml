@@ -21,16 +21,16 @@
          <children>
             <AnchorPane prefHeight="792.0" prefWidth="203.0">
                <children>
-                  <Pane fx:id="inner_pane" layoutX="3.0" layoutY="13.0" prefHeight="90.0" prefWidth="200.0" styleClass="inner_pane">
+                  <Pane fx:id="inner_pane" layoutX="17.0" layoutY="13.0" prefHeight="55.0" prefWidth="172.0" styleClass="inner_pane">
                      <children>
-                        <ImageView fitHeight="90.0" fitWidth="81.0" layoutX="60.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="55.0" fitWidth="45.0" layoutX="64.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/HomePage/dashboard.png" />
                            </image>
                         </ImageView>
                      </children>
                   </Pane>
-                  <Button fx:id="homeButton" layoutX="20.0" layoutY="132.0" mnemonicParsing="false" onAction="#onManageHome" prefHeight="46.0" prefWidth="172.0" styleClass="clicked_button" text="Home" textAlignment="CENTER" textFill="WHITE">
+                  <Button fx:id="homeButton" layoutX="18.0" layoutY="132.0" mnemonicParsing="false" onAction="#onManageHome" prefHeight="46.0" prefWidth="172.0" styleClass="clicked_button" text="Home" textAlignment="CENTER" textFill="WHITE">
                      <graphic>
                         <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -41,7 +41,7 @@
                      <font>
                         <Font name="Arial Bold" size="12.0" />
                      </font></Button>
-                  <Button fx:id="residentButton" layoutX="20.0" layoutY="189.0" mnemonicParsing="false" onAction="#onManageResident" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Resident" textAlignment="CENTER" textFill="WHITE">
+                  <Button fx:id="residentButton" layoutX="18.0" layoutY="189.0" mnemonicParsing="false" onAction="#onManageResident" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Resident" textAlignment="CENTER" textFill="WHITE">
                      <graphic>
                         <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -50,7 +50,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="feeButton" layoutX="17.0" layoutY="240.0" mnemonicParsing="false" onAction="#onManageFees" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Fee" textAlignment="CENTER" textFill="WHITE">
+                  <Button fx:id="feeButton" layoutX="15.0" layoutY="240.0" mnemonicParsing="false" onAction="#onManageFees" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Fee" textAlignment="CENTER" textFill="WHITE">
                      <graphic>
                         <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -59,7 +59,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="billButton" layoutX="17.0" layoutY="292.0" mnemonicParsing="false" onAction="#onManageBill" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Bill" textAlignment="CENTER" textFill="WHITE">
+                  <Button fx:id="billButton" layoutX="15.0" layoutY="292.0" mnemonicParsing="false" onAction="#onManageBill" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Bill" textAlignment="CENTER" textFill="WHITE">
                      <graphic>
                         <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -68,7 +68,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="reportButton" layoutX="17.0" layoutY="343.0" mnemonicParsing="false" onAction="#onManageReport" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Report" textAlignment="CENTER" textFill="WHITE">
+                  <Button fx:id="reportButton" layoutX="15.0" layoutY="343.0" mnemonicParsing="false" onAction="#onManageReport" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Report" textAlignment="CENTER" textFill="WHITE">
                      <graphic>
                         <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -77,7 +77,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="supportButton" layoutX="17.0" layoutY="396.0" mnemonicParsing="false" onAction="#onManageSupport" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Support" textAlignment="CENTER" textFill="WHITE">
+                  <Button fx:id="supportButton" layoutX="15.0" layoutY="396.0" mnemonicParsing="false" onAction="#onManageSupport" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Support" textAlignment="CENTER" textFill="WHITE">
                      <graphic>
                         <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -86,7 +86,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="58.0" layoutY="462.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="56.0" layoutY="462.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/HomePage/icons8-moon-64.png" />
                      </image>
@@ -140,7 +140,7 @@
                                  </contextMenu>
                               </Button>
 
-                              <Button alignment="CENTER" contentDisplay="RIGHT" layoutX="110.0" layoutY="4.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="45.0" styleClass="topbar_button" stylesheets="@../css/homepage.css" textAlignment="RIGHT">
+                              <Button fx:id="notificationButton" alignment="CENTER" contentDisplay="RIGHT" layoutX="110.0" layoutY="4.0" mnemonicParsing="false" onAction="#onManageNotification" prefHeight="45.0" prefWidth="45.0" styleClass="topbar_button" stylesheets="@../css/homepage.css" textAlignment="RIGHT">
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -159,7 +159,7 @@
                         </AnchorPane>
                      </children>
                   </HBox>
-                  <StackPane fx:id="contentArea" layoutX="65.0" layoutY="77.0" prefHeight="454.0" prefWidth="954.0" />
+                  <StackPane fx:id="contentArea" layoutX="65.0" layoutY="77.0" prefHeight="600.0" prefWidth="954.0" />
                </children>
             </Pane>
          </children>

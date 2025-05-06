@@ -14,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import models.User;
 import org.springframework.stereotype.Controller;
+import utils.UserUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,6 +29,7 @@ public class HomeController {
     @FXML private Button billButton;
     @FXML private Button reportButton;
     @FXML private Button supportButton;
+    @FXML private Button notificationButton;
 
     private List<Button> buttons; // Danh sách các button
 
@@ -55,6 +57,7 @@ public class HomeController {
     private StackPane contentArea;
 
     // Sự kiện khi click vào "Quản lý Chi Phí"
+
     @FXML
     private void onManageFees() {
         handleButtonClick(feeButton);
@@ -89,6 +92,25 @@ public class HomeController {
     private void onManageSupport(){
         handleButtonClick(supportButton);
         loadPage("/view/homepage/home-management.fxml"); //THAY ĐỔI DÒNG NÀY ĐỂ LOAD ĐÚNG TRANG
+    }
+
+    @FXML
+    private void onManageNotification(){
+        handleButtonClick(notificationButton);
+
+        User currentUser = UserUtils.getCurrentUser();
+        if (currentUser == null) {
+            System.out.println("Không tìm thấy người dùng hiện tại.");
+            return;
+        }
+
+        String role = currentUser.getRole().name(); // giả sử bạn dùng enum hoặc String để lưu role
+
+        if ("USER".equalsIgnoreCase(role)) {
+            loadPage("/view/notification/user_notification.fxml");
+        } else {
+            loadPage("/view/notification/admin_notification.fxml");
+        }
     }
 
     // Sự kiện khi click vào "Danh sách Người Dùng"

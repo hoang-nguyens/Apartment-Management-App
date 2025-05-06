@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" prefHeight="500.0" prefWidth="400.0" spacing="10" style="-fx-padding: 10; -fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.NotificationHistoryController"> <!-- Giới hạn chiều rộng -->
+
+    <!-- Tiêu đề -->
+    <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Lịch sử thông báo" />
+
+    <!-- Bảng thông báo -->
+    <TableView fx:id="notificationTable" prefHeight="400" prefWidth="550" style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);">
+        <columns>
+            <TableColumn fx:id="idColumn" prefWidth="24.57" style="-fx-alignment: CENTER;" text="ID">
+                <cellValueFactory><PropertyValueFactory property="id" /></cellValueFactory>
+            </TableColumn>
+
+            <TableColumn fx:id="typeColumn" prefWidth="69.88" style="-fx-alignment: CENTER;" text="Loại">
+                <cellValueFactory><PropertyValueFactory property="type" /></cellValueFactory>
+            </TableColumn>
+
+            <TableColumn fx:id="createdAtColumn" prefWidth="105.98" style="-fx-alignment: CENTER;" text="Thời gian">
+                <cellValueFactory><PropertyValueFactory property="createdAt" /></cellValueFactory>
+            </TableColumn>
+
+            <TableColumn fx:id="creatorColumn" prefWidth="74.49" style="-fx-alignment: CENTER;" text="Người tạo">
+                <cellValueFactory><PropertyValueFactory property="createdAt" /></cellValueFactory>
+            </TableColumn>
+
+            <TableColumn fx:id="detailColumn" prefWidth="105.21" style="-fx-alignment: CENTER;" text="Thao tác">
+                <cellValueFactory><PropertyValueFactory property="dummy" /></cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
+</VBox>
