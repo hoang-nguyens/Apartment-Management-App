@@ -73,7 +73,7 @@ public class HomeController {
     @FXML
     private void onManageResident(){
         handleButtonClick(residentButton);
-        loadPage("/view/homepage/home-management.fxml"); //THAY ĐỔI DÒNG NÀY ĐỂ LOAD ĐÚNG TRANG
+        loadPage("/view/resident/resident_table.fxml"); //THAY ĐỔI DÒNG NÀY ĐỂ LOAD ĐÚNG TRANG
     }
 
     @FXML

@@ -34,7 +34,7 @@ public class LoginController {
     private static User loggedInUser;
 
     @Autowired
-    private UserController userController;
+    private UserUIController userUIController;
 
     private final UserService userService;
     private final EmailService emailService;
@@ -90,12 +90,12 @@ public class LoginController {
 
     @FXML
     private void handleRegisterClick() {
-        userController.showRegisterBox();
+        userUIController.showRegisterBox();
     }
 
     @FXML
     private void handleForgotPasswordClick() {
-        userController.showForgotPasswordBox();
+        userUIController.showForgotPasswordBox();
     }
 
     private void setLoginError(String message) {

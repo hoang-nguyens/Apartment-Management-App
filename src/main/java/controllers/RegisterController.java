@@ -39,7 +39,7 @@ public class RegisterController {
     @Autowired
     private ConfirmController confirmController;
     @Autowired
-    private UserController userController;
+    private UserUIController userUIController;
 
     private final UserService userService;
     private final EmailService emailService;
@@ -75,12 +75,12 @@ public class RegisterController {
         if (state == 0 && !sendVerificationCode()) return;
 
         prepareConfirmation();
-        userController.showConfirmBox();
+        userUIController.showConfirmBox();
     }
 
     @FXML
     private void handleLoginClick() {
-        userController.showLoginBox();
+        userUIController.showLoginBox();
         clearRegister();
     }
 

@@ -118,4 +118,34 @@ public class UserService {
         return userRepository.findByRole(Role.USER);
     }
 
+    public void deleteUserByUsername(String username) {
+        String sql = "DELETE FROM users WHERE username = ?";
+        int rowsAffected = jdbcTemplate.update(sql, username);
+
+        if (rowsAffected == 0) {
+            // Nếu không tìm thấy user để xóa
+            throw new RuntimeException("User with username " + username + " not found");
+        }
+    }
+
+    public Optional<User> findUserByUsername(String username) {
+        try {
+            String sql = "SELECT * FROM users WHERE username = ?";
+            User user = jdbcTemplate.queryForObject(sql, new Object[]{username}, (rs, rowNum) -> {
+                User u = new User();
+                u.setUsername(rs.getString("username"));
+                u.setEmail(rs.getString("email"));
+                u.setPasswordHash(rs.getString("password_hash"));
+                u.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
+                u.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+                u.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                return u;
+            });
+            return Optional.ofNullable(user);
+        } catch (Exception e) {
+            return Optional.empty(); // Trả về Optional.empty nếu không tìm thấy user
+        }
+    }
+
+
 }

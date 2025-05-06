@@ -39,7 +39,7 @@ public class ConfirmController {
     private int curAct;
     private User user;
 
-    @Autowired private UserController userController;
+    @Autowired private UserUIController userUIController;
     @Autowired @Lazy private ForgotPasswordController forgotPasswordController;
     @Autowired @Lazy private RegisterController registerController;
 
@@ -185,15 +185,15 @@ public class ConfirmController {
     @FXML
     private void handleBack() {
         if (curAct == 1) {
-            userController.showRegisterBox();
+            userUIController.showRegisterBox();
         } else if (curAct == 2) {
-            userController.showForgotPasswordBox();
+            userUIController.showForgotPasswordBox();
         }
     }
 
     @FXML
     private void handleLoginClick(ActionEvent event) {
-        userController.showLoginBox();
+        userUIController.showLoginBox();
         clearCf();
     }
 }

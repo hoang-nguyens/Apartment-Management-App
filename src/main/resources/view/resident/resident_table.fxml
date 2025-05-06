@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="512.0" prefWidth="924.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ResidentViewController">
+    <children>
+        <HBox prefHeight="40.0" prefWidth="792.0" />
+        <HBox alignment="CENTER" prefHeight="37.0" prefWidth="792.0" stylesheets="@../css/table_fee.css">
+            <children>
+                <Label text="Số phòng" />
+                <ComboBox fx:id="roomComboBox" prefHeight="26.0" prefWidth="68.0" />
+                <Label text="Tạm trú" />
+                <ComboBox fx:id="tamVangStatusSearchComboBox" prefHeight="26.0" prefWidth="62.0" />
+                <Label text="Xác thực" />
+                <ComboBox prefWidth="56.0" fx:id="xacThucStatusSearchComboBox" />
+                <Button fx:id="resetButton" mnemonicParsing="false" onAction="#handleResetSearch" text="Reset" />
+            </children>
+        </HBox>
+        <Pane prefHeight="409.0" prefWidth="792.0" stylesheets="@../css/table_fee.css">
+            <children>
+                <TableView fx:id="residentTable" layoutX="16.0" prefHeight="410.0" prefWidth="891.0">
+                    <columns>
+                        <TableColumn fx:id="usernameColumn" prefWidth="75.0" text="Username" />
+                        <TableColumn fx:id="hotenColumn" prefWidth="75.0" text="Họ tên" />
+                        <TableColumn fx:id="cccdColumn" prefWidth="75.0" text="CCCD" />
+                        <TableColumn fx:id="sdtColumn" prefWidth="95.199951171875" text="Số điện thoại" />
+                        <TableColumn fx:id="genderColumn" prefWidth="77.60003662109375" text="Giới tính" />
+                        <TableColumn fx:id="apartmentNumberColumn" prefWidth="68.800048828125" text="Số phòng" />
+                        <TableColumn fx:id="tamVangStatusColumn" minWidth="0.0" prefWidth="72.79998779296875" text="Tạm trú" />
+                        <TableColumn fx:id="dobColumn" prefWidth="92.79998779296875" text="Ngày sinh" />
+                        <TableColumn prefWidth="54.39996337890625" text="Xác thực" fx:id="xacThucStatusColumn" />
+                        <TableColumn fx:id="actionColumn" prefWidth="145.5999755859375" text="Thao tác" />
+                    </columns>
+                </TableView>
+            </children>
+        </Pane>
+        <Label fx:id="thongBaoLabel" text="Trạng thái" textAlignment="CENTER" />
+    </children>
+</VBox>

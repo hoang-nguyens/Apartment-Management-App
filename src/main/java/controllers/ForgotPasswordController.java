@@ -24,7 +24,7 @@ public class ForgotPasswordController { // Không kế thừa từ UserControlle
     @FXML private Label forgotPasswordStatusLabel;
 
     @Autowired
-    private UserController userController; // Inject UserController
+    private UserUIController userUIController; // Inject UserController
 
     @Autowired
     private ConfirmController confirmController; // Inject ConfirmController
@@ -93,7 +93,7 @@ public class ForgotPasswordController { // Không kế thừa từ UserControlle
         confirmController.setVerificationCode(verificationCode);
         confirmController.setCurAct(2);
         confirmController.setUser(user);
-        userController.showConfirmBox();
+        userUIController.showConfirmBox();
         confirmController.startCountdown();
     }
     public void clearForgotPassword(){
@@ -105,7 +105,7 @@ public class ForgotPasswordController { // Không kế thừa từ UserControlle
     }
     @FXML
     protected void handleLoginClick() {
-        userController.showLoginBox();
+        userUIController.showLoginBox();
         clearForgotPassword();
     }
 }
