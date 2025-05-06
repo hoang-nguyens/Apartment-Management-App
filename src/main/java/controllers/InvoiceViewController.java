@@ -93,6 +93,9 @@ public class InvoiceViewController {
     public void initialize() {
         currentUser = UserUtils.getCurrentUser();
         invoiceTable.setEditable(true);
+        if (adminRoles.contains(currentUser.getRole())) {
+            invoiceService.createMonthlyInvoices();
+        }
 
 //        invoiceService.createMonthlyInvoices(currentUser);
         setupTableColumns();
