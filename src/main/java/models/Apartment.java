@@ -26,4 +26,7 @@ public class Apartment extends BaseModel{
     @Column(nullable = false)
     private float area;
 
+    private int motorbikeCount;
+
+    private int carCount;
 }

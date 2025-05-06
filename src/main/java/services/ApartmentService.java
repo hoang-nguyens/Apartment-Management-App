@@ -20,4 +20,7 @@ public class ApartmentService {
     public List<Apartment> getAllApartmentsByOwner(User owner) {
         return apartmentRepository.findByOwner(owner);
     }
+    public Apartment getApartmentByRoomNumber(String roomNumber) {
+        return apartmentRepository.findByRoomNumber(roomNumber);
+    }
 }

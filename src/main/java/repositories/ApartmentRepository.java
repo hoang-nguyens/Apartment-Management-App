@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface ApartmentRepository extends JpaRepository<Apartment, Long> {
     List<Apartment> findByOwner(User user);
+    Apartment findByRoomNumber(String roomNumber);
 }
