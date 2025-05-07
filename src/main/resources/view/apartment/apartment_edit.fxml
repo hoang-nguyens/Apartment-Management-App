@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="794.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ApartmentEditController">
+   <children>
+      <Pane prefHeight="400.0" prefWidth="719.0" stylesheets="@../css/insert_fee.css">
+         <children>
+            <Pane prefHeight="354.0" prefWidth="328.0">
+               <children>
+                  <Button fx:id="SaveButton" layoutX="122.0" layoutY="243.0" mnemonicParsing="false" onAction="#handleSave" styleClass="submit-button" stylesheets="@../css/insert_fee.css" text="Summit" />
+                  <Button fx:id="cancelButton" layoutX="126.0" layoutY="294.0" mnemonicParsing="false" onAction="#handleCancel" styleClass="cancel-button" stylesheets="@../css/insert_fee.css" text="Cancel" />
+                  <VBox alignment="CENTER" layoutX="2.0" layoutY="356.0" prefHeight="45.0" prefWidth="326.0">
+                     <children>
+                        <Label fx:id="statusLabel" text="Status" textAlignment="CENTER" />
+                     </children>
+                  </VBox>
+               </children>
+            </Pane>
+            <Pane id="grid_box" layoutX="337.0" layoutY="14.0" prefHeight="372.0" prefWidth="431.0" styleClass="root" stylesheets="@../css/insert_fee.css">
+               <children>
+                  <GridPane alignment="CENTER" layoutX="24.0" layoutY="-18.0" prefHeight="391.0" prefWidth="409.0" style="-fx-padding: 24px;">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="226.20001220703125" minWidth="10.0" prefWidth="155.80001831054688" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="316.5999450683594" minWidth="10.0" prefWidth="306.1999816894531" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Label contentDisplay="CENTER" prefHeight="31.0" prefWidth="115.0" text="Chủ hộ" textAlignment="CENTER" />
+                        <TextField fx:id="onwerField" GridPane.columnIndex="1" />
+                        <Label text="Tầng" GridPane.rowIndex="1" />
+                        <TextField fx:id="floorField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label text="Số phòng" GridPane.rowIndex="2" />
+                        <TextField fx:id="soPhongField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label text="Diện tích" GridPane.rowIndex="3" />
+                        <TextField fx:id="dienTichField" prefHeight="26.0" prefWidth="289.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label text="Số phòng ngủ" GridPane.rowIndex="4" />
+                        <Label text="Số phòng tắm" GridPane.rowIndex="5" />
+                        <Label text="Số xe máy" GridPane.rowIndex="6" />
+                        <Label text="Số ô tô" GridPane.rowIndex="7" />
+                        <TextField fx:id="soPhongNguField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="soPhongTamField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <TextField fx:id="soXeMayField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <TextField fx:id="soOToField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                     </children>
+                  </GridPane>
+               </children>
+               <effect>
+                  <DropShadow height="12.81" radius="5.03" spread="0.3" width="9.31" />
+               </effect>
+            </Pane>
+         </children>
+      </Pane>
+   </children>
+</VBox>

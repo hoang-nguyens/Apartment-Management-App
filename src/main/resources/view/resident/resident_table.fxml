@@ -35,8 +35,8 @@
                         <TableColumn fx:id="apartmentNumberColumn" prefWidth="68.800048828125" text="Số phòng" />
                         <TableColumn fx:id="tamVangStatusColumn" minWidth="0.0" prefWidth="72.79998779296875" text="Tạm trú" />
                         <TableColumn fx:id="dobColumn" prefWidth="92.79998779296875" text="Ngày sinh" />
-                        <TableColumn prefWidth="54.39996337890625" text="Xác thực" fx:id="xacThucStatusColumn" />
-                        <TableColumn fx:id="actionColumn" prefWidth="145.5999755859375" text="Thao tác" />
+                        <TableColumn prefWidth="73.60003662109375" text="Xác thực" fx:id="xacThucStatusColumn" />
+                        <TableColumn fx:id="actionColumn" prefWidth="126.4000244140625" text="Thao tác" />
                     </columns>
                 </TableView>
             </children>

@@ -64,6 +64,8 @@ public class HomeController {
         loadPage("/view/fee/fee-management.fxml");
     }
 
+
+
     @FXML
     private void onManageHome(){
         handleButtonClick(homeButton);
@@ -89,9 +91,9 @@ public class HomeController {
     }
 
     @FXML
-    private void onManageSupport(){
+    private void onManageApartment(){
         handleButtonClick(supportButton);
-        loadPage("/view/homepage/home-management.fxml"); //THAY ĐỔI DÒNG NÀY ĐỂ LOAD ĐÚNG TRANG
+        loadPage("/view/apartment/apartment_table.fxml"); //THAY ĐỔI DÒNG NÀY ĐỂ LOAD ĐÚNG TRANG
     }
 
     @FXML
