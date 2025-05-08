@@ -20,6 +20,9 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long> {
     // Tìm căn hộ theo tầng
     List<Apartment> findByFloor(Integer floor);
 
+    // Tìm căn hộ theo số phòng và tầng
+    List<Apartment> findByRoomNumberAndFloor(String roomNumber, Integer floor);
+
     // Tìm căn hộ có diện tích lớn hơn hoặc bằng một giá trị nhất định
     List<Apartment> findByAreaGreaterThanEqual(Float area);
 

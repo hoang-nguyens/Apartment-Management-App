@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repositories.ApartmentRepository;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ApartmentService {
@@ -38,6 +41,24 @@ public class ApartmentService {
     public List<Apartment> getApartmentsByMinArea(Float area) {
         return apartmentRepository.findByAreaGreaterThanEqual(area);
     }
+
+    public List<Apartment> getApartmentsByRoomNumberAndFloor(String roomNumber, Integer floor) {
+        if (roomNumber != null && floor != null) {
+            // Lọc theo cả số phòng và tầng
+            return apartmentRepository.findByRoomNumberAndFloor(roomNumber, floor);
+        } else if (roomNumber != null) {
+            // Lọc theo số phòng, nhưng trả về danh sách (để tránh Optional)
+            Optional<Apartment> apartment = apartmentRepository.findByRoomNumber(roomNumber);
+            return apartment.map(Arrays::asList).orElse(Collections.emptyList());
+        } else if (floor != null) {
+            // Lọc theo tầng
+            return apartmentRepository.findByFloor(floor);
+        } else {
+            // Nếu không có tham số, trả về tất cả các căn hộ
+            return apartmentRepository.findAll();
+        }
+    }
+
 
     // Lấy tất cả căn hộ theo số phòng ngủ
     public List<Apartment> getApartmentsByBedroomCount(Integer bedroomCount) {
@@ -79,10 +100,16 @@ public class ApartmentService {
                 .orElseThrow(() -> new RuntimeException("Apartment not found with ID: " + id));
     }
 
-    // Lấy tất cả căn hộ
     public List<Apartment> getAllApartments() {
-        return apartmentRepository.findAll();
+        List<Apartment> apartments = apartmentRepository.findAll();
+        for (Apartment apartment : apartments) {
+            System.out.println("Apartment ID: " + apartment.getId() +
+                    ", Bedroom Count: " + apartment.getBedroomCount() +
+                    ", Bathroom Count: " + apartment.getBathroomCount());
+        }
+        return apartments;
     }
+
 
     // Lấy tất cả căn hộ theo số lượng xe máy
     public List<Apartment> getApartmentsByMotorbikeCount(Integer motorbikeCount) {

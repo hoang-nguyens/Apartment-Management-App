@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -122,7 +123,7 @@ public class ApartmentViewController {
 
         // Khởi tạo ComboBox tầng (Floor)
         ObservableList<String> floorOptions = FXCollections.observableArrayList();
-        for (int i = 2; i <= 29; i++) { // Tầng 2 đến 29 là tầng căn hộ
+        for (int i = 5; i <= 28; i++) { // Tầng 2 đến 29 là tầng căn hộ
             floorOptions.add("Tầng " + i);
         }
         floorComboBox.setItems(floorOptions);
@@ -149,7 +150,10 @@ public class ApartmentViewController {
         areaColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getArea()));
         motorbikeCountColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getMotorbikeCount()));
         carCountColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getCarCount()));
+        bedroomCountColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getBedroomCount()));
+        bathroomCountColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getBathroomCount()));
 
+        apartmentTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         // Cột hành động
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button viewButton = new Button("Xem");
@@ -168,6 +172,7 @@ public class ApartmentViewController {
                 });
 
                 pane.setSpacing(5);
+                pane.setAlignment(Pos.CENTER);
             }
 
             @Override
@@ -185,6 +190,8 @@ public class ApartmentViewController {
 
     private void loadApartments() {
         try {
+            System.out.println("Đang gửi yêu cầu HTTP đến API...");
+
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("http://localhost:8080/api/apartments"))
                     .header("Content-Type", "application/json")
@@ -193,7 +200,10 @@ public class ApartmentViewController {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Trạng thái của request " + response);
+            // In ra trạng thái của request
+            System.out.println("Trạng thái của request: " + response.statusCode());
+            System.out.println("Nội dung phản hồi: " + response.body());
+
             if (response.statusCode() == 200) {
                 Apartment[] apartments = objectMapper.readValue(response.body(), Apartment[].class);
 
@@ -202,11 +212,15 @@ public class ApartmentViewController {
 
                 for (Apartment apartment : apartments) {
                     System.out.println("Đang xử lý căn hộ: " + apartment.getRoomNumber() + " (ID: " + apartment.getId() + ")");
+                    System.out.println("Số phòng ngủ: " + apartment.getBedroomCount());
+                    System.out.println("Số phòng tắm: " + apartment.getBathroomCount());
 
                     // Lấy căn hộ từ cơ sở dữ liệu
                     Apartment existingApartment = apartmentService.getApartmentById(apartment.getId());
                     if (existingApartment != null) {
-                        // Nếu căn hộ đã tồn tại, cập nhật lại thông tin nếu cần
+                        System.out.println("Căn hộ trong DB trước khi cập nhật: " + existingApartment);
+
+                        // Cập nhật căn hộ nếu có sự thay đổi
                         existingApartment.setRoomNumber(apartment.getRoomNumber());
                         existingApartment.setFloor(apartment.getFloor());
                         existingApartment.setOwner(apartment.getOwner());
@@ -218,13 +232,21 @@ public class ApartmentViewController {
 
                         // Cập nhật căn hộ nếu có sự thay đổi
                         apartmentService.updateApartment(existingApartment);
+
+                        System.out.println("Căn hộ trong DB sau khi cập nhật: " + existingApartment);
                     } else {
-                        // Nếu căn hộ không tồn tại trong cơ sở dữ liệu, có thể log lỗi hoặc xử lý khác
                         System.out.println("Căn hộ không tìm thấy trong DB, cần kiểm tra.");
                     }
 
                     // Thêm căn hộ vào danh sách để hiển thị
                     apartmentList.add(existingApartment);
+                }
+
+                // In ra các thông tin trong apartmentList sau khi đã thêm
+                for (Apartment apartment : apartmentList) {
+                    System.out.println("Căn hộ trong danh sách: " + apartment.getRoomNumber() +
+                            ", Số phòng ngủ: " + apartment.getBedroomCount() +
+                            ", Số phòng tắm: " + apartment.getBathroomCount());
                 }
 
                 apartmentTable.setItems(apartmentList);
@@ -237,6 +259,7 @@ public class ApartmentViewController {
             thongBaoLabel.setText("Lỗi tải lên dữ liệu căn hộ!");
         }
     }
+
 
     private void openApartmentStage(Apartment apartment, int mode) {
         try {
@@ -326,6 +349,7 @@ public class ApartmentViewController {
         openApartmentStage(apartment, 1);
     }
 
+
     @FXML
     private void handleSearch() {
         // Lấy giá trị từ ComboBox
@@ -337,31 +361,29 @@ public class ApartmentViewController {
         System.out.println("Floor: " + filterFloor);
 
         // Tạo URL cơ bản
-        StringBuilder urlBuilder = new StringBuilder("http://localhost:8080/api/apartments");
-
-        // Tạo danh sách các tham số truy vấn
+        String baseUrl = "http://localhost:8080/api/apartments";
         List<String> queryParams = new ArrayList<>();
 
-        // Xử lý giá trị tầng (loại bỏ "Tầng " nếu có)
-        if (filterFloor != null && !filterFloor.isEmpty()) {
-            String floor = filterFloor.replace("Tầng ", ""); // Loại bỏ chữ "Tầng"
-            queryParams.add("floor=" + URLEncoder.encode(floor, StandardCharsets.UTF_8));
-            System.out.println("Added floor filter: " + floor);  // Debug line
-        }
-
-        // Xử lý giá trị số phòng (loại bỏ tiền tố "PHONG_" và dấu gạch dưới nếu có)
+        // Xử lý số phòng (roomNumber)
         if (filterRoom != null && !filterRoom.isEmpty()) {
             String roomNumber = filterRoom.replace("PHONG_", "").replace("_", "");
             queryParams.add("roomNumber=" + URLEncoder.encode(roomNumber, StandardCharsets.UTF_8));
             System.out.println("Added roomNumber filter: " + roomNumber);  // Debug line
         }
 
-        // Nếu có tham số truy vấn, thêm chúng vào URL
-        if (!queryParams.isEmpty()) {
-            urlBuilder.append("?").append(String.join("&", queryParams));
+        // Xử lý tầng (floor)
+        if (filterFloor != null && !filterFloor.isEmpty()) {
+            String floor = filterFloor.replace("Tầng ", "");
+            queryParams.add("floor=" + URLEncoder.encode(floor, StandardCharsets.UTF_8));
+            System.out.println("Added floor filter: " + floor);  // Debug line
         }
 
-        String url = urlBuilder.toString();
+        // Nếu có bất kỳ tham số nào, tạo query string
+        String url = baseUrl;
+        if (!queryParams.isEmpty()) {
+            url += "?" + String.join("&", queryParams);
+        }
+
         System.out.println("== Final Request URL ==");
         System.out.println(url);  // Debug line
 
@@ -383,28 +405,24 @@ public class ApartmentViewController {
             System.out.println("== Response Status ==");
             System.out.println(response.statusCode());  // Debug line
 
-            // Kiểm tra mã trạng thái HTTP
             if (response.statusCode() == 200) {
                 System.out.println("== Raw JSON Response ==");
                 System.out.println(response.body());  // Debug line
 
-                // Parse JSON
                 Apartment[] filteredApartments = objectMapper.readValue(response.body(), Apartment[].class);
 
                 System.out.println("== Parsed Apartment Count ==");
                 System.out.println(filteredApartments.length);  // Debug line
 
-                // Cập nhật bảng
                 apartmentList.setAll(filteredApartments);
                 apartmentTable.setItems(apartmentList);
             } else {
                 System.out.println("Error: Received HTTP status " + response.statusCode());
-                // Bạn có thể hiển thị thông báo lỗi cho người dùng tại đây
             }
 
         } catch (Exception e) {
             System.out.println("== Exception Occurred ==");
-            e.printStackTrace();  // Debug line for error trace
+            e.printStackTrace();  // Debug line
         }
     }
 

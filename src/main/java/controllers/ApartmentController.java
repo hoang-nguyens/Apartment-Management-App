@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import services.ApartmentService;
 import services.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/apartments")
@@ -59,17 +59,66 @@ public class ApartmentController {
         return ResponseEntity.ok(apartment);
     }
 
-
     @GetMapping
-    public ResponseEntity<List<Apartment>> getApartmentsByFloor(@RequestParam int floor) {
-        logger.info("Received request to get apartments for floor: {}", floor);
+    public ResponseEntity<List<Apartment>> getApartmentsByFilters(
+            @RequestParam(required = false) String roomNumber,
+            @RequestParam(required = false) Integer floor,
+            @RequestParam(required = false) Float area,
+            @RequestParam(required = false) Integer bedroomCount,
+            @RequestParam(required = false) Integer bathroomCount) {
 
-        List<Apartment> apartments = apartmentService.getApartmentsByFloor(floor);
-        logger.info("Found {} apartments on floor {}", apartments.size(), floor);
+        logger.info("Received request to get apartments with filters - Room: {}, Floor: {}, Area: {}, Bedrooms: {}, Bathrooms: {}",
+                roomNumber, floor, area, bedroomCount, bathroomCount);
+
+        List<Apartment> apartments = new ArrayList<>();
+
+        // Kiểm tra và xử lý roomNumber nếu có
+        if (roomNumber != null) {
+            Apartment apartment = apartmentService.getApartmentByRoomNumber(roomNumber);
+            if (apartment != null) {
+                apartments.add(apartment);
+                logger.info("Found apartment with room number: {}", roomNumber);
+            } else {
+                logger.error("No apartment found for room number: {}", roomNumber);
+            }
+        }
+
+        // Kiểm tra và xử lý floor nếu có
+        if (floor != null) {
+            List<Apartment> apartmentsByFloor = apartmentService.getApartmentsByFloor(floor);
+            apartments.addAll(apartmentsByFloor);
+            logger.info("Found {} apartments on floor: {}", apartmentsByFloor.size(), floor);
+        }
+
+        // Kiểm tra và xử lý area nếu có
+        if (area != null) {
+            List<Apartment> apartmentsByArea = apartmentService.getApartmentsByMinArea(area);
+            apartments.addAll(apartmentsByArea);
+            logger.info("Found {} apartments with minimum area {}", apartmentsByArea.size(), area);
+        }
+
+        // Kiểm tra và xử lý bedroomCount nếu có
+        if (bedroomCount != null) {
+            List<Apartment> apartmentsByBedrooms = apartmentService.getApartmentsByBedroomCount(bedroomCount);
+            apartments.addAll(apartmentsByBedrooms);
+            logger.info("Found {} apartments with bedroom count {}", apartmentsByBedrooms.size(), bedroomCount);
+        }
+
+        // Kiểm tra và xử lý bathroomCount nếu có
+        if (bathroomCount != null) {
+            List<Apartment> apartmentsByBathrooms = apartmentService.getApartmentsByBathroomCount(bathroomCount);
+            apartments.addAll(apartmentsByBathrooms);
+            logger.info("Found {} apartments with bathroom count {}", apartmentsByBathrooms.size(), bathroomCount);
+        }
+
+        // Nếu không có bộ lọc nào được chỉ định, trả về tất cả căn hộ
+        if (apartments.isEmpty()) {
+            apartments = apartmentService.getAllApartments();
+            logger.info("Returning all apartments");
+        }
 
         return ResponseEntity.ok(apartments);
     }
-
 
     @GetMapping("/area/{area}")
     public ResponseEntity<List<Apartment>> getApartmentsByMinArea(@PathVariable float area) {
