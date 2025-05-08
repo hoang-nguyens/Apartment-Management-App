@@ -21,7 +21,7 @@ public class Apartment extends BaseModel {
     private String roomNumber;
 
     @NotNull(message = "Chủ sở hữu không được để trống")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 

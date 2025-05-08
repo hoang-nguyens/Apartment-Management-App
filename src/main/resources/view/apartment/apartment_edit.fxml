@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
@@ -44,7 +45,6 @@
                      </rowConstraints>
                      <children>
                         <Label contentDisplay="CENTER" prefHeight="31.0" prefWidth="115.0" text="Chủ hộ" textAlignment="CENTER" />
-                        <TextField fx:id="onwerField" GridPane.columnIndex="1" />
                         <Label text="Tầng" GridPane.rowIndex="1" />
                         <TextField fx:id="floorField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label text="Số phòng" GridPane.rowIndex="2" />
@@ -59,6 +59,7 @@
                         <TextField fx:id="soPhongTamField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                         <TextField fx:id="soXeMayField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                         <TextField fx:id="soOToField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                        <ComboBox fx:id="ownerComboBox" prefWidth="150.0" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                </children>

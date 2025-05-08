@@ -4,16 +4,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import models.Apartment;
+import models.enums.SoPhong;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.w3c.dom.Text;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.util.Optional;
+
 import java.net.http.HttpResponse;
 import java.net.http.HttpRequest;
 import javafx.scene.control.*;
 import java.net.http.HttpClient;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import repositories.*;
+import models.*;
 @Controller
 public class ApartmentEditController {
     private Stage stage;
@@ -24,7 +34,7 @@ public class ApartmentEditController {
     @FXML
     private TextField floorField;
     @FXML
-    private TextField onwerField;
+    private ComboBox<User> ownerComboBox;
     @FXML
     private TextField dienTichField;
     @FXML
@@ -42,15 +52,24 @@ public class ApartmentEditController {
     @FXML
     private Button cancelButton;
 
-    private final HttpClient hhtpClient = HttpClient.newHttpClient();
+
+    private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
+    @Autowired
+    private ResidentRepository residentRepository;
+    @Autowired
+    private UserRepository userRepository;
+
+
+
 
     @FXML
     public void initialize() {
         // Thiết lập placeholder cho các trường nhập liệu
         soPhongField.setPromptText("Số phòng");
         floorField.setPromptText("Tầng");
-        onwerField.setPromptText("Chủ sở hữu");
+        ownerComboBox.setPromptText("Chủ sở hữu");
         dienTichField.setPromptText("Diện tích (m²)");
         soXeMayField.setPromptText("Số xe máy");
         soOToField.setPromptText("Số ô tô");
@@ -60,27 +79,114 @@ public class ApartmentEditController {
         // Xóa nhãn trạng thái ban đầu
         statusLabel.setText("");
 
-        // Gắn sự kiện cho nút Save
+        // Gắn sự kiện cho các nút
         SaveButton.setOnAction(event -> handleSave());
-
-        // Gắn sự kiện cho nút Cancel
         cancelButton.setOnAction(event -> handleCancel());
 
-        // Ràng buộc định dạng: chỉ cho phép nhập số trong các trường số
+        // Ràng buộc định dạng số
         addNumericValidation(floorField);
-        addNumericValidation(dienTichField);
         addNumericValidation(soXeMayField);
         addNumericValidation(soOToField);
         addNumericValidation(soPhongNguField);
         addNumericValidation(soPhongTamField);
 
-        // Ràng buộc định dạng: chỉ cho phép nhập chữ và số cho onwerField (có thể điều chỉnh theo nhu cầu)
-        onwerField.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal.matches("[\\p{L}\\s]+")) {
-                onwerField.setText(oldVal);
+        // Gắn sự kiện chọn User trong ComboBox
+        ownerComboBox.setOnAction(event -> {
+            User selectedUser = ownerComboBox.getSelectionModel().getSelectedItem();
+            if (selectedUser != null) {
+                apartment.setOwner(selectedUser);  // Chỉ thay đổi chủ sở hữu
             }
         });
+
+        // Kiểm tra xem apartment có được khởi tạo chưa
+        if (apartment != null) {
+            // Hiển thị thông tin số phòng
+            soPhongField.setText(String.valueOf(apartment.getRoomNumber()));  // Chỉ hiển thị, không thay đổi
+            // Nạp dữ liệu vào ComboBox chủ hộ
+            populateOwnerComboBox();
+        }
     }
+
+
+
+    // Danh sách resident được lưu tạm để tìm sau khi chọn
+    private List<Resident> residentsInApartment = new ArrayList<>();
+
+    private void populateOwnerComboBox() {
+        // Kiểm tra apartment đã được khởi tạo chưa
+        if (apartment == null) {
+            System.out.println("Apartment là null!");
+            return;
+        }
+
+        // Convert "0501" => PHONG_0501
+        String phongEnumName = "PHONG_" + apartment.getRoomNumber();
+        System.out.println("Tên enum phòng: " + phongEnumName);
+
+        SoPhong soPhongEnum = SoPhong.valueOf(phongEnumName);
+
+        // Kiểm tra cư dân trong phòng
+        residentsInApartment = residentRepository.findBySoPhong(soPhongEnum);
+        if (residentsInApartment == null || residentsInApartment.isEmpty()) {
+            System.out.println("Không có cư dân trong phòng: " + phongEnumName);
+        } else {
+            System.out.println("Số cư dân tìm thấy: " + residentsInApartment.size());
+            for (Resident resident : residentsInApartment) {
+                System.out.println("Cư dân: " + resident.getUsername());
+            }
+        }
+
+        // Lấy danh sách User từ Resident (qua username)
+        List<User> usersInRoom = residentsInApartment.stream()
+                .map(resident -> userRepository.findByUsername(resident.getUsername()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+
+        // Kiểm tra danh sách usersInRoom
+        System.out.println("Danh sách Users tương ứng với cư dân trong phòng:");
+        for (User user : usersInRoom) {
+            System.out.println("User: " + user.getUsername() + " - " + user.getUsername());
+        }
+
+        // Thiết lập StringConverter để hiển thị họ tên cư dân
+        ownerComboBox.setConverter(new StringConverter<User>() {
+            @Override
+            public String toString(User user) {
+                if (user == null) return "";
+                // Tìm Resident tương ứng để lấy họ tên
+                return residentsInApartment.stream()
+                        .filter(resident -> resident.getUsername().equals(user.getUsername()))
+                        .map(Resident::getHoTen)
+                        .findFirst()
+                        .orElse("(Không rõ)");
+            }
+
+            @Override
+            public User fromString(String string) {
+                // Không cần dùng trong trường hợp này
+                return null;
+            }
+        });
+
+        // Nạp dữ liệu vào ComboBox
+        ownerComboBox.getItems().clear();
+        ownerComboBox.getItems().addAll(usersInRoom);
+        System.out.println("Dữ liệu đã nạp vào ComboBox: ");
+        for (User user : ownerComboBox.getItems()) {
+            System.out.println("User trong ComboBox: " + user.getUsername() + " - " + user.getUsername());
+        }
+
+        // Nếu apartment đã có owner → gán vào ComboBox
+        if (apartment.getOwner() != null) {
+            System.out.println("Chủ sở hữu hiện tại: " + apartment.getOwner().getUsername());
+            ownerComboBox.setValue(apartment.getOwner());
+        } else {
+            System.out.println("Căn hộ chưa có chủ sở hữu.");
+        }
+    }
+
+
 
     // Hàm ràng buộc chỉ nhập số
     private void addNumericValidation(TextField field) {
@@ -99,30 +205,33 @@ public class ApartmentEditController {
         this.apartment = apartment;
 
         if (apartment != null) {
-//            // Populate dữ liệu vào các trường nhập liệu
-//            soPhongField.setText(apartment.getRoomNumber());
-//            floorField.setText(String.valueOf(apartment.getFloor()));
-//            onwerField.setText(apartment.getOwner() != null ? apartment.getOwner().getUsername() : ""); // Cần phương thức getFullName()
-//            dienTichField.setText(String.valueOf(apartment.getArea()));
-//            soXeMayField.setText(String.valueOf(apartment.getMotorbikeCount()));
-//            soOToField.setText(String.valueOf(apartment.getCarCount()));
-//            soPhongNguField.setText(String.valueOf(apartment.getBedroomCount()));
-//            soPhongTamField.setText(String.valueOf(apartment.getBathroomCount()));
             populateForm(apartment);
         }
 
-        // Nếu mode == 1, chuyển sang chế độ chỉ xem
+        // Nếu mode == 1, chuyển sang chế độ chỉ xem (disable tất cả các trường và ẩn nút Save)
         if (mode == 1) {
             soPhongField.setDisable(true);
             floorField.setDisable(true);
-            onwerField.setDisable(true);
+            ownerComboBox.setDisable(true);
             dienTichField.setDisable(true);
             soXeMayField.setDisable(true);
             soOToField.setDisable(true);
             soPhongNguField.setDisable(true);
             soPhongTamField.setDisable(true);
-
             SaveButton.setVisible(false);
+        }
+
+        // mode = 3 cho phép chỉnh sửa thông tin
+        else if (mode == 3) {
+            soPhongField.setDisable(true);
+            floorField.setDisable(true);
+            ownerComboBox.setDisable(false);
+            dienTichField.setDisable(true);
+            soXeMayField.setDisable(false);
+            soOToField.setDisable(false);
+            soPhongNguField.setDisable(true);
+            soPhongTamField.setDisable(true);
+            SaveButton.setVisible(true);
         }
     }
 
@@ -135,7 +244,6 @@ public class ApartmentEditController {
         }
 
         try {
-            // Ghi log chi tiết để kiểm tra giá trị
             System.out.println(">>> Bắt đầu populateForm (Apartment)");
             System.out.println("ID: " + apartment.getId());
             System.out.println("Số phòng: " + apartment.getRoomNumber());
@@ -150,12 +258,45 @@ public class ApartmentEditController {
             // Điền thông tin vào form
             soPhongField.setText(safeString(apartment.getRoomNumber()));
             floorField.setText(String.valueOf(apartment.getFloor()));
-            onwerField.setText(apartment.getOwner() != null ? apartment.getOwner().getUsername() : "");
-            dienTichField.setText(String.valueOf(apartment.getArea()));
+            dienTichField.setText(apartment.getArea() != null ? apartment.getArea() + " m²" : "");
+
             soXeMayField.setText(String.valueOf(apartment.getMotorbikeCount()));
             soOToField.setText(String.valueOf(apartment.getCarCount()));
             soPhongNguField.setText(String.valueOf(apartment.getBedroomCount()));
             soPhongTamField.setText(String.valueOf(apartment.getBathroomCount()));
+
+            // Thiết lập StringConverter cho ComboBox<User>
+            ownerComboBox.setConverter(new StringConverter<User>() {
+                @Override
+                public String toString(User user) {
+                    return (user != null) ? user.getUsername() : "";
+                }
+
+                @Override
+                public User fromString(String string) {
+                    if (string != null && !string.isEmpty()) {
+                        return userRepository.findByUsername(string).orElse(null);
+                    }
+                    return null;
+                }
+            });
+
+            // Gán owner (kiểu User) cho ComboBox
+            if (apartment.getOwner() != null) {
+                ownerComboBox.setValue(apartment.getOwner());
+            } else {
+                ownerComboBox.setValue(null);
+            }
+
+            // Ghi log xác nhận
+            System.out.println("soPhongField: " + soPhongField.getText());
+            System.out.println("floorField: " + floorField.getText());
+            System.out.println("ownerComboBox: " + ownerComboBox.getValue());
+            System.out.println("dienTichField: " + dienTichField.getText());
+            System.out.println("soXeMayField: " + soXeMayField.getText());
+            System.out.println("soOToField: " + soOToField.getText());
+            System.out.println("soPhongNguField: " + soPhongNguField.getText());
+            System.out.println("soPhongTamField: " + soPhongTamField.getText());
 
             System.out.println(">>> Kết thúc populateForm (Apartment)");
 
@@ -166,15 +307,18 @@ public class ApartmentEditController {
     }
 
 
+
+
+
     // Hàm phụ trợ tránh lỗi null cho String
     private String safeString(String value) {
         return value != null ? value : "";
     }
 
+
     @FXML
     private void handleSave() {
         try {
-            // Kiểm tra dữ liệu nhập vào
             if (!validateApartmentInput()) {
                 statusLabel.setText("Vui lòng điền đầy đủ thông tin hợp lệ.");
                 return;
@@ -182,27 +326,31 @@ public class ApartmentEditController {
 
             boolean inserted = false;
 
-            // Nếu chưa có apartment, khởi tạo mới
             if (apartment == null) {
                 apartment = new Apartment();
                 inserted = true;
             }
 
-            // Cập nhật dữ liệu từ form vào đối tượng apartment
             apartment.setRoomNumber(soPhongField.getText());
             apartment.setFloor(Integer.parseInt(floorField.getText()));
-            apartment.setArea(Float.parseFloat(dienTichField.getText()));
+
+            String areaText = dienTichField.getText().replace("m²", "").trim();
+            apartment.setArea(Float.parseFloat(areaText));
+
             apartment.setMotorbikeCount(Integer.parseInt(soXeMayField.getText()));
             apartment.setCarCount(Integer.parseInt(soOToField.getText()));
             apartment.setBedroomCount(Integer.parseInt(soPhongNguField.getText()));
             apartment.setBathroomCount(Integer.parseInt(soPhongTamField.getText()));
 
-            // Gán resident owner nếu có (tuỳ logic bạn xử lý owner)
-//            if (selectedOwner != null) {
-//                apartment.setOwner(selectedOwner);
-//            }
+            // Set chủ sở hữu
+            User selectedOwner = ownerComboBox.getValue();
+            if (selectedOwner != null) {
+                apartment.setOwner(selectedOwner);
+            } else {
+                statusLabel.setText("Vui lòng chọn chủ hộ.");
+                return;
+            }
 
-            // In log để kiểm tra dữ liệu
             System.out.println("Apartment before request:");
             System.out.println("Room: " + apartment.getRoomNumber());
             System.out.println("Floor: " + apartment.getFloor());
@@ -232,8 +380,7 @@ public class ApartmentEditController {
                         .build();
             }
 
-            HttpResponse<String> response = hhtpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            ;
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             System.out.println("Response status code: " + response.statusCode());
             System.out.println("Response body: " + response.body());
@@ -256,13 +403,11 @@ public class ApartmentEditController {
 
     private boolean validateApartmentInput() {
         try {
-            // Kiểm tra số phòng
             if (isNullOrEmpty(soPhongField.getText())) {
                 statusLabel.setText("Số phòng không được để trống!");
                 return false;
             }
 
-            // Kiểm tra tầng
             if (isNullOrEmpty(floorField.getText())) {
                 statusLabel.setText("Tầng không được để trống!");
                 return false;
@@ -278,13 +423,13 @@ public class ApartmentEditController {
                 return false;
             }
 
-            // Kiểm tra diện tích
             if (isNullOrEmpty(dienTichField.getText())) {
                 statusLabel.setText("Diện tích không được để trống!");
                 return false;
             }
             try {
-                double area = Double.parseDouble(dienTichField.getText());
+                String areaText = dienTichField.getText().replace("m²", "").trim();
+                double area = Double.parseDouble(areaText);
                 if (area <= 0) {
                     statusLabel.setText("Diện tích phải lớn hơn 0!");
                     return false;
@@ -294,17 +439,16 @@ public class ApartmentEditController {
                 return false;
             }
 
-            // Kiểm tra số lượng xe máy
             if (!isValidIntegerField(soXeMayField.getText(), "Số xe máy")) return false;
-
-            // Kiểm tra số lượng ô tô
             if (!isValidIntegerField(soOToField.getText(), "Số ô tô")) return false;
-
-            // Kiểm tra số phòng ngủ
             if (!isValidIntegerField(soPhongNguField.getText(), "Số phòng ngủ")) return false;
-
-            // Kiểm tra số phòng tắm
             if (!isValidIntegerField(soPhongTamField.getText(), "Số phòng tắm")) return false;
+
+            // Kiểm tra đã chọn chủ hộ chưa
+            if (ownerComboBox.getValue() == null) {
+                statusLabel.setText("Vui lòng chọn chủ hộ!");
+                return false;
+            }
 
             return true;
 
@@ -314,6 +458,7 @@ public class ApartmentEditController {
             return false;
         }
     }
+
 
     private boolean isNullOrEmpty(String str) {
         return str == null || str.trim().isEmpty();
@@ -325,17 +470,18 @@ public class ApartmentEditController {
             return false;
         }
         try {
-            int intValue = Integer.parseInt(value);
+            int intValue = Integer.parseInt(value.trim());
             if (intValue < 0) {
                 statusLabel.setText(fieldName + " không được âm!");
                 return false;
             }
+            return true;
         } catch (NumberFormatException e) {
-            statusLabel.setText(fieldName + " phải là số nguyên!");
+            statusLabel.setText(fieldName + " phải là số nguyên hợp lệ!");
             return false;
         }
-        return true;
     }
+
 
     @FXML
     private void handleCancel() {

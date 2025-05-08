@@ -44,21 +44,16 @@ public class ApartmentService {
 
     public List<Apartment> getApartmentsByRoomNumberAndFloor(String roomNumber, Integer floor) {
         if (roomNumber != null && floor != null) {
-            // Lọc theo cả số phòng và tầng
             return apartmentRepository.findByRoomNumberAndFloor(roomNumber, floor);
         } else if (roomNumber != null) {
-            // Lọc theo số phòng, nhưng trả về danh sách (để tránh Optional)
             Optional<Apartment> apartment = apartmentRepository.findByRoomNumber(roomNumber);
             return apartment.map(Arrays::asList).orElse(Collections.emptyList());
         } else if (floor != null) {
-            // Lọc theo tầng
             return apartmentRepository.findByFloor(floor);
         } else {
-            // Nếu không có tham số, trả về tất cả các căn hộ
             return apartmentRepository.findAll();
         }
     }
-
 
     // Lấy tất cả căn hộ theo số phòng ngủ
     public List<Apartment> getApartmentsByBedroomCount(Integer bedroomCount) {
@@ -100,16 +95,27 @@ public class ApartmentService {
                 .orElseThrow(() -> new RuntimeException("Apartment not found with ID: " + id));
     }
 
+    // Lấy tất cả căn hộ
     public List<Apartment> getAllApartments() {
-        List<Apartment> apartments = apartmentRepository.findAll();
-        for (Apartment apartment : apartments) {
-            System.out.println("Apartment ID: " + apartment.getId() +
-                    ", Bedroom Count: " + apartment.getBedroomCount() +
-                    ", Bathroom Count: " + apartment.getBathroomCount());
-        }
-        return apartments;
+        return apartmentRepository.findAll();
     }
 
+    // Tìm tất cả căn hộ theo các điều kiện bổ sung như số lượng xe máy, ô tô, diện tích...
+    public List<Apartment> getApartmentsByFilters(Integer motorbikeCount, Integer carCount, Float area, Integer bedroomCount, Integer bathroomCount, Integer floor) {
+        if (motorbikeCount != null && carCount != null) {
+            return apartmentRepository.findByMotorbikeCountAndCarCount(motorbikeCount, carCount);
+        }
+        if (area != null && bedroomCount != null) {
+            return apartmentRepository.findByAreaGreaterThanEqualAndBedroomCount(area, bedroomCount);
+        }
+        if (area != null && bathroomCount != null) {
+            return apartmentRepository.findByAreaGreaterThanEqualAndBathroomCount(area, bathroomCount);
+        }
+        if (floor != null) {
+            return apartmentRepository.findByFloor(floor);
+        }
+        return apartmentRepository.findAll();
+    }
 
     // Lấy tất cả căn hộ theo số lượng xe máy
     public List<Apartment> getApartmentsByMotorbikeCount(Integer motorbikeCount) {

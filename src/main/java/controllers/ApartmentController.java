@@ -29,6 +29,7 @@ public class ApartmentController {
         this.userService = userService;
     }
 
+    // Lấy tất cả căn hộ của một chủ sở hữu
     @GetMapping("/owner/{ownerId}")
     public ResponseEntity<List<Apartment>> getAllApartmentsByOwner(@PathVariable Long ownerId) {
         logger.info("Received request to get apartments for owner with ID: {}", ownerId);
@@ -45,6 +46,7 @@ public class ApartmentController {
         return ResponseEntity.ok(apartments);
     }
 
+    // Lấy căn hộ theo số phòng
     @GetMapping("/room")
     public ResponseEntity<Apartment> getApartmentByRoomNumber(@RequestParam String roomNumber) {
         logger.info("Received request to get apartment for room number: {}", roomNumber);
@@ -59,6 +61,7 @@ public class ApartmentController {
         return ResponseEntity.ok(apartment);
     }
 
+    // Lấy danh sách căn hộ theo các bộ lọc
     @GetMapping
     public ResponseEntity<List<Apartment>> getApartmentsByFilters(
             @RequestParam(required = false) String roomNumber,
@@ -120,33 +123,67 @@ public class ApartmentController {
         return ResponseEntity.ok(apartments);
     }
 
-    @GetMapping("/area/{area}")
-    public ResponseEntity<List<Apartment>> getApartmentsByMinArea(@PathVariable float area) {
-        logger.info("Received request to get apartments with minimum area: {}", area);
+    // Thêm mới căn hộ
+    @PostMapping
+    public ResponseEntity<Apartment> createApartment(@RequestBody Apartment apartment) {
+        logger.info("Received request to create new apartment: {}", apartment);
 
-        List<Apartment> apartments = apartmentService.getApartmentsByMinArea(area);
-        logger.info("Found {} apartments with minimum area {}", apartments.size(), area);
+        // Kiểm tra xem thông tin căn hộ có hợp lệ không
+        if (apartment == null || apartment.getRoomNumber() == null || apartment.getOwner() == null) {
+            logger.error("Invalid apartment data received");
+            return ResponseEntity.badRequest().build();
+        }
 
-        return ResponseEntity.ok(apartments);
+        Apartment createdApartment = apartmentService.saveApartment(apartment);
+        logger.info("Apartment created successfully with ID: {}", createdApartment.getId());
+
+        return ResponseEntity.status(201).body(createdApartment);
     }
 
-    @GetMapping("/bedrooms/{bedroomCount}")
-    public ResponseEntity<List<Apartment>> getApartmentsByBedroomCount(@PathVariable int bedroomCount) {
-        logger.info("Received request to get apartments with bedroom count: {}", bedroomCount);
+    // Cập nhật thông tin căn hộ
+    @PutMapping("/{id}")
+    public ResponseEntity<Apartment> updateApartment(@PathVariable Long id, @RequestBody Apartment apartment) {
+        logger.info("Received request to update apartment with ID: {}", id);
 
-        List<Apartment> apartments = apartmentService.getApartmentsByBedroomCount(bedroomCount);
-        logger.info("Found {} apartments with bedroom count {}", apartments.size(), bedroomCount);
+        // Kiểm tra xem căn hộ có tồn tại trong cơ sở dữ liệu hay không
+        Apartment existingApartment = apartmentService.getApartmentById(id);
+        if (existingApartment == null) {
+            logger.error("Apartment with ID {} not found", id);
+            return ResponseEntity.notFound().build();
+        }
 
-        return ResponseEntity.ok(apartments);
+        // Cập nhật thông tin căn hộ
+        existingApartment.setRoomNumber(apartment.getRoomNumber());
+        existingApartment.setFloor(apartment.getFloor());
+        existingApartment.setArea(apartment.getArea());
+        existingApartment.setMotorbikeCount(apartment.getMotorbikeCount());
+        existingApartment.setCarCount(apartment.getCarCount());
+        existingApartment.setBedroomCount(apartment.getBedroomCount());
+        existingApartment.setBathroomCount(apartment.getBathroomCount());
+        existingApartment.setOwner(apartment.getOwner());
+
+        Apartment updatedApartment = apartmentService.updateApartment(existingApartment);
+        logger.info("Apartment with ID {} updated successfully", updatedApartment.getId());
+
+        return ResponseEntity.ok(updatedApartment);
     }
 
-    @GetMapping("/bathrooms/{bathroomCount}")
-    public ResponseEntity<List<Apartment>> getApartmentsByBathroomCount(@PathVariable int bathroomCount) {
-        logger.info("Received request to get apartments with bathroom count: {}", bathroomCount);
+    // Xóa căn hộ
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteApartment(@PathVariable Long id) {
+        logger.info("Received request to delete apartment with ID: {}", id);
 
-        List<Apartment> apartments = apartmentService.getApartmentsByBathroomCount(bathroomCount);
-        logger.info("Found {} apartments with bathroom count {}", apartments.size(), bathroomCount);
+        // Kiểm tra xem căn hộ có tồn tại không
+        Apartment apartment = apartmentService.getApartmentById(id);
+        if (apartment == null) {
+            logger.error("Apartment with ID {} not found", id);
+            return ResponseEntity.notFound().build();
+        }
 
-        return ResponseEntity.ok(apartments);
+        // Xóa căn hộ
+        apartmentService.deleteApartment(id);
+        logger.info("Apartment with ID {} deleted successfully", id);
+
+        return ResponseEntity.noContent().build();
     }
 }
