@@ -102,8 +102,11 @@ public class ApartmentEditController {
         if (apartment != null) {
             // Hiển thị thông tin số phòng
             soPhongField.setText(String.valueOf(apartment.getRoomNumber()));  // Chỉ hiển thị, không thay đổi
-            // Nạp dữ liệu vào ComboBox chủ hộ
-            populateOwnerComboBox();
+
+            // Nếu apartment có chủ sở hữu, chọn người đó trong ComboBox
+            if (apartment.getOwner() != null) {
+                ownerComboBox.setValue(apartment.getOwner());
+            }
         }
     }
 
@@ -112,7 +115,20 @@ public class ApartmentEditController {
     // Danh sách resident được lưu tạm để tìm sau khi chọn
     private List<Resident> residentsInApartment = new ArrayList<>();
 
-    private void populateOwnerComboBox() {
+    protected void populateOwnerComboBox() {
+
+        // In ra danh sách cư dân cũ trước khi xóa
+        if (!residentsInApartment.isEmpty()) {
+            System.out.println("Danh sách cư dân cũ (trước khi clear):");
+            for (Resident resident : residentsInApartment) {
+                System.out.println("- " + resident.getUsername() + " | " + resident.getHoTen());
+            }
+        } else {
+            System.out.println("Danh sách cư dân trước khi clear: trống.");
+        }
+
+        residentsInApartment.clear();
+
         // Kiểm tra apartment đã được khởi tạo chưa
         if (apartment == null) {
             System.out.println("Apartment là null!");
@@ -319,8 +335,11 @@ public class ApartmentEditController {
     @FXML
     private void handleSave() {
         try {
+            System.out.println("Bắt đầu phương thức handleSave.");
+
             if (!validateApartmentInput()) {
                 statusLabel.setText("Vui lòng điền đầy đủ thông tin hợp lệ.");
+                System.out.println("Dữ liệu không hợp lệ.");
                 return;
             }
 
@@ -329,7 +348,18 @@ public class ApartmentEditController {
             if (apartment == null) {
                 apartment = new Apartment();
                 inserted = true;
+                System.out.println("Tạo mới căn hộ.");
             }
+
+            // In ra các giá trị đầu vào để kiểm tra
+            System.out.println("Nhập liệu từ người dùng:");
+            System.out.println("Số phòng: " + soPhongField.getText());
+            System.out.println("Tầng: " + floorField.getText());
+            System.out.println("Diện tích: " + dienTichField.getText());
+            System.out.println("Số xe máy: " + soXeMayField.getText());
+            System.out.println("Số ô tô: " + soOToField.getText());
+            System.out.println("Số phòng ngủ: " + soPhongNguField.getText());
+            System.out.println("Số phòng tắm: " + soPhongTamField.getText());
 
             apartment.setRoomNumber(soPhongField.getText());
             apartment.setFloor(Integer.parseInt(floorField.getText()));
@@ -342,26 +372,33 @@ public class ApartmentEditController {
             apartment.setBedroomCount(Integer.parseInt(soPhongNguField.getText()));
             apartment.setBathroomCount(Integer.parseInt(soPhongTamField.getText()));
 
+            // In ra thông tin căn hộ đã thiết lập
+            System.out.println("Căn hộ sau khi thiết lập:");
+            System.out.println("Room: " + apartment.getRoomNumber());
+            System.out.println("Floor: " + apartment.getFloor());
+            System.out.println("Area: " + apartment.getArea());
+            System.out.println("Motorbike count: " + apartment.getMotorbikeCount());
+            System.out.println("Car count: " + apartment.getCarCount());
+            System.out.println("Bedroom count: " + apartment.getBedroomCount());
+            System.out.println("Bathroom count: " + apartment.getBathroomCount());
+
             // Set chủ sở hữu
             User selectedOwner = ownerComboBox.getValue();
             if (selectedOwner != null) {
                 apartment.setOwner(selectedOwner);
+                System.out.println("Chủ sở hữu: " + selectedOwner.getUsername());
             } else {
                 statusLabel.setText("Vui lòng chọn chủ hộ.");
+                System.out.println("Chưa chọn chủ hộ.");
                 return;
             }
-
-            System.out.println("Apartment before request:");
-            System.out.println("Room: " + apartment.getRoomNumber());
-            System.out.println("Floor: " + apartment.getFloor());
-            System.out.println("Area: " + apartment.getArea());
-            System.out.println("Owner: " + (apartment.getOwner() != null ? apartment.getOwner().getUsername() : "null"));
 
             String requestBody = objectMapper.writeValueAsString(apartment);
             System.out.println("Request body: " + requestBody);
 
             HttpRequest request;
             if (inserted) {
+                System.out.println("Thực hiện POST request để tạo mới.");
                 request = HttpRequest.newBuilder()
                         .uri(URI.create("http://localhost:8080/api/apartments"))
                         .header("Content-Type", "application/json")
@@ -370,9 +407,11 @@ public class ApartmentEditController {
             } else {
                 if (apartment.getId() == null || apartment.getId() <= 0) {
                     statusLabel.setText("ID không hợp lệ.");
+                    System.out.println("ID không hợp lệ.");
                     return;
                 }
 
+                System.out.println("Thực hiện PUT request để cập nhật.");
                 request = HttpRequest.newBuilder()
                         .uri(URI.create("http://localhost:8080/api/apartments/" + apartment.getId()))
                         .header("Content-Type", "application/json")
@@ -389,17 +428,22 @@ public class ApartmentEditController {
                 apartment = objectMapper.readValue(response.body(), Apartment.class);
                 statusLabel.setText("Lưu thành công!");
                 stage.close();
+                System.out.println("Căn hộ đã lưu thành công.");
             } else {
                 statusLabel.setText("Lỗi khi lưu: " + response.body());
+                System.out.println("Lỗi khi lưu: " + response.body());
             }
 
         } catch (NumberFormatException e) {
             statusLabel.setText("Sai định dạng số: " + e.getMessage());
+            System.out.println("Lỗi NumberFormatException: " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             statusLabel.setText("Lỗi: " + e.getMessage());
+            System.out.println("Lỗi Exception: " + e.getMessage());
         }
     }
+
 
     private boolean validateApartmentInput() {
         try {

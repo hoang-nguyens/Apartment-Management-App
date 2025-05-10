@@ -309,8 +309,13 @@ public class ApartmentViewController {
             apartmentEditController.setStage(apartmentEditStage);
             System.out.println("Đã thiết lập Stage cho controller");
 
+            // Thiết lập apartment và mode cho controller
             apartmentEditController.setApartment(apartment, mode);
             System.out.println("Đã thiết lập Apartment và mode cho controller");
+
+            // Gọi populateOwnerComboBox() sau khi apartment đã được thiết lập
+            apartmentEditController.populateOwnerComboBox();
+            System.out.println("Đã gọi populateOwnerComboBox()");
 
             // Hiển thị cửa sổ và chờ người dùng tương tác (modal)
             apartmentEditStage.showAndWait();
@@ -321,6 +326,7 @@ public class ApartmentViewController {
             Logger.getLogger(ApartmentController.class.getName()).log(Level.SEVERE, "Lỗi khi mở cửa sổ căn hộ", e);
         }
     }
+
 
     @FXML
     private void handleEdit(Apartment selectedApartment) {
