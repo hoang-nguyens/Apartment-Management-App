@@ -2,6 +2,8 @@ package models;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
+
 import models.enums.Role;
 import models.enums.Status;
 
@@ -79,5 +81,18 @@ public class User extends BaseModel {
 
     public void setLastLogin(LocalDateTime lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(this.getId(), user.getId()); // so sánh theo id
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getId());
     }
 }

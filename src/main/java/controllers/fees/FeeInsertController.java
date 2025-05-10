@@ -1,9 +1,7 @@
-package controllers;
+package controllers.fees;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,8 +14,6 @@ import models.enums.FeeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import services.FeeCategoryService;
-import services.FeeService;
-import services.UserService;
 
 import java.math.BigDecimal;
 import java.net.URI;

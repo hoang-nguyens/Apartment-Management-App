@@ -17,8 +17,8 @@ import java.util.List;
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, Long>{
     List<Invoice> findAll();
-    List<Invoice> findByUser(User user);
-    List<Invoice> findByUserId(Long id);
+    List<Invoice> findAllByUser(User user);
+    List<Invoice> findAllByUserId(Long id);
 
     @Query("""
     SELECT i FROM Invoice i
@@ -33,5 +33,8 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long>{
     );
 
     boolean existsByApartmentAndCategoryAndIssueDate(Apartment apartment, String category, LocalDate issueDate);
-    List<Invoice> findByDueDateBeforeAndStatusNot(LocalDate dueDate, InvoiceStatus status);
+    List<Invoice> findAllByDueDateBeforeAndStatusNot(LocalDate dueDate, InvoiceStatus status);
+
+    List<Invoice> findAllByStatusNot(InvoiceStatus status);
+    List<Invoice> findAllByUserIdAndStatusNot(Long userId, InvoiceStatus status);
 }

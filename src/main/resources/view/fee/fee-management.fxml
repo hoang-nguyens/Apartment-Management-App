@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FeeViewController">
+<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.fees.FeeViewController">
     <!-- Hàng 1: Nút Thêm Mới -->
     <HBox alignment="CENTER_LEFT" spacing="10" stylesheets="@../css/table_fee.css">
         <Button fx:id="addButton" onAction="#handleAdd" styleClass="new_button" stylesheets="@../css/table_fee.css" text="Thêm mới" />

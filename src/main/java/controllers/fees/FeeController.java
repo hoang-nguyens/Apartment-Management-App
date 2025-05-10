@@ -1,15 +1,11 @@
-package controllers;
+package controllers.fees;
 
 import models.Fee;
-import models.enums.BillPeriod;
-import models.enums.FeeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import services.FeeService;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController

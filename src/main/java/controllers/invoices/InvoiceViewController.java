@@ -1,4 +1,4 @@
-package controllers;
+package controllers.invoices;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -15,7 +15,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import models.*;
-import models.enums.FeeType;
 import models.enums.InvoiceStatus;
 import models.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Controller;
 import services.ApartmentService;
 import services.FeeCategoryService;
 import services.InvoiceService;
-import services.UserService;
 import utils.SoPhongUtil;
 import utils.UserUtils;
 
@@ -34,22 +32,20 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Controller
 public class InvoiceViewController {
     private final InvoiceService invoiceService;
     private final FeeCategoryService feeCategoryService;
-    private final ApartmentService apartmentService;
 
     @Autowired
-    public InvoiceViewController(InvoiceService invoiceService, FeeCategoryService feeCategoryService, ApartmentService apartmentService) {
+    public InvoiceViewController(InvoiceService invoiceService, FeeCategoryService feeCategoryService) {
         this.invoiceService = invoiceService;
         this.feeCategoryService = feeCategoryService;
-        this.apartmentService = apartmentService;
     }
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
@@ -72,6 +68,7 @@ public class InvoiceViewController {
     @FXML private TableColumn<Invoice, String> categoryColumn;
     @FXML private TableColumn<Invoice, BigDecimal> amountColumn;
     @FXML private TableColumn<Invoice, InvoiceStatus> statusColumn;
+    @FXML private TableColumn<Invoice, String> titleColumn;
 
     @FXML private Label totalAmountLabel;
 
@@ -99,7 +96,7 @@ public class InvoiceViewController {
         loadCategories();
         loadFeeStatus();
         loadInvoices();
-        updateTotalAmount();
+        updateTotalAmount(invoiceList);
 
         payButton.setOnAction(event -> handlePayment());
     }
@@ -115,6 +112,7 @@ public class InvoiceViewController {
                 } else {
                     selectedInvoices.remove(cell.getItem());
                 }
+                updateTotalAmount(selectedInvoices);
             });
 
             selectedInvoices.addListener((SetChangeListener.Change<? extends Invoice> change) -> {
@@ -124,7 +122,6 @@ public class InvoiceViewController {
             cell.itemProperty().addListener((obs, oldItem, newItem) -> {
                 selected.set(newItem != null && selectedInvoices.contains(newItem));
             });
-
             return cell;
         });
 
@@ -135,9 +132,16 @@ public class InvoiceViewController {
         });
         apartmentColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getApartment().getRoomNumber()));
-        issueDateColumn.setCellValueFactory(new PropertyValueFactory<>("issueDate"));
+//        issueDateColumn.setCellValueFactory(new PropertyValueFactory<>("issueDate"));
         dueDateColumn.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
-        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+//        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+        titleColumn.setCellValueFactory(data -> {
+            String cate = data.getValue().getCategory();
+            LocalDate issueDate = data.getValue().getIssueDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
+            return new SimpleStringProperty(cate + " tháng " + issueDate.format(formatter));
+        });
+        // category + issueDate -> title
         amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         if (!adminRoles.contains(currentUser.getRole())) {
@@ -146,6 +150,7 @@ public class InvoiceViewController {
             apartmentField.setVisible(false);
             categoryComboBox.setVisible(false);
             invoiceStatusComboBox.setVisible(false);
+            searchButton.setVisible(false);
         } else {
             payButton.setVisible(false);
         }
@@ -176,7 +181,7 @@ public class InvoiceViewController {
             statusLabel.setText("Vui lòng đăng nhập !!!");
             return;
         }
-        String url = "http://localhost:8080/api/invoices";
+        String url = "http://localhost:8080/api/invoices/unpaid";
         if (!adminRoles.contains(currentUser.getRole())) {
             url += "?userId=" + currentUser.getId();
         }
@@ -200,8 +205,8 @@ public class InvoiceViewController {
         }
     }
 
-    private void updateTotalAmount() {
-        BigDecimal total = invoiceList.stream()
+    private void updateTotalAmount(Collection<Invoice> invoices) {
+        BigDecimal total = invoices.stream()
                 .filter(invoice -> invoice.getStatus() == InvoiceStatus.UNPAID)
                 .map(Invoice::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

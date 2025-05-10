@@ -77,6 +77,7 @@ public class HomeController {
     private void onManageBill(){
         handleButtonClick(billButton);
         loadPage("/view/bill/bill-management.fxml"); //THAY ĐỔI DÒNG NÀY ĐỂ LOAD ĐÚNG TRANG
+//        loadPage("/view/payment/payment-view.fxml");
     }
 
     @FXML

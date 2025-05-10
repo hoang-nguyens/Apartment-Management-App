@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass // Cho phép các Entity con kế thừa nhưng không tạo bảng riêng
 @Getter
 @Setter
-@Service
+@Entity
 public abstract class BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

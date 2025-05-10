@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="512.0" prefWidth="793.0" spacing="10" stylesheets="@../css/table_fee.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FeeViewController">
+<VBox alignment="CENTER" prefHeight="512.0" prefWidth="793.0" spacing="10" stylesheets="@../css/table_fee.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.fees.FeeViewController">
     <!-- Hàng 1: Nút Thêm Mới -->
     <HBox alignment="CENTER_LEFT" prefHeight="18.0" prefWidth="794.0" spacing="10">
         <Button fx:id="addButton" onAction="#handleAdd" styleClass="new_button" stylesheets="@../css/table_fee.css" text="Thêm mới" textFill="#f7f3f3" />

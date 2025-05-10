@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.geometry.Insets?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.PaymentViewController" spacing="20">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- PHẦN THỐNG KÊ -->
+    <HBox spacing="20">
+        <TableView fx:id="statisticTable" prefWidth="300" prefHeight="300">
+            <columns>
+                <TableColumn fx:id="colCategory" text="Loại khoản thu"/>
+                <TableColumn fx:id="colTotal" text="Tổng tiền"/>
+            </columns>
+        </TableView>
+
+        <PieChart fx:id="paymentPieChart" title="Tỷ lệ thu theo loại" prefWidth="400" prefHeight="300"/>
+    </HBox>
+
+    <HBox spacing="20">
+        <BarChart fx:id="barChart" title="Thống kê chi tiêu hàng tháng" prefWidth="800" prefHeight="400">
+            <xAxis>
+                <CategoryAxis fx:id="xAxis" label="Tháng"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="yAxis" label="Số tiền"/>
+            </yAxis>
+        </BarChart>
+    </HBox>
+
+    <!-- PHẦN LỊCH SỬ THANH TOÁN -->
+    <VBox spacing="10">
+        <Label text="Lịch sử thanh toán" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+        <TableView fx:id="paymentTable" prefHeight="400">
+            <columns>
+                <TableColumn fx:id="colInvoice" text="Hóa đơn"/>
+                <TableColumn fx:id="colUsername" text="Cư dân"/>
+                <TableColumn fx:id="colAmount" text="Số tiền"/>
+                <TableColumn fx:id="colDate" text="Ngày thanh toán"/>
+                <TableColumn fx:id="colMethod" text="Phương thức"/>
+                <TableColumn fx:id="colNote" text="Ghi chú"/>
+            </columns>
+        </TableView>
+    </VBox>
+</VBox>

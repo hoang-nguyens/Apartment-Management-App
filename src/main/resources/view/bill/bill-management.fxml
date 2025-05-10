@@ -10,7 +10,7 @@
 
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ComboBox?>
-<AnchorPane prefHeight="475.0" prefWidth="867.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.InvoiceViewController">
+<AnchorPane prefHeight="475.0" prefWidth="867.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.invoices.InvoiceViewController">
 
     <VBox alignment="TOP_CENTER" layoutX="130.0" layoutY="19.0" prefHeight="378.0" prefWidth="657.0" spacing="10" >
         <!-- Tiêu đề -->
@@ -28,15 +28,17 @@
         <!-- Bảng hiển thị hóa đơn -->
         <TableView fx:id="invoiceTable" prefHeight="300" prefWidth="657.0">
             <columns>
-                <TableColumn fx:id="selectedColumn" prefWidth="50" text="" />
-                <TableColumn fx:id="invoiceIdColumn" prefWidth="100" text="Mã Hóa Đơn" />
+                <TableColumn fx:id="selectedColumn" prefWidth="20" text="" />
+                <TableColumn fx:id="invoiceIdColumn" prefWidth="70" text="Mã Hóa Đơn" />
                 <TableColumn fx:id="payerNameColumn" prefWidth="100" text="Tên chủ hộ" />
-                <TableColumn fx:id="apartmentColumn" prefWidth="50" text="Tên căn hộ" />
-                <TableColumn fx:id="issueDateColumn" prefWidth="120" text="Ngày lập" />
-                <TableColumn fx:id="dueDateColumn" prefWidth="120" text="Hạn thanh toán" />
-                <TableColumn fx:id="categoryColumn" prefWidth="120" text="Loại khoản thu" />
-                <TableColumn fx:id="amountColumn" prefWidth="100" text="Số tiền" />
-                <TableColumn fx:id="statusColumn" prefWidth="100" text="Trạng thái" />
+                <TableColumn fx:id="apartmentColumn" prefWidth="60" text="Căn hộ" />
+                <TableColumn fx:id="titleColumn" prefWidth="180" text="Tên hóa đơn" />
+<!--                <TableColumn fx:id="issueDateColumn" prefWidth="120" text="Ngày lập" />-->
+                <TableColumn fx:id="dueDateColumn" prefWidth="100" text="Hạn thanh toán" />
+<!--                <TableColumn fx:id="categoryColumn" prefWidth="120" text="Loại khoản thu" />-->
+
+                <TableColumn fx:id="amountColumn" prefWidth="80" text="Số tiền" />
+                <TableColumn fx:id="statusColumn" prefWidth="80" text="Trạng thái" />
             </columns>
         </TableView>
 

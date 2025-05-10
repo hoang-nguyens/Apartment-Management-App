@@ -1,9 +1,8 @@
-package controllers;
+package controllers.invoices;
 
 import models.Apartment;
 import models.Invoice;
 import models.enums.InvoiceStatus;
-import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +10,6 @@ import services.ApartmentService;
 import services.InvoiceService;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -34,6 +31,17 @@ public class InvoiceController {
             return ResponseEntity.ok(invoiceService.getInvoiceByUserId(userId));
         } else {
             return ResponseEntity.ok(invoiceService.getInvoices());
+        }
+    }
+
+    @GetMapping("/unpaid")
+    public ResponseEntity<List<Invoice>> getAllUnpaidInvoices(
+            @RequestParam(required = false) Long userId
+    ) {
+        if (userId != null) {
+            return ResponseEntity.ok(invoiceService.getUnpaidInvoices(userId));
+        } else {
+            return ResponseEntity.ok(invoiceService.getUnpaidInvoices());
         }
     }
 

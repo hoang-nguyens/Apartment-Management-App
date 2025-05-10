@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="415.0" prefWidth="873.0" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FeeInsertController">
+<VBox alignment="CENTER" prefHeight="415.0" prefWidth="873.0" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.fees.FeeInsertController">
     <Pane prefHeight="443.0" prefWidth="874.0" stylesheets="@../css/insert_fee.css">
         <children>
             <Pane id="grid_box" layoutX="410.0" layoutY="18.0" prefHeight="380.0" prefWidth="450.0" styleClass="root" stylesheets="@../css/insert_fee.css">

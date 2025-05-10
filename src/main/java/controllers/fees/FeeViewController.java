@@ -1,4 +1,4 @@
-package controllers;
+package controllers.fees;
 
 import app.MainApplication;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +15,6 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Fee;
-import models.FeeCategory;
 import models.User;
 import models.enums.BillPeriod;
 import models.enums.FeeUnit;
@@ -23,7 +22,6 @@ import models.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import services.FeeCategoryService;
-import services.InvoiceService;
 import utils.UserUtils;
 
 import java.math.BigDecimal;
