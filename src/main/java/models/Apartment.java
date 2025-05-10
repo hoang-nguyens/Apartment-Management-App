@@ -1,8 +1,11 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "apartments")
 public class Apartment extends BaseModel {
@@ -20,9 +23,13 @@ public class Apartment extends BaseModel {
     @Column(name = "room_number", nullable = false, length = 20)
     private String roomNumber;
 
-    @NotNull(message = "Chủ sở hữu không được để trống")
+    // Thêm trường ownerId để chỉ lưu ID của chủ sở hữu
+    @Column(name = "owner_id", nullable = false)
+    private Long ownerId;
+
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "owner_id", nullable = false)
+    @JoinColumn(name = "owner_id", insertable = false, updatable = false)
+    @JsonBackReference
     private User owner;
 
     @NotNull(message = "Diện tích không được để trống")
@@ -71,12 +78,28 @@ public class Apartment extends BaseModel {
         this.roomNumber = roomNumber;
     }
 
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+        if (ownerId != null) {
+            // Tự động ánh xạ ownerId thành đối tượng User nếu cần thiết
+            this.owner = new User();
+            this.owner.setId(ownerId);
+        }
+    }
+
     public User getOwner() {
         return owner;
     }
 
     public void setOwner(User owner) {
         this.owner = owner;
+        if (owner != null) {
+            this.ownerId = owner.getId();  // Cập nhật ownerId khi setter được gọi
+        }
     }
 
     public Float getArea() {

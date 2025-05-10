@@ -95,6 +95,7 @@ public class ApartmentService {
                 .orElseThrow(() -> new RuntimeException("Apartment not found with ID: " + id));
     }
 
+
     // Lấy tất cả căn hộ
     public List<Apartment> getAllApartments() {
         return apartmentRepository.findAll();

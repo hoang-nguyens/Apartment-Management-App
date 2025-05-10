@@ -64,4 +64,8 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long> {
 
     // Tìm căn hộ theo chủ sở hữu và diện tích
     List<Apartment> findByOwnerAndAreaGreaterThanEqual(User owner, Float area);
+
+    // Tìm căn hộ theo ID
+//    Optional<Apartment> findById(Long id);
+
 }

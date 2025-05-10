@@ -5,6 +5,7 @@ import models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import services.ApartmentService;
@@ -122,6 +123,25 @@ public class ApartmentController {
 
         return ResponseEntity.ok(apartments);
     }
+
+    // Phương thức GET cho /api/apartments/{id}
+    @GetMapping("/{id}")
+    public ResponseEntity<Apartment> getApartmentById(@PathVariable Long id) {
+        logger.info("Request received for apartment with ID: {}", id);
+        try {
+            Apartment apartment = apartmentService.getApartmentById(id);
+            if (apartment == null) {
+                logger.error("Apartment with ID {} not found", id);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+            logger.info("Apartment found: {}", apartment);
+            return ResponseEntity.ok(apartment);
+        } catch (RuntimeException e) {
+            logger.error("Error retrieving apartment with ID {}", id, e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
 
     // Thêm mới căn hộ
     @PostMapping

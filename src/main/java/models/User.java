@@ -1,7 +1,10 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import models.enums.Role;
 import models.enums.Status;
 
@@ -28,8 +31,20 @@ public class User extends BaseModel {
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Apartment> apartments;
+
     // Constructor mặc định
     public User() {}
+
+    public List<Apartment> getApartments() {
+        return apartments;
+    }
+
+    public void setApartments(List<Apartment> apartments) {
+        this.apartments = apartments;
+    }
 
     // Getters
     public String getUsername() {
