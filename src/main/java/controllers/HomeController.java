@@ -129,7 +129,21 @@ public class HomeController {
     @FXML
     private void onManageApartment(){
         handleButtonClick(supportButton);
-        loadPage("/view/apartment/apartment_table.fxml"); //THAY ĐỔI DÒNG NÀY ĐỂ LOAD ĐÚNG TRANG
+
+        User currentUser = UserUtils.getCurrentUser();
+        if (currentUser == null) {
+            System.out.println("Không tìm thấy người dùng hiện tại.");
+            return;
+        }
+
+        String role = currentUser.getRole().name(); // giả sử bạn dùng enum hoặc String để lưu role
+
+        if ("USER".equalsIgnoreCase(role)) {
+            loadPage("/view/apartment/apartment_edit.fxml");
+        } else {
+            loadPage("/view/apartment/apartment_table.fxml");
+        }
+
     }
 
     @FXML

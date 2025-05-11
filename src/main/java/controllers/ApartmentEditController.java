@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import models.Apartment;
+import models.enums.Role;
 import models.enums.SoPhong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,10 +25,18 @@ import java.util.stream.Collectors;
 
 import repositories.*;
 import models.*;
+import services.ApartmentService;
+import utils.UserUtils;
+
 @Controller
 public class ApartmentEditController {
     private Stage stage;
     private Apartment apartment;
+    private final ApartmentService apartmentService;
+    public ApartmentEditController(ApartmentService apartmentService){
+        this.apartmentService = apartmentService;
+    }
+
 
     @FXML
     private TextField soPhongField;
@@ -66,6 +75,22 @@ public class ApartmentEditController {
 
     @FXML
     public void initialize() {
+        User currentUser = UserUtils.getCurrentUser();
+        if (currentUser == null) {
+            System.out.println("Không tìm thấy người dùng hiện tại.");
+            return;
+        }
+
+        Role role = currentUser.getRole();
+        if(role == Role.USER){
+            List<Apartment> apartments = currentUser.getApartments();
+            if (apartments != null && !apartments.isEmpty()) {
+                apartment = apartments.get(0);
+            }
+
+            setApartment(apartment,1);
+            return;
+        }
         // Thiết lập placeholder cho các trường nhập liệu
         soPhongField.setPromptText("Số phòng");
         floorField.setPromptText("Tầng");
@@ -226,15 +251,16 @@ public class ApartmentEditController {
 
         // Nếu mode == 1, chuyển sang chế độ chỉ xem (disable tất cả các trường và ẩn nút Save)
         if (mode == 1) {
-            soPhongField.setDisable(true);
-            floorField.setDisable(true);
-            ownerComboBox.setDisable(true);
-            dienTichField.setDisable(true);
-            soXeMayField.setDisable(true);
-            soOToField.setDisable(true);
-            soPhongNguField.setDisable(true);
-            soPhongTamField.setDisable(true);
+            soPhongField.setEditable(false);
+            floorField.setEditable(false);
+            ownerComboBox.setEditable(false);
+            dienTichField.setEditable(false);
+            soXeMayField.setEditable(false);
+            soOToField.setEditable(false);
+            soPhongNguField.setEditable(false);
+            soPhongTamField.setEditable(false);
             SaveButton.setVisible(false);
+            cancelButton.setVisible(false);
         }
 
         // mode = 3 cho phép chỉnh sửa thông tin

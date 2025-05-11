@@ -45,7 +45,7 @@ public class User extends BaseModel {
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Apartment> apartments;
 

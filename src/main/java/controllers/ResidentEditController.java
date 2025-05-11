@@ -153,6 +153,7 @@ public class ResidentEditController{
             trangThaiXacThucField.setEditable(false);
             soPhongField.setEditable(false);
             saveButton.setVisible(false);
+            cancleButton.setVisible(false);
         }
     }
     public Resident getResident() {return resident;}
