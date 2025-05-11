@@ -44,4 +44,9 @@ public class PaymentController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
+    @GetMapping("user/{id}")
+    public ResponseEntity<List<Payment>> getUserPayments(@PathVariable Long id) {
+        return ResponseEntity.ok(paymentService.getPaymentsByUserId(id));
+    }
 }

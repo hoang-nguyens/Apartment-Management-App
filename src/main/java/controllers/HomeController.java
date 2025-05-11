@@ -98,10 +98,10 @@ public class HomeController {
         MenuItem paymentHistoryItem = new MenuItem("Lịch sử Thanh toán");
         MenuItem contributionHistoryItem = new MenuItem("Lịch sử Đóng góp");
 
-        // Cảnh sửa đường dẫn đến fxml nha
+
+        paymentHistoryItem.setOnAction(e -> loadPage("/view/payment/payment-view.fxml"));
         paymentItem.setOnAction(e -> loadPage("/view/bill/bill-management.fxml"));
-        paymentHistoryItem.setOnAction(e -> loadPage("/view/bill/bill-management.fxml"));
-        contributionHistoryItem.setOnAction(e -> loadPage("/view/bill/bill-management.fxml"));
+        contributionHistoryItem.setOnAction(e -> loadPage("/view/contribution/contribution-management.fxml"));
         contextMenu.getItems().addAll(paymentItem, paymentHistoryItem, contributionHistoryItem);
         contextMenu.show(billButton, Side.RIGHT, 0, 0);
     }

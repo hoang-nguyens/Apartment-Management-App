@@ -141,7 +141,7 @@ public class InvoiceService {
     }
 
     public void updateOverdueInvoice() {
-        List<Invoice> overdueInvoices = invoiceRepository.findByDueDateBeforeAndStatusNot(today, InvoiceStatus.OVERDUE);
+        List<Invoice> overdueInvoices = invoiceRepository.findAllByDueDateBeforeAndStatusNot(today, InvoiceStatus.OVERDUE);
         for (Invoice invoice : overdueInvoices) {
             invoice.setStatus(InvoiceStatus.OVERDUE);
             invoiceRepository.save(invoice);
@@ -153,12 +153,20 @@ public class InvoiceService {
         return invoiceRepository.findAll();
     }
 
+    public List<Invoice> getUnpaidInvoices() {
+        return invoiceRepository.findAllByStatusNot(InvoiceStatus.PAID);
+    }
+
+    public List<Invoice> getUnpaidInvoices(Long userId) {
+        return invoiceRepository.findAllByUserIdAndStatusNot(userId, InvoiceStatus.PAID);
+    }
+
     public List<Invoice> getInvoiceByUser(User user) {
-        return invoiceRepository.findByUser(user);
+        return invoiceRepository.findAllByUser(user);
     }
 
     public List<Invoice> getInvoiceByUserId(Long userId) {
-        return invoiceRepository.findByUserId(userId);
+        return invoiceRepository.findAllByUserId(userId);
     }
 
     public List<Invoice> getFilterInvoice(Long apartmentId, String category, InvoiceStatus status) {

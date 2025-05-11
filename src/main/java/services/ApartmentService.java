@@ -23,13 +23,16 @@ public class ApartmentService {
 
     // Lấy tất cả căn hộ của một chủ sở hữu
     public List<Apartment> getAllApartmentsByOwner(User owner) {
-        return apartmentRepository.findByOwner(owner);
+        return apartmentRepository.findAllByOwner(owner);
     }
 
     // Lấy căn hộ theo số phòng
     public Apartment getApartmentByRoomNumber(String roomNumber) {
         return apartmentRepository.findByRoomNumber(roomNumber)
                 .orElseThrow(() -> new RuntimeException("Apartment not found with room number: " + roomNumber));
+    }
+    public Apartment getApartmentByOwner(User owner) {
+        return apartmentRepository.findByOwner(owner);
     }
 
     // Lấy tất cả căn hộ theo tầng

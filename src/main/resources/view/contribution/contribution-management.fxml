@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ContributionViewController">
+
+    <!-- Thanh trên cùng: tiêu đề và nút hành động -->
+    <top>
+        <HBox spacing="10">
+            <Label text="Quản lý Đóng Góp" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Button fx:id="addButton" text="➕ Thêm đóng góp" onAction="#onAddContribution" />
+            <Button fx:id="refreshButton" text="🔄 Làm mới" onAction="#refresh" />
+        </HBox>
+    </top>
+
+    <!-- Bảng dữ liệu đóng góp -->
+    <center>
+        <TableView fx:id="contributionsTable" VBox.vgrow="ALWAYS">
+            <!-- Các cột sẽ được tạo động trong controller -->
+        </TableView>
+    </center>
+
+</BorderPane>

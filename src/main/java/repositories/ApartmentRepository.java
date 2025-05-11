@@ -12,8 +12,9 @@ import java.util.Optional;
 public interface ApartmentRepository extends JpaRepository<Apartment, Long> {
 
     // Tìm các căn hộ của một chủ sở hữu
-    List<Apartment> findByOwner(User owner);
+    List<Apartment> findAllByOwner(User owner);
 
+    Apartment findByOwner(User user);
     // Tìm căn hộ theo số phòng
     Optional<Apartment> findByRoomNumber(String roomNumber);
 

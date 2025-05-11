@@ -2,8 +2,6 @@ package controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,8 +14,6 @@ import models.enums.FeeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import services.FeeCategoryService;
-import services.FeeService;
-import services.UserService;
 
 import java.math.BigDecimal;
 import java.net.URI;
@@ -26,6 +22,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 public class FeeInsertController {
@@ -33,6 +31,7 @@ public class FeeInsertController {
     private final FeeCategoryService feeCategoryService;
     private Stage stage;
     private Fee fee;
+    private static final Logger logger = LoggerFactory.getLogger(FeeInsertController.class);
 
     @Autowired
     public FeeInsertController(FeeCategoryService feeCategoryService) {
@@ -135,7 +134,7 @@ public class FeeInsertController {
     private void populateForm(Fee fee) {
         categoryComboBox.setValue(fee.getCategory());
         subCategoryComboBox.setValue(fee.getSubCategory());
-        amountField.setText(fee.getAmount().toString());
+        amountField.setText(fee.getAmount() != null ? fee.getAmount().toString() : null);
         unitComboBox.setValue(fee.getUnit());
         billPeriodComboBox.setValue(fee.getBillPeriod());
         descriptionArea.setText(fee.getDescription());
@@ -184,6 +183,9 @@ public class FeeInsertController {
     private void handleSave() {
         try {
             if (! validateFeeInput()) return;
+            if (amountField.getText()==null || amountField.getText().isEmpty()) {
+                amountField.setText("0");
+            }
 //            User currentUser = userService.getCurrentUser();
 //            System.out.println(currentUser.toString());
 
@@ -237,7 +239,7 @@ public class FeeInsertController {
         } catch (IllegalArgumentException e) {
             statusLabel.setText("Lỗi nhập liệu: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             statusLabel.setText("Lỗi: " + e.getMessage());
         }
     }
