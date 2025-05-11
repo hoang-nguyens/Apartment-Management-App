@@ -16,6 +16,7 @@ import javafx.util.converter.BigDecimalStringConverter;
 import models.contibution.Contribution;
 import models.fee.Fee;
 import models.fee.FeeCategory;
+import models.resident.Resident;
 import models.user.User;
 import models.enums.FeeType;
 import models.enums.Role;
@@ -23,7 +24,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import services.apartment.ApartmentService;
 import services.fee.FeeCategoryService;
+import services.resident.ResidentService;
 import services.user.UserService;
+import utils.UserUtils;
 
 import java.math.BigDecimal;
 import java.net.URI;
@@ -40,12 +43,14 @@ public class ContributionViewController {
     private final FeeCategoryService feeCategoryService;
     private final ApartmentService apartmentService;
     private final UserService userService;
+    private final ResidentService residentService;
 
     @Autowired
-    public ContributionViewController(FeeCategoryService feeCategoryService, ApartmentService apartmentService, UserService userService) {
+    public ContributionViewController(FeeCategoryService feeCategoryService, ApartmentService apartmentService, UserService userService, ResidentService residentService) {
         this.feeCategoryService = feeCategoryService;
         this.apartmentService = apartmentService;
         this.userService = userService;
+        this.residentService = residentService;
     }
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
@@ -72,10 +77,16 @@ public class ContributionViewController {
     @FXML
     public void initialize() {
         users = userService.getAllUsersWithUserRole();
+        currentUser = UserUtils.getCurrentUser();
         setupFeeNames();
         loadContributions();
         loadNotContributedUsers();
         setupTableColumns();
+        if (!adminRoles.contains(currentUser.getRole())) {
+            contributionsTable.setEditable(false);
+            addButton.setVisible(false);
+            refreshButton.setVisible(false);
+        }
     }
 
     @FXML public void refresh() {
@@ -116,7 +127,8 @@ public class ContributionViewController {
         TableColumn<Map<String, Object>, String> nameCol = new TableColumn<>("Người nộp");
         nameCol.setCellValueFactory(data -> {
             User user = (User) data.getValue().get("name");
-            return new SimpleStringProperty(user.getEmail());
+            Resident resident = residentService.findResidentByUserId(user.getId());
+            return new SimpleStringProperty(resident!=null ? resident.getHoTen() : user.getEmail());
         });
         nameCol.setEditable(false);
         contributionsTable.getColumns().add(nameCol);
