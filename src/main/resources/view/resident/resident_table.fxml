@@ -15,28 +15,27 @@
         <HBox alignment="CENTER" prefHeight="37.0" prefWidth="792.0" stylesheets="@../css/table_fee.css">
             <children>
                 <Label text="Số phòng" />
-                <ComboBox fx:id="roomComboBox" prefHeight="26.0" prefWidth="68.0" />
+                <ComboBox fx:id="roomComboBox" prefHeight="28.0" prefWidth="107.0" />
                 <Label text="Tạm trú" />
-                <ComboBox fx:id="tamVangStatusSearchComboBox" prefHeight="26.0" prefWidth="62.0" />
+                <ComboBox fx:id="tamVangStatusSearchComboBox" prefHeight="28.0" prefWidth="108.0" />
                 <Label text="Xác thực" />
-                <ComboBox prefWidth="56.0" fx:id="xacThucStatusSearchComboBox" />
+                <ComboBox prefHeight="28.0" prefWidth="101.0" fx:id="xacThucStatusSearchComboBox" />
                 <Button fx:id="resetButton" mnemonicParsing="false" onAction="#handleResetSearch" text="Reset" />
             </children>
         </HBox>
-        <Pane prefHeight="409.0" prefWidth="792.0" stylesheets="@../css/table_fee.css">
+        <Pane prefHeight="409.0" prefWidth="750.0" stylesheets="@../css/table_fee.css">
             <children>
-                <TableView fx:id="residentTable" layoutX="16.0" prefHeight="410.0" prefWidth="891.0">
+                <TableView fx:id="residentTable" layoutX="1.0" prefHeight="410.0" prefWidth="924.0">
                     <columns>
-                        <TableColumn fx:id="usernameColumn" prefWidth="75.0" text="Username" />
-                        <TableColumn fx:id="hotenColumn" prefWidth="75.0" text="Họ tên" />
-                        <TableColumn fx:id="cccdColumn" prefWidth="75.0" text="CCCD" />
-                        <TableColumn fx:id="sdtColumn" prefWidth="95.199951171875" text="Số điện thoại" />
-                        <TableColumn fx:id="genderColumn" prefWidth="77.60003662109375" text="Giới tính" />
-                        <TableColumn fx:id="apartmentNumberColumn" prefWidth="68.800048828125" text="Số phòng" />
-                        <TableColumn fx:id="tamVangStatusColumn" minWidth="0.0" prefWidth="72.79998779296875" text="Tạm trú" />
-                        <TableColumn fx:id="dobColumn" prefWidth="92.79998779296875" text="Ngày sinh" />
-                        <TableColumn prefWidth="73.60003662109375" text="Xác thực" fx:id="xacThucStatusColumn" />
-                        <TableColumn fx:id="actionColumn" prefWidth="126.4000244140625" text="Thao tác" />
+                        <TableColumn fx:id="usernameColumn" prefWidth="83.71200752258301" style="-fx-alignment: CENTER;" text="Username" />
+                        <TableColumn fx:id="hotenColumn" prefWidth="132.86400604248047" style="-fx-alignment: CENTER;" text="Họ tên" />
+                        <TableColumn fx:id="cccdColumn" prefWidth="112.12800598144531" style="-fx-alignment: CENTER;" text="CCCD" />
+                        <TableColumn fx:id="sdtColumn" prefWidth="102.14404296875" style="-fx-alignment: CENTER;" text="Số điện thoại" />
+                        <TableColumn fx:id="genderColumn" prefWidth="86.78399658203125" style="-fx-alignment: CENTER;" text="Giới tính" />
+                        <TableColumn fx:id="apartmentNumberColumn" prefWidth="111.3599853515625" style="-fx-alignment: CENTER;" text="Số phòng" />
+                        <TableColumn prefWidth="135.16796875" style="-fx-alignment: CENTER;" text="Xác thực" fx:id="xacThucStatusColumn" />
+                        <TableColumn fx:id="actionColumn" prefWidth="139.00799560546875" style="-fx-alignment: CENTER;" text="Thao tác" />
+
                     </columns>
                 </TableView>
             </children>

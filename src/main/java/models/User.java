@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ public class User extends BaseModel {
     private Status status = Status.ACTIVE;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = true)
+    @JsonIgnore
     private Resident resident;
 
     public Resident getResident() {

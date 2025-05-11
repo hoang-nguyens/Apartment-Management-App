@@ -187,8 +187,11 @@ public class ResidentViewController {
     }
 
     private void loadResidents() {
+        System.out.println("Bắt đầu tải danh sách cư dân...");
+
         // Chỉ bỏ qua tải dữ liệu nếu đã tải và không cần làm mới
         if (isDataLoaded) {
+            System.out.println("Dữ liệu đã được tải trước đó, không cần tải lại.");
             residentTable.setItems(residentList);
             return;
         }
@@ -200,34 +203,55 @@ public class ResidentViewController {
                     .header("Content-Type", "application/json")
                     .GET()
                     .build();
+
+            System.out.println("Gửi yêu cầu HTTP đến server...");
+
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
+            System.out.println("Nhận phản hồi từ server với mã trạng thái: " + response.statusCode());
+
             if (response.statusCode() == 200) {
+                System.out.println("Phản hồi thành công. Đang xử lý dữ liệu...");
+
                 // Xóa dữ liệu cũ và cập nhật danh sách mới
                 residentList.clear();
-                User[] users = objectMapper.readValue(response.body(), User[].class);
+
+                String responseBody = response.body();
+                System.out.println("Nội dung phản hồi:\n" + responseBody);
+
+                User[] users = objectMapper.readValue(responseBody, User[].class);
+
                 for (User user : users) {
+                    System.out.println("Xử lý người dùng: " + user.getUsername());
+
                     Resident resident = residentService.findResidentByUsername(user.getUsername());
                     if (resident == null) {
+                        System.out.println("Người dùng chưa tồn tại, tạo mới.");
                         resident = new Resident();
                         resident.setUser(user);
                         resident.setTrangThaiXacThuc(XacThuc.CHUA_XAC_THUC);
                         resident.setTrangThaiTamVang(TamVangStatus.thuong_tru);
                         residentService.saveResident(resident);
                     }
+
                     residentList.add(resident);
                 }
+
                 residentTable.setItems(residentList);
                 isDataLoaded = true;
                 thongBaoLabel.setText("Tải dữ liệu thành công.");
+                System.out.println("Tải dữ liệu thành công.");
             } else {
                 thongBaoLabel.setText("Lỗi khi tải dữ liệu.");
+                System.out.println("Phản hồi lỗi từ server. Mã: " + response.statusCode());
             }
         } catch (Exception e) {
             e.printStackTrace();
             thongBaoLabel.setText("Lỗi kết nối server!");
+            System.out.println("Lỗi xảy ra khi gửi yêu cầu hoặc xử lý phản hồi: " + e.getMessage());
         }
     }
+
 
     private String formatEnumToDisplayName(String enumName) {
         String formattedName = enumName.replace("_", " ");
