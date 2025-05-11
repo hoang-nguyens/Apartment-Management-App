@@ -92,8 +92,18 @@ public class HomeController {
 
     @FXML
     private void onManageBill(){
-        handleButtonClick(billButton);
-        loadPage("/view/bill/bill-management.fxml"); //THAY ĐỔI DÒNG NÀY ĐỂ LOAD ĐÚNG TRANG
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem paymentItem = new MenuItem("Thanh toán");
+        MenuItem paymentHistoryItem = new MenuItem("Lịch sử Thanh toán");
+        MenuItem contributionHistoryItem = new MenuItem("Lịch sử Đóng góp");
+
+        // Cảnh sửa đường dẫn đến fxml nha
+        paymentItem.setOnAction(e -> loadPage("/view/bill/bill-management.fxml"));
+        paymentHistoryItem.setOnAction(e -> loadPage("/view/bill/bill-management.fxml"));
+        contributionHistoryItem.setOnAction(e -> loadPage("/view/bill/bill-management.fxml"));
+        contextMenu.getItems().addAll(paymentItem, paymentHistoryItem, contributionHistoryItem);
+        contextMenu.show(billButton, Side.RIGHT, 0, 0);
     }
 
     @FXML
@@ -151,14 +161,15 @@ public class HomeController {
         alert.showAndWait();
     }
 
-    // Tải và hiển thị trang mới trong contentArea
-    private void loadPage(String fxmlPath) {
+    protected void loadPage(String fxmlPath) {
         try {
             System.out.println("Đang tải: " + fxmlPath);
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            loader.setControllerFactory(springContext::getBean); // Inject Spring Beans
+            loader.setControllerFactory(springContext::getBean); // Spring sẽ tự inject controller và các dependency
+
             Pane newPage = loader.load();
+
             if (contentArea != null) {
                 contentArea.getChildren().setAll(newPage);
             } else {
@@ -172,6 +183,7 @@ public class HomeController {
             showAlert("Lỗi không xác định: " + e.getMessage());
         }
     }
+
 
     /** Account **/
     @FXML private Button accountButton;

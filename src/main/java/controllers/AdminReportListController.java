@@ -318,7 +318,7 @@ public class AdminReportListController {
                             currentAdmin,
                             responseText
                     );
-                    isDataLoaded = false;
+                    setDataLoaded();
                     loadAllReports();
                     showAlert("Thành công", "Đã gửi phản hồi!", Alert.AlertType.INFORMATION);
                 } catch (Exception e) {
@@ -328,6 +328,9 @@ public class AdminReportListController {
         }
     }
 
+    void setDataLoaded(){
+        isDataLoaded = false;
+    }
 
     private void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);

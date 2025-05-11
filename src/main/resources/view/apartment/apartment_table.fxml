@@ -25,15 +25,14 @@
          <children>
             <TableView fx:id="apartmentTable" layoutX="50.0" prefHeight="348.0" prefWidth="766.0">
               <columns>
-                <TableColumn fx:id="ownerUsernameColumn" prefWidth="75.0" text="Chủ hộ" />
-                <TableColumn fx:id="floorColumn" prefWidth="75.0" text="Tầng" />
-                  <TableColumn fx:id="roomNumberColumn" prefWidth="75.0" text="Số phòng" />
-                  <TableColumn fx:id="areaColumn" prefWidth="75.0" text="Diện tích" />
-                  <TableColumn fx:id="bedroomCountColumn" prefWidth="97.5999755859375" text="Số phòng ngủ" />
-                  <TableColumn fx:id="bathroomCountColumn" prefWidth="108.00003051757812" text="Số phòng tắm" />
-                  <TableColumn fx:id="motorbikeCountColumn" prefWidth="66.4000244140625" text="Số xe máy" />
-                  <TableColumn fx:id="carCountColumn" prefWidth="60.800048828125" text="Số ô tô" />
-                  <TableColumn fx:id="actionColumn" prefWidth="127.20001220703125" text="Thao tác" />
+                <TableColumn fx:id="floorColumn" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Tầng" />
+                  <TableColumn fx:id="roomNumberColumn" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Số phòng" />
+                  <TableColumn fx:id="areaColumn" prefWidth="75.0" style="-fx-alignment: CENTER;" text="Diện tích" />
+                  <TableColumn fx:id="bedroomCountColumn" prefWidth="97.5999755859375" style="-fx-alignment: CENTER;" text="Số phòng ngủ" />
+                  <TableColumn fx:id="bathroomCountColumn" prefWidth="108.00003051757812" style="-fx-alignment: CENTER;" text="Số phòng tắm" />
+                  <TableColumn fx:id="motorbikeCountColumn" prefWidth="66.4000244140625" style="-fx-alignment: CENTER;" text="Số xe máy" />
+                  <TableColumn fx:id="carCountColumn" prefWidth="60.800048828125" style="-fx-alignment: CENTER;" text="Số ô tô" />
+                  <TableColumn fx:id="actionColumn" prefWidth="127.20001220703125" style="-fx-alignment: CENTER;" text="Thao tác" />
               </columns>
             </TableView>
          </children>

@@ -58,8 +58,8 @@ public class ApartmentViewController {
 
     @FXML
     private TableView<Apartment> apartmentTable;
-    @FXML
-    private TableColumn<Apartment, String> ownerUsernameColumn;
+//    @FXML
+//    private TableColumn<Apartment, String> ownerUsernameColumn;
     @FXML
     private TableColumn<Apartment, Integer> floorColumn;
     @FXML
@@ -142,9 +142,9 @@ public class ApartmentViewController {
         roomComboBox.setOnAction(event -> handleSearch());
 
         // Cài đặt cột bảng
-        ownerUsernameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
-                cellData.getValue().getOwner() != null ? cellData.getValue().getOwner().getUsername() : ""
-        ));
+//        ownerUsernameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
+//                cellData.getValue().getOwner() != null ? cellData.getValue().getOwner().getUsername() : ""
+//        ));
         floorColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getFloor()));
         roomNumberColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRoomNumber()));
         areaColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getArea()));
@@ -211,6 +211,7 @@ public class ApartmentViewController {
                 apartmentList.clear();
 
                 for (Apartment apartment : apartments) {
+                    System.out.println("Chủ hộ là: " + apartment.getOwner());
                     System.out.println("Đang xử lý căn hộ: " + apartment.getRoomNumber() + " (ID: " + apartment.getId() + ")");
                     System.out.println("Số phòng ngủ: " + apartment.getBedroomCount());
                     System.out.println("Số phòng tắm: " + apartment.getBathroomCount());
@@ -219,7 +220,7 @@ public class ApartmentViewController {
                     Apartment existingApartment = apartmentService.getApartmentById(apartment.getId());
                     if (existingApartment != null) {
                         System.out.println("Căn hộ trong DB trước khi cập nhật: " + existingApartment);
-
+                        System.out.println("Chủ hộ: " + apartment.getOwner());
                         // Cập nhật căn hộ nếu có sự thay đổi
                         existingApartment.setRoomNumber(apartment.getRoomNumber());
                         existingApartment.setFloor(apartment.getFloor());
@@ -242,12 +243,7 @@ public class ApartmentViewController {
                     apartmentList.add(existingApartment);
                 }
 
-                // In ra các thông tin trong apartmentList sau khi đã thêm
-                for (Apartment apartment : apartmentList) {
-                    System.out.println("Căn hộ trong danh sách: " + apartment.getRoomNumber() +
-                            ", Số phòng ngủ: " + apartment.getBedroomCount() +
-                            ", Số phòng tắm: " + apartment.getBathroomCount());
-                }
+
 
                 apartmentTable.setItems(apartmentList);
                 thongBaoLabel.setText("Tải lên dữ liệu căn hộ thành công.");

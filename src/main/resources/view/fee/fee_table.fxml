@@ -42,16 +42,16 @@
           <!-- TableView hiển thị danh sách Fee -->
           <TableView fx:id="feeTable" prefHeight="400.0" prefWidth="792.0" styleClass="column-header" stylesheets="@../css/table_fee.css">
               <columns>
-                  <TableColumn fx:id="idColumn" styleClass="column-header" text="ID" />
-                  <TableColumn fx:id="categoryColumn" text="Loại khoản thu" />
-                  <TableColumn fx:id="subCategoryColumn" text="Nhóm khoản thu" />
-                  <TableColumn fx:id="amountColumn" text="Số tiền" />
-                  <TableColumn fx:id="unitColumn" text="Đơn vị tính" />
-                  <TableColumn fx:id="billPeriodColumn" text="Kỳ thanh toán" />
-                  <TableColumn fx:id="descriptionColumn" text="Mô tả" />
-                  <TableColumn fx:id="startDateColumn" text="Ngày bắt đầu" />
-                  <TableColumn fx:id="endDateColumn" text="Ngày kết thúc" />
-                  <TableColumn fx:id="actionColumn" text="Thao tác" /> <!-- Sửa tiêu đề để phù hợp -->
+                  <TableColumn fx:id="idColumn" style="-fx-alignment: CENTER;" text="ID" />
+                  <TableColumn fx:id="categoryColumn" style="-fx-alignment: CENTER;" text="Loại khoản thu" />
+                  <TableColumn fx:id="subCategoryColumn" style="-fx-alignment: CENTER;" text="Nhóm khoản thu" />
+                  <TableColumn fx:id="amountColumn" style="-fx-alignment: CENTER;" text="Số tiền" />
+                  <TableColumn fx:id="unitColumn" style="-fx-alignment: CENTER;" text="Đơn vị tính" />
+                  <TableColumn fx:id="billPeriodColumn" style="-fx-alignment: CENTER;" text="Kỳ thanh toán" />
+                  <TableColumn fx:id="descriptionColumn" style="-fx-alignment: CENTER;" text="Mô tả" />
+                  <TableColumn fx:id="startDateColumn" style="-fx-alignment: CENTER;" text="Ngày bắt đầu" />
+                  <TableColumn fx:id="endDateColumn" style="-fx-alignment: CENTER;" text="Ngày kết thúc" />
+                  <TableColumn fx:id="actionColumn" style="-fx-alignment: CENTER;" text="Thao tác" /> <!-- Sửa tiêu đề để phù hợp -->
               </columns>
           </TableView>
       </children>

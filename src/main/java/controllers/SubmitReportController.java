@@ -19,6 +19,8 @@ public class SubmitReportController {
     private ReportService reportService;
     @Autowired
     UserReportHistoryController userReportHistoryController ;
+    @Autowired
+    AdminReportListController adminReportListController;
 
     @FXML private TextField titleField;
     @FXML private TextArea messageArea;
@@ -56,6 +58,7 @@ public class SubmitReportController {
             messageArea.clear();
             showSuccess("Gửi khiếu nại thành công!");
             userReportHistoryController.loadReports();
+            adminReportListController.setDataLoaded();
         }));
 
         submitTask.setOnFailed(e -> Platform.runLater(() ->

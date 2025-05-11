@@ -25,7 +25,7 @@
         </HBox>
         <Pane prefHeight="409.0" prefWidth="750.0" stylesheets="@../css/table_fee.css">
             <children>
-                <TableView fx:id="residentTable" layoutX="1.0" prefHeight="410.0" prefWidth="924.0">
+                <TableView fx:id="residentTable" layoutX="50.0" prefHeight="410.0" prefWidth="924.0">
                     <columns>
                         <TableColumn fx:id="usernameColumn" prefWidth="83.71200752258301" style="-fx-alignment: CENTER;" text="Username" />
                         <TableColumn fx:id="hotenColumn" prefWidth="132.86400604248047" style="-fx-alignment: CENTER;" text="Họ tên" />
