@@ -4,7 +4,6 @@ import app.MainApplication;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import jakarta.persistence.Table;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -16,7 +15,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import models.Fee;
 import models.Resident;
 import models.User;
 import models.enums.*;
@@ -42,6 +40,7 @@ import java.util.stream.Collectors;
 
 @Controller
 public class ResidentViewController {
+    private boolean isDataLoaded = false;
     private final ResidentService residentService;
     private final ResidentEditController residentEditController;
 
@@ -114,65 +113,47 @@ public class ResidentViewController {
             Resident resident = residentService.findResidentByUsername(username);
 
             if (resident != null) {
-                openResidentStage(resident, 1); // Chế độ chỉ xem
             } else {
                 thongBaoLabel.setText("Không tìm thấy thông tin cư dân.");
             }
-
-            // Ẩn bảng danh sách nếu là user thường
-            residentTable.setVisible(false);
-            thongBaoLabel.setVisible(false); // Hoặc có thể hiển thị lời chào khác
             return;
         }
-
-        // Nếu là ADMIN hoặc ADMIN_ROOT thì load toàn bộ danh sách cư dân
         loadResidents();
         System.out.println("ResidentViewController initialized");
-
-// Khởi tạo ComboBox cho số phòng (RoomNumber)
         roomComboBox.setItems(FXCollections.observableArrayList(
-                Arrays.stream(SoPhong.values())  // Lấy các giá trị từ enum RoomNumber
-                        .map(Enum::name)  // Lấy tên enum, ví dụ: "ROOM_101"
-//                        .map(this::formatEnumToDisplayName)  // Chuyển thành chuỗi dễ đọc, ví dụ: "Room 101"
+                Arrays.stream(SoPhong.values())
+                        .map(Enum::name)
                         .collect(Collectors.toList())
         ));
-
-        // Khởi tạo ComboBox cho trạng thái xác thực (AuthStatus)
         xacThucStatusSearchComboBox.setItems(FXCollections.observableArrayList(
-                Arrays.stream(XacThuc.values())  // Lấy các giá trị từ enum AuthStatus
-                        .map(Enum::name)  // Lấy tên enum, ví dụ: "VERIFIED"
-//                        .map(this::formatEnumToDisplayName)  // Chuyển thành chuỗi dễ đọc, ví dụ: "Verified"
+                Arrays.stream(XacThuc.values())
+                        .map(Enum::name)
                         .collect(Collectors.toList())
         ));
-
-        // Khởi tạo ComboBox cho trạng thái tạm vắng (TamVangStatus)
         tamVangStatusSearchComboBox.setItems(FXCollections.observableArrayList(
-                Arrays.stream(TamVangStatus.values())  // Lấy các giá trị từ enum TamVangStatus
-                        .map(Enum::name)  // Lấy tên enum, ví dụ: "ACTIVE"
-//                        .map(this::formatEnumToDisplayName)  // Chuyển thành chuỗi dễ đọc, ví dụ: "Active"
+                Arrays.stream(TamVangStatus.values())
+                        .map(Enum::name)
                         .collect(Collectors.toList())
         ));
-
-        // Thêm các sự kiện lựa chọn nếu cần (ví dụ: xử lý khi người dùng chọn)
         roomComboBox.setOnAction(event -> handleSearch());
         xacThucStatusSearchComboBox.setOnAction(event -> handleSearch());
         tamVangStatusSearchComboBox.setOnAction(event -> handleSearch());
-        // Setup các cột trong bảng
         usernameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUser().getUsername()));
         hotenColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getHoTen()));
         cccdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCccd()));
         sdtColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSdt()));
         genderColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getGioiTinh()));
         apartmentNumberColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getSoPhong()));
-        dobColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getNgaySinh()));
-        tamVangStatusColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getTrangThaiTamVang()));
         xacThucStatusColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getTrangThaiXacThuc()));
-
-        // Cột Hành động
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button viewButton = new Button("Xem");
             private final Button editButton = new Button("Sửa");
             private final Button deleteButton = new Button("Xóa");
+            {
+                viewButton.setStyle("-fx-background-color: #1E90FF; -fx-text-fill: white;");   // Xanh nước biển
+                editButton.setStyle("-fx-background-color: #32CD32; -fx-text-fill: white;");   // Xanh lá cây
+                deleteButton.setStyle("-fx-background-color: #FF4500; -fx-text-fill: white;"); // Đỏ
+            }
             private final HBox pane = new HBox(viewButton, editButton, deleteButton);
 
             {
@@ -180,7 +161,6 @@ public class ResidentViewController {
                     Resident resident = getTableView().getItems().get(getIndex());
                     handleViewDetails(resident);
                 });
-
                 editButton.setOnAction(event -> {
                     Resident resident = getTableView().getItems().get(getIndex());
                     handleEdit(resident);
@@ -207,67 +187,57 @@ public class ResidentViewController {
     }
 
     private void loadResidents() {
+        // Chỉ bỏ qua tải dữ liệu nếu đã tải và không cần làm mới
+        if (isDataLoaded) {
+            residentTable.setItems(residentList);
+            return;
+        }
+
         try {
+            // Gọi API để lấy dữ liệu mới nhất
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("http://localhost:8080/api/users"))
                     .header("Content-Type", "application/json")
                     .GET()
                     .build();
-
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Trạng thái của request " + response);
             if (response.statusCode() == 200) {
+                // Xóa dữ liệu cũ và cập nhật danh sách mới
+                residentList.clear();
                 User[] users = objectMapper.readValue(response.body(), User[].class);
-
                 for (User user : users) {
-                    System.out.println("Đang xử lý user: " + user.getUsername() + " (ID: " + user.getId() + ")");
-
-                    // Tìm cư dân tương ứng với username
                     Resident resident = residentService.findResidentByUsername(user.getUsername());
-                    System.out.println("Kết quả tìm resident: " + resident);
-
                     if (resident == null) {
-                        System.out.println("Resident chưa tồn tại, tạo mới.");
-
-                        // Nếu không có, tạo mới một Resident
                         resident = new Resident();
-                        resident.setUser(user);  // Gán User cho Resident
-                        resident.setTrangThaiXacThuc(XacThuc.CHUA_XAC_THUC);  // Đặt trạng thái xác thực là CHUA_XAC_THUC
-                        resident.setTrangThaiTamVang(TamVangStatus.thuong_tru);  // Đặt trạng thái tạm vắng là thuong_tru
-
-                        residentService.saveResident(resident); // Lưu vào DB
+                        resident.setUser(user);
+                        resident.setTrangThaiXacThuc(XacThuc.CHUA_XAC_THUC);
+                        resident.setTrangThaiTamVang(TamVangStatus.thuong_tru);
+                        residentService.saveResident(resident);
                     }
-
                     residentList.add(resident);
                 }
-
                 residentTable.setItems(residentList);
-                thongBaoLabel.setText("Tải lên dữ liệu cư dân thành công.");
+                isDataLoaded = true;
+                thongBaoLabel.setText("Tải dữ liệu thành công.");
             } else {
-                thongBaoLabel.setText("Tải lên dữ liệu cư dân thất bại.");
+                thongBaoLabel.setText("Lỗi khi tải dữ liệu.");
             }
         } catch (Exception e) {
-            e.printStackTrace(); // In lỗi chi tiết
-            thongBaoLabel.setText("Lỗi tải lên dữ liệu cư dân!");
+            e.printStackTrace();
+            thongBaoLabel.setText("Lỗi kết nối server!");
         }
     }
 
     private String formatEnumToDisplayName(String enumName) {
-        // Thay "_" bằng khoảng trắng
         String formattedName = enumName.replace("_", " ");
-
-        // Sử dụng Matcher để chuyển chữ cái đầu tiên của mỗi từ thành chữ hoa
         Pattern pattern = Pattern.compile("\\b[a-z]");
         Matcher matcher = pattern.matcher(formattedName);
-
-        // Thay đổi chữ cái đầu tiên của mỗi từ thành chữ hoa
         StringBuffer result = new StringBuffer();
         while (matcher.find()) {
             matcher.appendReplacement(result, matcher.group().toUpperCase());
         }
         matcher.appendTail(result);
-
         return result.toString();
     }
 
@@ -275,24 +245,14 @@ public class ResidentViewController {
     private void openResidentStage(Resident resident, int mode) {
         try {
             System.out.println("Bắt đầu mở cửa sổ cư dân. Mode = " + mode);
-
-            // Tạo FXMLLoader và nạp fxml view
             System.out.println("Đang tải file FXML: /view/resident/resident_edit.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/resident/resident_edit.fxml"));
-
-            // Thiết lập controller factory sử dụng Spring context để quản lý bean
             System.out.println("Thiết lập controller factory từ Spring context");
             fxmlLoader.setControllerFactory(MainApplication.springContext::getBean);
-
-            // Tạo Scene từ fxml đã load, kích thước của cửa sổ
             System.out.println("Đang load FXML và tạo Scene");
             Scene residentScene = new Scene(fxmlLoader.load(), 875, 415);
-
-            // Tạo một cửa sổ mới cho chế độ chỉnh sửa cư dân
             Stage residentEditStage = new Stage();
             residentEditStage.initModality(Modality.APPLICATION_MODAL);
-
-            // Thiết lập tiêu đề cửa sổ theo chế độ
             switch (mode) {
                 case 1:
                     residentEditStage.setTitle("Chi tiết cư dân");
@@ -308,22 +268,14 @@ public class ResidentViewController {
                     break;
             }
             System.out.println("Đã thiết lập tiêu đề cửa sổ: " + residentEditStage.getTitle());
-
-            // Gắn Scene vào Stage
             residentEditStage.setScene(residentScene);
             System.out.println("Đã gắn Scene vào Stage");
-
-            // Lấy controller của fxml đã load và thiết lập các giá trị cần thiết
             ResidentEditController residentEditController = fxmlLoader.getController();
             System.out.println("Đã lấy được controller: " + residentEditController.getClass().getName());
-
             residentEditController.setStage(residentEditStage);
             System.out.println("Đã thiết lập Stage cho controller");
-
             residentEditController.setResident(resident, mode);
             System.out.println("Đã thiết lập Resident và mode cho controller");
-
-            // Hiển thị cửa sổ và chờ người dùng tương tác (modal)
             residentEditStage.showAndWait();
             System.out.println("Cửa sổ cư dân đã hiển thị xong");
         } catch (Exception e) {
@@ -367,6 +319,7 @@ public class ResidentViewController {
             residentTable.refresh();
             thongBaoLabel.setText("Cập nhật cư dân thành công!");
         }
+        //needsRefresh = true;
     }
 
     @FXML
@@ -393,8 +346,8 @@ public class ResidentViewController {
                 thongBaoLabel.setText("Lỗi khi xóa cư dân.");
             }
         }
+        //needsRefresh = true;
     }
-
 
     @FXML
     private void handleViewDetails(Resident resident) {
@@ -403,17 +356,13 @@ public class ResidentViewController {
 
     @FXML
     private void handleSearch() {
-        // Kiểm tra giá trị từ ComboBox
         String filterRoom = roomComboBox.getValue();
         String filterAuthStatus = xacThucStatusSearchComboBox.getValue();
         String filterTamVangStatus = tamVangStatusSearchComboBox.getValue();
-
         System.out.println("== ComboBox Values ==");
         System.out.println("Room: " + filterRoom);
         System.out.println("Auth Status: " + filterAuthStatus);
         System.out.println("Tam Vang Status: " + filterTamVangStatus);
-
-        // Tạo URL với query params
         String url = "http://localhost:8080/api/residents";
         List<String> queryParams = new ArrayList<>();
 
@@ -454,20 +403,13 @@ public class ResidentViewController {
 
             System.out.println("== Raw JSON Response ==");
             System.out.println(response.body());
-
-            // Parse JSON (mặc định là mảng Resident[])
             Resident[] filteredResidents = objectMapper.readValue(response.body(), Resident[].class);
-
             System.out.println("== Parsed Resident Count ==");
             System.out.println(filteredResidents.length);
-
-            // In danh sách cư dân filter được
             System.out.println("== Filtered Residents ==");
             for (Resident resident : filteredResidents) {
                 System.out.println(resident);
             }
-
-            // Cập nhật danh sách
             residentList.setAll(filteredResidents);
             residentTable.setItems(residentList);
 
@@ -476,8 +418,6 @@ public class ResidentViewController {
             e.printStackTrace();
         }
     }
-
-
 
     @FXML
     private void handleResetSearch() {

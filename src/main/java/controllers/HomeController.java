@@ -75,7 +75,19 @@ public class HomeController {
     @FXML
     private void onManageResident(){
         handleButtonClick(residentButton);
-        loadPage("/view/resident/resident_table.fxml"); //THAY ĐỔI DÒNG NÀY ĐỂ LOAD ĐÚNG TRANG
+        User currentUser = UserUtils.getCurrentUser();
+        if (currentUser == null) {
+            System.out.println("Không tìm thấy người dùng hiện tại.");
+            return;
+        }
+
+        String role = currentUser.getRole().name(); // giả sử bạn dùng enum hoặc String để lưu role
+
+        if ("USER".equalsIgnoreCase(role)) {
+            loadPage("/view/resident/resident_edit.fxml");
+        } else {
+            loadPage("/view/resident/resident_table.fxml");
+        }
     }
 
     @FXML
@@ -87,7 +99,21 @@ public class HomeController {
     @FXML
     private void onManageReport(){
         handleButtonClick(reportButton);
-        loadPage("/view/homepage/home-management.fxml"); //THAY ĐỔI DÒNG NÀY ĐỂ LOAD ĐÚNG TRANG
+        User currentUser = UserUtils.getCurrentUser();
+        if (currentUser == null) {
+            System.out.println("Không tìm thấy người dùng hiện tại.");
+            return;
+        }
+
+        String role = currentUser.getRole().name(); // giả sử bạn dùng enum hoặc String để lưu role
+
+        if ("USER".equalsIgnoreCase(role)) {
+            loadPage("/view/report/user_report.fxml");
+        }
+        else {
+            loadPage("/view/report/report_list.fxml");
+        }
+        //notificationController.setComplaintMode(true);
     }
 
     @FXML
@@ -115,21 +141,6 @@ public class HomeController {
         }
     }
 
-    // Sự kiện khi click vào "Danh sách Người Dùng"
-    @FXML
-    private void onUserList() {
-    }
-
-    // Sự kiện khi click vào "Cài đặt"
-    @FXML
-    private void onSettings() {
-    }
-
-    // Sự kiện khi click vào "Đăng xuất"
-    @FXML
-    private void onLogout() {
-        showAlert("Bạn đã đăng xuất!");
-    }
 
     // Hiển thị thông báo
     private void showAlert(String message) {

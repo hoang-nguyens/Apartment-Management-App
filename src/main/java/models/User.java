@@ -28,6 +28,18 @@ public class User extends BaseModel {
     @Column(nullable = false)
     private Status status = Status.ACTIVE;
 
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = true)
+    private Resident resident;
+
+    public Resident getResident() {
+        return resident;
+    }
+
+    public void setResident(Resident resident) {
+        this.resident = resident;
+    }
+
+
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 

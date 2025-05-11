@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" prefHeight="500.0" prefWidth="400.0" spacing="10" style="-fx-background-color: #f5f5f5; -fx-padding: 15;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SubmitReportController">
+
+    <!-- Tiêu đề -->
+    <Label fx:id="tilteLabel" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Tạo Khiếu Nại Mới" />
+
+    <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-border-radius: 5; -fx-border-color: #ddd;">
+
+
+        <!-- Tiêu đề -->
+        <VBox spacing="5">
+            <Label style="-fx-font-weight: bold; -fx-text-fill: #34495e;" text="Tiêu đề:" />
+            <TextField fx:id="titleField" style="-fx-pref-width: 300;" />
+        </VBox>
+
+        <!-- Nội dung -->
+        <VBox spacing="5">
+            <Label style="-fx-font-weight: bold; -fx-text-fill: #34495e;" text="Nội dung khiếu nại:" />
+            <TextArea fx:id="messageArea" prefHeight="123.0" prefRowCount="5" prefWidth="337.0" style="-fx-pref-width: 300; -fx-pref-height: 100;" wrapText="true" />
+        </VBox>
+    </VBox>
+
+    <!-- Nút gửi -->
+    <Button fx:id="sentNotificationButton" onAction="#handleSendReport" style="-fx-background-color: #7A9EE6; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 15;" stylesheets="@../css/style.css" text="Gửi Khiếu Nại" />
+    <Label fx:id="stateLabel" />
+</VBox>

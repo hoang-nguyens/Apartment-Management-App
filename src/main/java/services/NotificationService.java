@@ -5,6 +5,7 @@ import models.Notification;
 import models.User;
 import models.UserNotification;
 import models.enums.NotificationType;
+import models.enums.Role;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import repositories.NotificationRepository;
@@ -82,10 +83,22 @@ public class NotificationService {
     }
     @Transactional
     public void deleteNotification(Long notificationId) {
-        // Xóa các UserNotification liên quan trước
-        userNotificationRepository.deleteById(notificationId);
-        // Sau đó xóa notification
+        // Xóa tất cả bản ghi UserNotification liên quan
+        userNotificationRepository.deleteByNotificationId(notificationId);
+
+        // Sau đó xóa Notification
         notificationRepository.deleteById(notificationId);
     }
+
+    public List<Notification> getNotificationsCreatedByUsers() {
+        return notificationRepository.findByCreatedByRoleIn(List.of(Role.USER));
+    }
+
+    // Lấy thông báo được tạo bởi người có role là ADMIN
+    public List<Notification> getNotificationsCreatedByAdmins() {
+        List<Role> adminRoles = List.of(Role.ADMIN, Role.ADMIN_ROOT);
+        return notificationRepository.findByCreatedByRoleIn(adminRoles);
+    }
+
 
 }

@@ -45,7 +45,8 @@ public class NotificationHistoryController {
 
     @FXML
     private TableColumn<Notification, Void> detailColumn;
-
+    private boolean isDataLoaded = false;
+    ObservableList<Notification> observableList = FXCollections.observableArrayList();
     private final NotificationService notificationService;
 
     @Autowired
@@ -111,10 +112,9 @@ public class NotificationHistoryController {
         return param -> new TableCell<>() {
             private final Button detailBtn = new Button("Xem");
             private final Button deleteBtn = new Button("Xóa");
-            private final HBox buttonBox = new HBox(12); // chứa cả hai nút
+            private final HBox buttonBox = new HBox(12);
 
             {
-                // Style nút chi tiết
                 detailBtn.setStyle("-fx-background-color: #7A9EE6; -fx-text-fill: white;");
                 detailBtn.setOnAction(event -> {
                     Notification notification = getTableView().getItems().get(getIndex());
@@ -127,8 +127,9 @@ public class NotificationHistoryController {
                     Notification notification = getTableView().getItems().get(getIndex());
                     boolean confirmed = showConfirmationDialog("Xác nhận xóa", "Bạn có chắc muốn xóa thông báo này?");
                     if (confirmed) {
-                        notificationService.deleteNotification(notification.getId()); // Cần viết hàm này trong service
-                        notificationTable.getItems().remove(notification); // cập nhật bảng
+                        notificationService.deleteNotification(notification.getId());
+                        notificationTable.getItems().remove(notification);
+                        notificationTable.refresh();
                     }
                 });
                 buttonBox.setAlignment(Pos.CENTER);
@@ -156,9 +157,11 @@ public class NotificationHistoryController {
         return alert.showAndWait().filter(response -> response == okButton).isPresent();
     }
 
-    private void loadNotificationHistory() {
-        List<Notification> notifications = notificationService.getAllNotifications();
-        ObservableList<Notification> observableList = FXCollections.observableArrayList(notifications);
+    protected void loadNotificationHistory() {
+        if(!isDataLoaded) {
+            List<Notification> notifications = notificationService.getNotificationsCreatedByAdmins();
+            observableList = FXCollections.observableArrayList(notifications);
+        }
         notificationTable.setItems(observableList);
     }
 

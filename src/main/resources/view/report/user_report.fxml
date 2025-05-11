@@ -5,8 +5,8 @@
 <HBox alignment="CENTER" fx:controller="controllers.HomeViewController" prefHeight="600.0" prefWidth="900.0" spacing="20" style="-fx-padding: 20; -fx-background-color: #eaeaea;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
     <!-- Giao diện bên trái -->
-    <fx:include source="create_notification.fxml" />
+    <fx:include source="submit_report.fxml" />
 
     <!-- Giao diện bên phải -->
-    <fx:include source="notification_history.fxml" />
+    <fx:include source="user_report_history.fxml" />
 </HBox>

@@ -15,7 +15,6 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Fee;
-import models.FeeCategory;
 import models.User;
 import models.enums.BillPeriod;
 import models.enums.FeeUnit;
@@ -23,7 +22,6 @@ import models.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import services.FeeCategoryService;
-import services.InvoiceService;
 import utils.UserUtils;
 
 import java.math.BigDecimal;
@@ -41,6 +39,7 @@ import java.util.Set;
 
 @Controller
 public class FeeViewController {
+    private boolean isDataLoaded = false;
     private final FeeCategoryService feeCategoryService;
     private final FeeInsertController feeInsertController;
 
@@ -182,6 +181,10 @@ public class FeeViewController {
     }
 
     private void loadFees() {
+        if(isDataLoaded){
+            feeTable.setItems(feeList);
+            return;
+        }
         try {
             String url = "http://localhost:8080/api/fees";
 
@@ -199,6 +202,7 @@ public class FeeViewController {
                 feeList.setAll(fees);
                 feeTable.setItems(feeList);
                 statusLabel.setText("Tải lên dữ liệu thành công.");
+                isDataLoaded = true;
             } else {
                 statusLabel.setText("Tải lên dữ liệu thất bại.");
             }
