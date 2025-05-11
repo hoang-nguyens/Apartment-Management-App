@@ -28,24 +28,37 @@ public class ContributionController {
 
     @PostMapping("/manual")
     public ResponseEntity<Contribution> manualPayment(
-            @RequestParam Long feeId,
-            @RequestParam Long userId,
-            @RequestParam BigDecimal amount,
-            @RequestParam(required = false) PaymentMethod paymentMethod,
-            @RequestParam(required = false, defaultValue = "Thu cong") String note
+            @RequestBody Contribution contribution
     ) {
         try {
-            User resident = userService.getUserById(userId);
-            Fee fee = feeService.getFeeById(feeId);
-            System.out.println(fee.getId() + " " + resident.getId());
-            return ResponseEntity.ok(contributionService.createContribution(resident, fee, amount, paymentMethod, note));
+//            User resident = userService.getUserById(userId);
+//            Fee fee = feeService.getFeeById(feeId);
+//            System.out.println(fee.getId() + " " + resident.getId());
+            return ResponseEntity.ok(contributionService.createContribution(contribution));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(null);
         }
     }
 
-    @GetMapping("users")
+    @PutMapping("/{id}")
+    public ResponseEntity<Contribution> updateContribution(
+            @PathVariable Long id,
+            @RequestBody Contribution contribution
+    ) {
+        try {
+            if (!id.equals(contribution.getId())) {
+                return ResponseEntity.badRequest().build(); // ID không khớp => từ chối
+            }
+            Contribution updated = contributionService.updateContribution(contribution);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping
     public ResponseEntity<List<Contribution>> getAllContributions() {
         return ResponseEntity.ok(contributionService.getAllContributions());
     }
@@ -54,5 +67,4 @@ public class ContributionController {
     public ResponseEntity<List<Contribution>> getContributionByUserId(@PathVariable Long id) {
         return ResponseEntity.ok(contributionService.getContributionsByUserId(id));
     }
-
 }

@@ -21,6 +21,9 @@ public class ContributionService {
     }
 
     public Contribution createContribution(Contribution contribution) {
+        if (contribution.getPaymentMethod() == null){
+            contribution.setPaymentMethod(PaymentMethod.CASH);
+        }
         return contributionRepository.save(contribution);
     }
 
@@ -31,6 +34,11 @@ public class ContributionService {
         Contribution contribution = new Contribution(resident, fee, amount, paymentMethod, note);
         return contributionRepository.save(contribution);
     }
+
+    public Contribution updateContribution(Contribution contribution) {
+        return contributionRepository.save(contribution);
+    }
+
 
     public List<Contribution> getAllContributions() {
         return contributionRepository.findAll();

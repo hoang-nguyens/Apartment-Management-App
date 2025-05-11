@@ -29,7 +29,7 @@ public class Fee extends BaseModel{
     private String subCategory;
 
     //    @NotNull(message = "Số tiền không được để trống")
-    @DecimalMin(value = "0.01", message = "Số tiền phải lớn hơn 0")
+    @DecimalMin(value = "0", message = "Số tiền phải lớn hơn 0")
     @DecimalMax(value = "1000000000", message = "Số tiền không được vượt quá 1 tỵ")
     @Column(nullable = true)
     private BigDecimal amount;
