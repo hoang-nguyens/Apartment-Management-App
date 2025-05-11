@@ -12,7 +12,7 @@
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.PaymentViewController" spacing="20">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.payment.PaymentViewController" spacing="20">
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>

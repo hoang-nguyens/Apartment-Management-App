@@ -2,7 +2,7 @@
 
 <?import javafx.scene.layout.HBox?>
 
-<HBox alignment="CENTER" fx:controller="controllers.HomeViewController" prefHeight="600.0" prefWidth="900.0" spacing="20" style="-fx-padding: 20; -fx-background-color: #eaeaea;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<HBox alignment="CENTER" fx:controller="controllers.home.HomeViewController" prefHeight="600.0" prefWidth="900.0" spacing="20" style="-fx-padding: 20; -fx-background-color: #eaeaea;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
     <!-- Giao diện bên trái -->
     <fx:include source="create_notification.fxml" />

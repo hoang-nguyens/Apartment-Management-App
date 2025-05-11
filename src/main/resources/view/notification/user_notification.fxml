@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" maxWidth="500.0" prefHeight="500.0" prefWidth="500.0" spacing="10" style="-fx-padding: 15;" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.UserNotificationController">
+<VBox alignment="TOP_CENTER" maxWidth="500.0" prefHeight="500.0" prefWidth="500.0" spacing="10" style="-fx-padding: 15;" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.notificatoin.UserNotificationController">
 
     <HBox alignment="CENTER" spacing="10">
         <ToggleButton fx:id="newToggle" prefHeight="41.0" prefWidth="121.0" selected="true" styleClass="button" text="Thông báo mới" />

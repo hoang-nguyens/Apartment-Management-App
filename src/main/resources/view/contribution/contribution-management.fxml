@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ContributionViewController">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.contribution.ContributionViewController">
 
     <!-- Thanh trên cùng: tiêu đề và nút hành động -->
     <top>
