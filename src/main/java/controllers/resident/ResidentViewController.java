@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.resident.Resident;
@@ -21,9 +22,12 @@ import models.enums.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import services.resident.ResidentService;
+import utils.PdfExporter;
 import utils.UserUtils;
 
 import javafx.scene.control.Button;
+
+import java.io.File;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -97,6 +101,8 @@ public class ResidentViewController {
     private Button searchButton;
     @FXML
     private Button resetButton;
+    @FXML
+    private Button PDFButton;
 
     private ObservableList<Resident> residentList = FXCollections.observableArrayList();
     private ObservableList<String> categoryList = FXCollections.observableArrayList();
@@ -426,4 +432,27 @@ public class ResidentViewController {
         xacThucStatusSearchComboBox.setValue(null);
         loadResidents();
     }
+
+    @FXML
+    private void handleExportResidentPdfClick() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Lưu file PDF");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF files", "*.pdf"));
+        File file = fileChooser.showSaveDialog(new Stage());
+
+        if (file != null) {
+            // Lấy danh sách cư dân hiện đang hiển thị trong bảng
+            List<Resident> currentResidentList = new ArrayList<>(residentTable.getItems());
+
+            if (currentResidentList.isEmpty()) {
+                thongBaoLabel.setText("Không có dữ liệu cư dân để xuất PDF.");
+                return;
+            }
+
+            // Gọi hàm export
+            PdfExporter.exportResidentListToPDF(currentResidentList, file.getAbsolutePath());
+            thongBaoLabel.setText("Đã xuất file PDF cư dân thành công.");
+        }
+    }
+
 }

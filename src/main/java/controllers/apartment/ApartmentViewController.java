@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.apartment.Apartment;
@@ -21,8 +22,10 @@ import models.enums.SoPhong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import services.apartment.ApartmentService;
+import utils.PdfExporter;
 import utils.UserUtils;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -435,5 +438,29 @@ public class ApartmentViewController {
         floorComboBox.setValue(null);
         loadApartments();
     }
+
+    @FXML
+    private void handleExportPdfClick() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Lưu file PDF");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF files", "*.pdf"));
+        File file = fileChooser.showSaveDialog(new Stage());
+
+        if (file != null) {
+            // Lấy danh sách căn hộ hiện đang hiển thị trong bảng
+            List<Apartment> currentApartmentList = new ArrayList<>(apartmentTable.getItems());
+
+            if (currentApartmentList.isEmpty()) {
+                thongBaoLabel.setText("Không có dữ liệu để xuất PDF.");
+                return;
+            }
+
+            // Gọi hàm export
+            PdfExporter.exportApartmentListToPDF(currentApartmentList, file.getAbsolutePath());
+            thongBaoLabel.setText("Đã xuất file PDF thành công.");
+        }
+    }
+
+
 
 }
