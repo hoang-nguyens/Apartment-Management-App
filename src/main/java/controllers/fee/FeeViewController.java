@@ -54,6 +54,7 @@ public class FeeViewController {
     private User currentUser;
 
     private final Set<Role> adminRoles = Set.of(Role.ADMIN, Role.ADMIN_ROOT);
+    private boolean selectedAll=false;
     // sửa lại các cột phải map từ fxml qua controller (đủ cột, not null)
     @FXML
     private TableView<Fee> feeTable;
@@ -83,6 +84,8 @@ public class FeeViewController {
     private ComboBox<String> categoryComboBox;
     @FXML
     private ComboBox<String> subCategoryComboBox;
+    @FXML
+    private ComboBox<String> filterStatusComboBox;
 
     @FXML
     private Label statusLabel;
@@ -170,6 +173,7 @@ public class FeeViewController {
         if (currentUser==null || !adminRoles.contains(currentUser.getRole())) {
             actionColumn.setVisible(false);
             addButton.setVisible(false);
+            filterStatusComboBox.setDisable(true);
         }
         // Load fee data
         loadFees();
@@ -178,6 +182,13 @@ public class FeeViewController {
         // Setup combo boxes
         categoryComboBox.setItems(categoryList);
         categoryComboBox.setOnAction(event -> loadSubCategories());
+
+        filterStatusComboBox.setItems(FXCollections.observableArrayList("Còn hiệu lực", "Tất cả"));
+        filterStatusComboBox.setValue("Còn hiệu lực"); // ✅ giá trị mặc định
+        filterStatusComboBox.setOnAction(event -> {
+            String selected = filterStatusComboBox.getValue();
+            selectedAll = selected.equals("Tất cả");
+        });
     }
 
     private void loadFees() {
@@ -188,7 +199,7 @@ public class FeeViewController {
         try {
             String url = "http://localhost:8080/api/fees";
 
-            if (!currentUser.getRole().equals(Role.ADMIN_ROOT)) {
+            if (!currentUser.getRole().equals(Role.ADMIN_ROOT) || !selectedAll) {
                 url += "/active";
             }
             HttpRequest request = HttpRequest.newBuilder()
@@ -319,17 +330,27 @@ public class FeeViewController {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            feeList.remove(selectedFee);
+            try {
+                String url = "http://localhost:8080/api/fees/" + selectedFee.getId();
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(url))
+                        .header("Content-Type", "application/json")
+                        .DELETE()
+                        .build();
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                if (response.statusCode() == 200) {
+                    feeList.remove(selectedFee);
+                    feeTable.refresh();
+                    statusLabel.setText("Xóa khoản thu thành công!");
+                } else {
+                    statusLabel.setText("Lỗi request!");
+                    System.out.println(response.body());
+                }
+
+            } catch (Exception e) {
+                statusLabel.setText("Lỗi: " + e.getMessage());
+            }
         }
-//
-//        try {
-//            feeService.deleteFee(selectedFee.getId());
-//            feeList.remove(selectedFee);
-//            feeTable.refresh();
-//            statusLabel.setText("Xóa khoản thu thành công!");
-//        } catch (Exception e) {
-//            statusLabel.setText("Lỗi: " + e.getMessage());
-//        }
     }
 
     @FXML
@@ -345,6 +366,9 @@ public class FeeViewController {
         System.out.println(filterCategory + " " + filterSubCategory);
 
         String url = "http://localhost:8080/api/fees";
+        if (!selectedAll) {
+            url += "/active";
+        }
         List<String> queryParams = new ArrayList<>();
         if (filterCategory != null && !filterCategory.isEmpty()) queryParams.add("category=" + URLEncoder.encode(filterCategory, StandardCharsets.UTF_8));
         if (filterSubCategory != null && !filterSubCategory.isEmpty()) queryParams.add("subCategory=" + URLEncoder.encode(filterSubCategory, StandardCharsets.UTF_8));
@@ -371,6 +395,7 @@ public class FeeViewController {
 
     @FXML
     private void handleReset(){
+        isDataLoaded = false;
         loadFees();
     }
 

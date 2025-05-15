@@ -22,8 +22,8 @@
         <Label text="Nhóm khoản thu:" />
         <ComboBox fx:id="subCategoryComboBox" />
 
-        <!--        <Label text="Trạng thái:" />-->
-        <!--        <ComboBox fx:id="filterStatusComboBox" />-->
+        <Label text="Trạng thái:" />
+        <ComboBox fx:id="filterStatusComboBox" />
 
         <Button fx:id="searchButton" onAction="#handleSearch" text="Tìm kiếm" />
         <Button fx:id="resetButton" onAction="#handleReset" text="Xem tất cả" />

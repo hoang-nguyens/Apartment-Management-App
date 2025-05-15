@@ -161,24 +161,49 @@ public class ContributionViewController {
                 if (result.isPresent() && result.get() == ButtonType.OK) {
                     try {
                         Contribution contrib = (Contribution) row.get(fee);
-                        contrib.setAmount(newValue);
+                        if (contrib != null) {
+                            contrib.setAmount(newValue);
 
-                        String jsonBody = objectMapper.writeValueAsString(contrib);
-                        HttpRequest request = HttpRequest.newBuilder()
-                                .uri(URI.create("http://localhost:8080/api/contributions/" + contrib.getId())) // hoặc endpoint bạn dùng
-                                .header("Content-Type", "application/json")
-                                .PUT(HttpRequest.BodyPublishers.ofString(jsonBody))
-                                .build();
+                            String jsonBody = objectMapper.writeValueAsString(contrib);
+                            HttpRequest request = HttpRequest.newBuilder()
+                                    .uri(URI.create("http://localhost:8080/api/contributions/" + contrib.getId())) // hoặc endpoint bạn dùng
+                                    .header("Content-Type", "application/json")
+                                    .PUT(HttpRequest.BodyPublishers.ofString(jsonBody))
+                                    .build();
 
-                        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-                        if (response.statusCode() == 200) {
-                            row.put(fee, contrib); // cập nhật dữ liệu trong bảng
+                            if (response.statusCode() == 200) {
+                                row.put(fee, contrib); // cập nhật dữ liệu trong bảng
+                                System.out.println("put new contrib ok");
+                            } else {
+                                showError("Cập nhật thất bại", response.body());
+                                contributionsTable.refresh();
+                            }
                         } else {
-                            showError("Cập nhật thất bại", response.body());
-                            contributionsTable.refresh();
+                            contrib = new Contribution();
+                            contrib.setAmount(newValue);
+                            contrib.setUser((User) row.get("name"));
+                            contrib.setFee(getFee(fee));
+                            try {
+                                String json = objectMapper.writeValueAsString(contrib);
+                                HttpRequest request = HttpRequest.newBuilder()
+                                        .uri(URI.create(paymentManualEndpoint))
+                                        .header("Content-Type", "application/json")
+                                        .POST(HttpRequest.BodyPublishers.ofString(json))
+                                        .build();
+                                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                                if (response.statusCode() == 200) {
+                                    row.put(fee, contrib);
+                                    System.out.println("put new contrib ok");
+                                } else {
+                                    System.out.println(response.body());
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
-                        row.put(fee, event.getNewValue());
+//                        row.put(fee, event.getNewValue());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
