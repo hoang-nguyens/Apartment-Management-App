@@ -62,10 +62,17 @@ public class FeeService {
     }
 
     public void deleteFee(Long feeId) {
-        if (!feeRepository.existsById(feeId)) {
+//        feeRepository.deleteById(feeId);
+        Fee fee = feeRepository.findById(feeId).orElse(null);
+        if (fee==null) {
             throw new EntityNotFoundException("Fee not found with ID: " + feeId);
         }
-        feeRepository.deleteById(feeId);
+        if (fee.getEndDate().isBefore(LocalDate.now())) {
+            feeRepository.deleteById(feeId);
+        } else {
+            fee.setEndDate(LocalDate.now().plusDays(1));
+            feeRepository.save(fee);
+        }
     }
 
     public void validateFee(Fee fee) {
