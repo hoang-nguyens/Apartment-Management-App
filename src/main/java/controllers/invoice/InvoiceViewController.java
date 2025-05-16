@@ -128,7 +128,7 @@ public class InvoiceViewController {
         invoiceIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         payerNameColumn.setCellValueFactory(cellData -> {
             User user = cellData.getValue().getUser();
-            return new SimpleStringProperty(user != null ? user.getUsername() : "N/A");
+            return new SimpleStringProperty(user.getResident() != null ? user.getResident().getHoTen() : "N/A");
         });
         apartmentColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getApartment().getRoomNumber()));

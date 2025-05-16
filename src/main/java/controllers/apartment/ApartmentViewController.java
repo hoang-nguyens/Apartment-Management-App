@@ -162,6 +162,10 @@ public class ApartmentViewController {
             private final HBox pane = new HBox(viewButton, editButton);
 
             {
+                // Thêm màu cho nút
+                viewButton.setStyle("-fx-background-color: dodgerblue; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
+                editButton.setStyle("-fx-background-color: seagreen; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;");
+
                 viewButton.setOnAction(event -> {
                     Apartment apartment = getTableView().getItems().get(getIndex());
                     handleViewDetails(apartment);
@@ -272,7 +276,7 @@ public class ApartmentViewController {
 
             // Tạo Scene từ fxml đã load, kích thước của cửa sổ
             System.out.println("Đang load FXML và tạo Scene");
-            Scene apartmentScene = new Scene(fxmlLoader.load(), 875, 415);
+            Scene apartmentScene = new Scene(fxmlLoader.load(), 772, 415);
 
             // Tạo một cửa sổ mới cho chế độ chỉnh sửa căn hộ
             Stage apartmentEditStage = new Stage();

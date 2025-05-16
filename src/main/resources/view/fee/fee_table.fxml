@@ -10,12 +10,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <VBox alignment="CENTER" prefHeight="512.0" prefWidth="793.0" spacing="10" stylesheets="@../css/table_fee.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.fee.FeeViewController">
-    <!-- Hàng 1: Nút Thêm Mới -->
-    <HBox alignment="CENTER_LEFT" prefHeight="18.0" prefWidth="794.0" spacing="10">
-        <Button fx:id="addButton" onAction="#handleAdd" styleClass="new_button" stylesheets="@../css/table_fee.css" text="Thêm mới" textFill="#f7f3f3" />
-    </HBox>
+   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quản lí khoản thu">
+      <font>
+         <Font name="System Bold" size="19.0" />
+      </font>
+   </Text>
 
     <!-- Hàng 2: Form lọc dữ liệu -->
     <HBox alignment="CENTER" spacing="10">
@@ -36,6 +39,7 @@
                     </image>
                 </ImageView>
             </graphic></Button>
+        <Button fx:id="addButton" onAction="#handleAdd" styleClass="new_button" stylesheets="@../css/table_fee.css" text="Thêm mới" textFill="#f7f3f3" />
     </HBox>
     <Pane prefHeight="400.0" prefWidth="798.0">
         <children>

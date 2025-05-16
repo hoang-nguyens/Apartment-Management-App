@@ -1,56 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<?import javafx.scene.chart.PieChart?>
 <?import javafx.geometry.Insets?>
-
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.payment.PaymentViewController" spacing="20">
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.payment.PaymentViewController">
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
+   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Thống kê thanh toán">
+      <font>
+         <Font name="System Bold" size="15.0" />
+      </font>
+   </Text>
 
     <!-- PHẦN THỐNG KÊ -->
     <HBox spacing="20">
-        <TableView fx:id="statisticTable" prefWidth="300" prefHeight="300">
+        <TableView fx:id="statisticTable" prefHeight="300" prefWidth="300">
             <columns>
-                <TableColumn fx:id="colCategory" text="Loại khoản thu"/>
-                <TableColumn fx:id="colTotal" text="Tổng tiền"/>
+                <TableColumn fx:id="colCategory" prefWidth="146.6879796385765" style="-fx-alignment: CENTER;" text="Loại khoản thu" />
+                <TableColumn fx:id="colTotal" prefWidth="153.60003662109375" style="-fx-alignment: CENTER;" text="Tổng tiền" />
             </columns>
         </TableView>
+      <Pane prefHeight="300.0" prefWidth="137.0" />
 
-        <PieChart fx:id="paymentPieChart" title="Tỷ lệ thu theo loại" prefWidth="400" prefHeight="300"/>
+        <PieChart fx:id="paymentPieChart" prefHeight="300" prefWidth="400" title="Tỷ lệ thu theo loại" />
     </HBox>
 
     <HBox spacing="20">
-        <BarChart fx:id="barChart" title="Thống kê chi tiêu hàng tháng" prefWidth="800" prefHeight="400">
+        <BarChart fx:id="barChart" prefHeight="400" prefWidth="800" title="Thống kê chi tiêu hàng tháng">
             <xAxis>
-                <CategoryAxis fx:id="xAxis" label="Tháng"/>
+                <CategoryAxis label="Tháng" fx:id="xAxis" />
             </xAxis>
             <yAxis>
-                <NumberAxis fx:id="yAxis" label="Số tiền"/>
+                <NumberAxis fx:id="yAxis" label="Số tiền" />
             </yAxis>
         </BarChart>
     </HBox>
 
     <!-- PHẦN LỊCH SỬ THANH TOÁN -->
     <VBox spacing="10">
-        <Label text="Lịch sử thanh toán" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;"  text="Lịch sử thanh toán">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
         <TableView fx:id="paymentTable" prefHeight="400">
             <columns>
-                <TableColumn fx:id="colInvoice" text="Hóa đơn"/>
-                <TableColumn fx:id="colUsername" text="Cư dân"/>
-                <TableColumn fx:id="colAmount" text="Số tiền"/>
-                <TableColumn fx:id="colDate" text="Ngày thanh toán"/>
-                <TableColumn fx:id="colMethod" text="Phương thức"/>
-                <TableColumn fx:id="colNote" text="Ghi chú"/>
+                <TableColumn fx:id="colInvoice" style="-fx-alignment: CENTER;" text="Hóa đơn" />
+                <TableColumn fx:id="colUsername" style="-fx-alignment: CENTER;" prefWidth="116.73599243164062" text="Cư dân" />
+            <TableColumn fx:id="colApartment" style="-fx-alignment: CENTER;" prefWidth="116.73599243164062" text="Căn hộ" />
+                <TableColumn fx:id="colAmount" style="-fx-alignment: CENTER;" prefWidth="139.7760009765625" text="Số tiền" />
+                <TableColumn fx:id="colDate" style="-fx-alignment: CENTER;" prefWidth="167.4239501953125" text="Ngày thanh toán" />
+                <TableColumn fx:id="colMethod" style="-fx-alignment: CENTER;" prefWidth="155.90396118164062" text="Phương thức" />
+                <TableColumn fx:id="colNote" style="-fx-alignment: CENTER;" prefWidth="140.5439453125" text="Ghi chú" />
             </columns>
         </TableView>
     </VBox>

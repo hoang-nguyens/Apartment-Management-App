@@ -6,6 +6,7 @@ import lombok.Setter;
 import models.BaseModel;
 import models.enums.PaymentMethod;
 import models.invoice.Invoice;
+import models.resident.Resident;
 import models.user.User;
 
 import java.math.BigDecimal;

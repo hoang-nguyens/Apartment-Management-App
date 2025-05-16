@@ -4,7 +4,6 @@
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -21,76 +20,88 @@
          <children>
             <AnchorPane prefHeight="792.0" prefWidth="203.0">
                <children>
-                  <Pane fx:id="inner_pane" layoutX="17.0" layoutY="13.0" prefHeight="55.0" prefWidth="172.0" styleClass="inner_pane">
+                  <VBox alignment="TOP_CENTER" layoutX="3.0" layoutY="7.0" prefHeight="704.0" prefWidth="198.0">
                      <children>
-                        <ImageView fitHeight="55.0" fitWidth="45.0" layoutX="64.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+                        <Pane fx:id="inner_pane" prefHeight="55.0" prefWidth="172.0" styleClass="inner_pane">
+                           <children>
+                              <ImageView fitHeight="55.0" fitWidth="45.0" layoutX="77.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/HomePage/dashboard.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="55.0" prefWidth="198.0" />
+                        <Button fx:id="homeButton" mnemonicParsing="false" onAction="#onManageHome" prefHeight="46.0" prefWidth="172.0" styleClass="clicked_button" text="Trang chủ" textAlignment="CENTER" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/HomePage/home_pixian_ai.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Button>
+                        <Pane layoutX="10.0" layoutY="65.0" prefHeight="17.0" prefWidth="198.0" />
+                        <Button fx:id="supportButton" mnemonicParsing="false" onAction="#onManageApartment" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Căn hộ" textAlignment="CENTER" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/HomePage/icons8-support-50.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Pane layoutX="10.0" layoutY="167.0" prefHeight="17.0" prefWidth="198.0" />
+                        <Button fx:id="residentButton" mnemonicParsing="false" onAction="#onManageResident" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Cư dân" textAlignment="CENTER" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/HomePage/icons8-management-50.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Pane layoutX="10.0" layoutY="351.0" prefHeight="17.0" prefWidth="198.0" />
+                        <Button fx:id="feeButton" mnemonicParsing="false" onAction="#onManageFees" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Phí" textAlignment="CENTER" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/HomePage/icons8-dollar-bag-50.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Pane layoutX="10.0" layoutY="228.0" prefHeight="17.0" prefWidth="198.0" />
+                        <Button fx:id="billButton" mnemonicParsing="false" onAction="#onManageBill" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Thanh toán" textAlignment="CENTER" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/HomePage/icons8-bill-64.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Pane layoutX="10.0" layoutY="290.0" prefHeight="17.0" prefWidth="198.0" />
+                        <Button fx:id="reportButton" mnemonicParsing="false" onAction="#onManageReport" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Khiếu nại" textAlignment="CENTER" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/HomePage/icons8-log-50.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Pane layoutX="10.0" layoutY="412.0" prefHeight="95.0" prefWidth="198.0" />
+                        <ImageView fitHeight="98.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/HomePage/dashboard.png" />
+                              <Image url="@../images/HomePage/icons8-moon-64.png" />
                            </image>
                         </ImageView>
                      </children>
-                  </Pane>
-                  <Button fx:id="homeButton" layoutX="18.0" layoutY="132.0" mnemonicParsing="false" onAction="#onManageHome" prefHeight="46.0" prefWidth="172.0" styleClass="clicked_button" text="Home" textAlignment="CENTER" textFill="WHITE">
-                     <graphic>
-                        <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/HomePage/home_pixian_ai.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font name="Arial Bold" size="12.0" />
-                     </font></Button>
-                  <Button fx:id="residentButton" layoutX="18.0" layoutY="189.0" mnemonicParsing="false" onAction="#onManageResident" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Resident" textAlignment="CENTER" textFill="WHITE">
-                     <graphic>
-                        <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/HomePage/icons8-management-50.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button fx:id="feeButton" layoutX="15.0" layoutY="240.0" mnemonicParsing="false" onAction="#onManageFees" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Fee" textAlignment="CENTER" textFill="WHITE">
-                     <graphic>
-                        <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/HomePage/icons8-dollar-bag-50.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button fx:id="billButton" layoutX="15.0" layoutY="292.0" mnemonicParsing="false" onAction="#onManageBill" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Bill" textAlignment="CENTER" textFill="WHITE">
-                     <graphic>
-                        <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/HomePage/icons8-bill-64.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button fx:id="reportButton" layoutX="15.0" layoutY="343.0" mnemonicParsing="false" onAction="#onManageReport" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Report" textAlignment="CENTER" textFill="WHITE">
-                     <graphic>
-                        <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/HomePage/icons8-log-50.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button fx:id="supportButton" layoutX="15.0" layoutY="396.0" mnemonicParsing="false" onAction="#onManageApartment" prefHeight="38.0" prefWidth="172.0" styleClass="other_button" stylesheets="@../css/homepage.css" text="Apartment" textAlignment="CENTER" textFill="WHITE">
-                     <graphic>
-                        <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/HomePage/icons8-support-50.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="56.0" layoutY="462.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/HomePage/icons8-moon-64.png" />
-                     </image>
-                  </ImageView>
+                  </VBox>
                </children>
             </AnchorPane>
          </children></VBox>
@@ -149,12 +160,6 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="396.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/HomePage/icons8-search-64.png" />
-                                 </image>
-                              </ImageView>
-                              <TextField alignment="TOP_LEFT" layoutX="183.0" layoutY="6.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="190.0" promptText="Search:" styleClass="search" stylesheets="@../css/homepage.css" />
                            </children>
                         </AnchorPane>
                      </children>

@@ -2,6 +2,7 @@ package services.payment;
 
 import models.invoice.Invoice;
 import models.payment.Payment;
+import models.resident.Resident;
 import models.user.User;
 import models.enums.PaymentMethod;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class PaymentService {
         return paymentRepository.save(payment);
     }
 
-    public Payment createPayment(User user, Invoice invoice, PaymentMethod paymentMethod,String note) {
+    public Payment createPayment(User user, Invoice invoice, PaymentMethod paymentMethod, String note) {
         if (paymentMethod == null) paymentMethod = PaymentMethod.CASH;
         Payment payment = new Payment(invoice, user, invoice.getAmount(), paymentMethod, note);
         return createPayment(payment);

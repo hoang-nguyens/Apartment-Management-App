@@ -39,6 +39,8 @@ public class PaymentViewController {
     private TableColumn<Payment, String> colInvoice;
     @FXML private TableColumn<Payment, String> colUsername;
     @FXML
+    private TableColumn<Payment, String> colApartment;
+    @FXML
     private TableColumn<Payment, BigDecimal> colAmount;
     @FXML
     private TableColumn<Payment, String> colDate;
@@ -90,7 +92,8 @@ public class PaymentViewController {
         colInvoice.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getInvoice().getCategory()));
         colUsername.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getResident().getUsername()));
+                new SimpleStringProperty(data.getValue().getResident().getResident().getHoTen()));
+        colApartment.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getResident().getResident().getSoPhong().toString()));
         colAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         colDate.setCellValueFactory(data ->
                 new SimpleStringProperty(new SimpleDateFormat("dd/MM/yyyy").format(data.getValue().getPaymentDate())));

@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ComboBox?>
 <AnchorPane prefHeight="475.0" prefWidth="867.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.invoice.InvoiceViewController">
 
-    <VBox alignment="TOP_CENTER" layoutX="130.0" layoutY="19.0" prefHeight="378.0" prefWidth="657.0" spacing="10" >
+    <VBox alignment="TOP_CENTER" layoutX="68.0" layoutY="14.0" prefHeight="379.0" prefWidth="730.0" spacing="10">
         <!-- Tiêu đề -->
         <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Danh sách hóa đơn cần thanh toán" />
 
         <Button fx:id="markAsPaidButton" onAction="#markAsPaid" text="Đã thanh toán" />
 
         <HBox alignment="CENTER" spacing="10">
-            <TextField fx:id="apartmentField" promptText="Số phòng"/>
-            <ComboBox fx:id="categoryComboBox" promptText="Loại khoản thu"/>
-            <ComboBox fx:id="invoiceStatusComboBox" promptText="Trạng thái"/>
+            <TextField fx:id="apartmentField" promptText="Số phòng" />
+            <ComboBox fx:id="categoryComboBox" promptText="Loại khoản thu" />
+            <ComboBox fx:id="invoiceStatusComboBox" promptText="Trạng thái" />
             <Button fx:id="searchButton" onAction="#handleSearch" text="Tìm kiếm" />
         </HBox>
 
         <!-- Bảng hiển thị hóa đơn -->
-        <TableView fx:id="invoiceTable" prefHeight="300" prefWidth="657.0">
+        <TableView fx:id="invoiceTable" prefHeight="231.0" prefWidth="678.0">
             <columns>
-                <TableColumn fx:id="selectedColumn" prefWidth="20" text="" />
-                <TableColumn fx:id="invoiceIdColumn" prefWidth="70" text="Mã Hóa Đơn" />
-                <TableColumn fx:id="payerNameColumn" prefWidth="100" text="Tên chủ hộ" />
-                <TableColumn fx:id="apartmentColumn" prefWidth="60" text="Căn hộ" />
-                <TableColumn fx:id="titleColumn" prefWidth="180" text="Tên hóa đơn" />
+                <TableColumn fx:id="selectedColumn" prefWidth="20" style="-fx-alignment: CENTER;" text="" />
+                <TableColumn fx:id="invoiceIdColumn" prefWidth="30.720001220703125" style="-fx-alignment: CENTER;" text="ID" />
+                <TableColumn fx:id="payerNameColumn" prefWidth="126.719970703125" style="-fx-alignment: CENTER;" text="Tên chủ hộ" />
+                <TableColumn fx:id="apartmentColumn" prefWidth="86.01597595214844" style="-fx-alignment: CENTER;" text="Căn hộ" />
+                <TableColumn fx:id="titleColumn" prefWidth="155.135986328125" style="-fx-alignment: CENTER;" text="Tên hóa đơn" />
                 <!--                <TableColumn fx:id="issueDateColumn" prefWidth="120" text="Ngày lập" />-->
-                <TableColumn fx:id="dueDateColumn" prefWidth="100" text="Hạn thanh toán" />
+                <TableColumn fx:id="dueDateColumn" prefWidth="116.73605346679688" style="-fx-alignment: CENTER;" text="Hạn thanh toán" />
                 <!--                <TableColumn fx:id="categoryColumn" prefWidth="120" text="Loại khoản thu" />-->
 
-                <TableColumn fx:id="amountColumn" prefWidth="80" text="Số tiền" />
-                <TableColumn fx:id="statusColumn" prefWidth="80" text="Trạng thái" />
+                <TableColumn fx:id="amountColumn" prefWidth="94.4639892578125" style="-fx-alignment: CENTER;" text="Số tiền" />
+                <TableColumn fx:id="statusColumn" prefWidth="100.6080322265625" style="-fx-alignment: CENTER;" text="Trạng thái" />
             </columns>
         </TableView>
 

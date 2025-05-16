@@ -102,11 +102,11 @@ public class FeeInsertController {
             populateForm(fee);
         }
         if (mode == 1) {
-            amountField.setDisable(true);
-            unitComboBox.setDisable(true);
-            billPeriodComboBox.setDisable(true);
-            endDatePicker.setDisable(true);
-            descriptionArea.setDisable(true);
+            amountField.setEditable(false);
+            unitComboBox.setEditable(false);
+            billPeriodComboBox.setEditable(false);
+            endDatePicker.setEditable(false);
+            descriptionArea.setEditable(false);
             saveButton.setVisible(false);
         }
     }
