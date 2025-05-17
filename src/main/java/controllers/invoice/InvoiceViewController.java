@@ -76,6 +76,7 @@ public class InvoiceViewController {
     @FXML private Button searchButton;
     @FXML private Label statusLabel;
     @FXML private Button markAsPaidButton;
+    @FXML private Button markAsUnpaidButton;
     @FXML private TextField usernameField;
     @FXML private TextField apartmentField;
     @FXML private ComboBox<String> categoryComboBox;
@@ -85,12 +86,19 @@ public class InvoiceViewController {
     private ObservableSet<Invoice> selectedInvoices = FXCollections.observableSet();
     private ObservableList<String> categoryList = FXCollections.observableArrayList();
 
+    private boolean inited = false;
+
 
     @FXML
     public void initialize() {
         currentUser = UserUtils.getCurrentUser();
         invoiceTable.setEditable(true);
 
+        if (!inited) {
+            invoiceService.createMonthlyInvoices();
+            invoiceService.updateOverdueInvoice();
+            inited = true;
+        }
 //        invoiceService.createMonthlyInvoices(currentUser);
         setupTableColumns();
         loadCategories();
@@ -147,6 +155,7 @@ public class InvoiceViewController {
         if (!adminRoles.contains(currentUser.getRole())) {
             payerNameColumn.setVisible(false);
             markAsPaidButton.setVisible(false);
+            markAsUnpaidButton.setVisible(false);
             apartmentField.setVisible(false);
             categoryComboBox.setVisible(false);
             invoiceStatusComboBox.setVisible(false);
@@ -207,7 +216,7 @@ public class InvoiceViewController {
 
     private void updateTotalAmount(Collection<Invoice> invoices) {
         BigDecimal total = invoices.stream()
-                .filter(invoice -> invoice.getStatus() == InvoiceStatus.UNPAID)
+                .filter(invoice -> invoice.getStatus() == InvoiceStatus.UNPAID || invoice.getStatus() == InvoiceStatus.PENDING)
                 .map(Invoice::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
@@ -219,21 +228,38 @@ public class InvoiceViewController {
             System.out.println(invoice.getAmount());
         }
         System.out.println("Tính năng thanh toán đang hoàn thiện.");
-//        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION,
-//                "Xác nhận thanh toán các hóa đơn?", ButtonType.YES, ButtonType.NO);
-//        confirmation.showAndWait().ifPresent(response -> {
-//            if (response == ButtonType.YES) {
-//                for (Invoice invoice : invoiceList) {
-//                    if (invoice.getStatus() == InvoiceStatus.UNPAID) {
+        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION,
+                "Xác nhận thanh toán " + selectedInvoices.size() + " hóa đơn?", ButtonType.YES, ButtonType.NO);
+        confirmation.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.YES) {
+                for (Invoice invoice : selectedInvoices) {
+                    if (invoice.getStatus() == InvoiceStatus.UNPAID || invoice.getStatus() == InvoiceStatus.OVERDUE) {
 //                        invoice.setStatus(InvoiceStatus.PAID);
-//                        // Gọi API để cập nhật hóa đơn đã thanh toán
-//                        invoiceController.updateInvoice(invoice.getId(), invoice);
-//                    }
-//                }
-//                loadInvoices();
-//                updateTotalAmount();
-//            }
-//        });
+                        // Gọi API để cập nhật hóa đơn đã thanh toán
+                        HttpRequest request = HttpRequest.newBuilder()
+                                .uri(URI.create(endpoint + "/" + invoice.getId() + "/status?status=PENDING"))
+                                .header("Content-Type", "application/json")
+                                .method("PATCH", HttpRequest.BodyPublishers.noBody())
+                                .build();
+                        try {
+                            HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                            if (httpResponse.statusCode() == 200) {
+                                Invoice newInvoice = objectMapper.readValue(httpResponse.body(), Invoice.class);
+                                invoice.setStatus(newInvoice.getStatus());
+                                statusLabel.setText("Ban quản lý sẽ xem xét thông tin thanh toán của bạn.");
+                            } else {
+                                statusLabel.setText("Lỗi request:" + httpResponse.body());
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+                loadInvoices();
+                updateTotalAmount(selectedInvoices);
+            }
+        });
     }
 
     @FXML
@@ -287,6 +313,39 @@ public class InvoiceViewController {
         } catch (Exception e) {
             e.printStackTrace();
             statusLabel.setText("Co loi xay ra");
+        }
+    }
+
+    @FXML
+    private void markAsUnpaid() {
+        try {
+            Set<Long> selectedInvoiceId = new java.util.HashSet<>(Set.of());
+            for (Invoice invoice : selectedInvoices) {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(endpoint + "/" + invoice.getId() + "/status?status=UNPAID"))
+                        .header("Content-Type", "application/json")
+                        .method("PATCH", HttpRequest.BodyPublishers.noBody())
+                        .build();
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                if (response.statusCode() == 200) {
+                    Invoice newInvoice = objectMapper.readValue(response.body(), Invoice.class);
+                    selectedInvoiceId.add(newInvoice.getId());
+                } else {
+                    statusLabel.setText("Lỗi request:" + response.body());
+                }
+            }
+            for (int i = 0; i < invoiceList.size(); i++) {
+                if (selectedInvoiceId.contains(invoiceList.get(i).getId())) {
+                    invoiceList.get(i).setStatus(InvoiceStatus.UNPAID);
+                }
+            }
+            if (!selectedInvoiceId.isEmpty()) {
+                invoiceTable.refresh();
+                statusLabel.setText("Đánh dâu thành công");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
