@@ -18,11 +18,14 @@ import models.enums.InvoiceStatus;
 import models.enums.Role;
 import models.fee.FeeCategory;
 import models.invoice.Invoice;
+import models.resident.Resident;
 import models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import repositories.notification.UserNotificationRepository;
 import services.fee.FeeCategoryService;
 import services.invoice.InvoiceService;
+import services.resident.ResidentService;
 import utils.SoPhongUtil;
 import utils.UserUtils;
 
@@ -41,11 +44,12 @@ import java.util.*;
 public class InvoiceViewController {
     private final InvoiceService invoiceService;
     private final FeeCategoryService feeCategoryService;
-
+    private final ResidentService residentService;
     @Autowired
-    public InvoiceViewController(InvoiceService invoiceService, FeeCategoryService feeCategoryService) {
+    public InvoiceViewController(InvoiceService invoiceService, FeeCategoryService feeCategoryService, ResidentService residentService) {
         this.invoiceService = invoiceService;
         this.feeCategoryService = feeCategoryService;
+        this.residentService = residentService;
     }
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
@@ -136,8 +140,13 @@ public class InvoiceViewController {
         invoiceIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         payerNameColumn.setCellValueFactory(cellData -> {
             User user = cellData.getValue().getUser();
-            return new SimpleStringProperty(user.getResident() != null ? user.getResident().getHoTen() : "N/A");
+            Long userId = user.getId();
+
+            Resident resident = residentService.findResidentByUserId(userId);
+            String hoTen = (resident != null) ? resident.getHoTen() : "N/A";
+            return new SimpleStringProperty(hoTen);
         });
+
         apartmentColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getApartment().getRoomNumber()));
 //        issueDateColumn.setCellValueFactory(new PropertyValueFactory<>("issueDate"));
