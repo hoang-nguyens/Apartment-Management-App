@@ -49,7 +49,7 @@
                            <graphic>
                               <ImageView fitHeight="18.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/HomePage/icons8-support-50.png" />
+                                    <Image url="@../images/HomePage/icons8-apartment-50.png" />
                                  </image>
                               </ImageView>
                            </graphic>
