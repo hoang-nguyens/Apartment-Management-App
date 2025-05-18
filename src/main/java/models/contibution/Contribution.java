@@ -1,6 +1,8 @@
 package models.contibution;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import lombok.Getter;
 import lombok.Setter;
 import models.BaseModel;
@@ -24,6 +26,7 @@ public class Contribution extends BaseModel {
     @JoinColumn(name = "fee_id", referencedColumnName = "id", nullable = false)
     private Fee fee;
 
+    @DecimalMin(value = "0", message = "Số tiền phải lớn hơn 0")
     private BigDecimal amount;
 
     @Temporal(TemporalType.TIMESTAMP)
