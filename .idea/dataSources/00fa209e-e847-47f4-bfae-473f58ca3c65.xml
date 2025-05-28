@@ -1381,7 +1381,7 @@ parent</ColNames>
     <column id="369" parent="301" name="status">
       <NotNull>1</NotNull>
       <Position>7</Position>
-      <StoredType>enum(&apos;UNPAID&apos;, &apos;PAID&apos;, &apos;OVERDUE&apos;)|0e</StoredType>
+      <StoredType>enum(&apos;UNPAID&apos;, &apos;PAID&apos;, &apos;OVERDUE&apos;, &apos;PENDING&apos;)|0e</StoredType>
     </column>
     <column id="370" parent="301" name="paid_date">
       <Position>8</Position>

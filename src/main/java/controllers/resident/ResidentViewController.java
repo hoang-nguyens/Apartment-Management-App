@@ -157,7 +157,7 @@ public class ResidentViewController {
             private final Button deleteButton = new Button("Xóa");
             {
                 viewButton.setStyle("-fx-background-color: #1E90FF; -fx-text-fill: white;");   // Xanh nước biển
-                editButton.setStyle("-fx-background-color: #32CD32; -fx-text-fill: white;");   // Xanh lá cây
+                editButton.setStyle("-fx-background-color: seagreen; -fx-text-fill: white;");   // Xanh lá cây
                 deleteButton.setStyle("-fx-background-color: #FF4500; -fx-text-fill: white;"); // Đỏ
             }
             private final HBox pane = new HBox(viewButton, editButton, deleteButton);

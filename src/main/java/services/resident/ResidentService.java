@@ -86,6 +86,7 @@ public class ResidentService {
         // Tạo mới Resident và lưu vào database
         Resident resident = new Resident(hoTen, cccd, sdt, ngaySinh, gioiTinh, trangThaiTamVang, trangThaiXacThuc, soPhong, user);
         Resident savedResident = residentRepository.save(resident);
+        //user.setResident(resident);
         System.out.println("Resident mới đã được tạo và lưu vào cơ sở dữ liệu với ID: " + savedResident.getId());
 
         return savedResident;

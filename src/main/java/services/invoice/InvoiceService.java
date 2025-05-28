@@ -58,6 +58,7 @@ public class InvoiceService {
             if (apartmentList.isEmpty()) {
                 continue;
             }
+            System.out.println("calc:" + user.getUsername());
             for (Apartment apartment : apartmentList) {
                 for (String category : categories) {
                     createInvoice(user, category, apartment);
@@ -95,6 +96,7 @@ public class InvoiceService {
         }
         if (totalFee.compareTo(BigDecimal.ZERO) > 0) {
             Invoice invoice = new Invoice(user, monthlyIssueDate, monthyDueDate, category, totalFee, apartment);
+            System.out.println(user.getResident().getHoTen());
             createInvoice(invoice);
         }
     }
@@ -147,13 +149,16 @@ public class InvoiceService {
     }
 
     public void updateOverdueInvoice() {
-        List<Invoice> overdueInvoices = invoiceRepository.findAllByDueDateBeforeAndStatusNot(today, InvoiceStatus.OVERDUE);
+        List<Invoice> overdueInvoices = invoiceRepository.findAllByDueDateBeforeAndStatus(today, InvoiceStatus.UNPAID);
         for (Invoice invoice : overdueInvoices) {
             invoice.setStatus(InvoiceStatus.OVERDUE);
-            invoiceRepository.save(invoice);
         }
+        invoiceRepository.saveAll(overdueInvoices);
     }
 
+    public List<Invoice> getPendingInvoices() {
+        return invoiceRepository.findAllByStatus(InvoiceStatus.PENDING);
+    }
 
     public List<Invoice> getInvoices() {
         return invoiceRepository.findAll();
@@ -164,7 +169,7 @@ public class InvoiceService {
     }
 
     public List<Invoice> getUnpaidInvoices(Long userId) {
-        return invoiceRepository.findAllByUserIdAndStatusNot(userId, InvoiceStatus.PAID);
+        return invoiceRepository.findAllByUserIdAndStatusNotIn(userId, List.of(InvoiceStatus.PAID, InvoiceStatus.PENDING));
     }
 
     public List<Invoice> getInvoiceByUser(User user) {

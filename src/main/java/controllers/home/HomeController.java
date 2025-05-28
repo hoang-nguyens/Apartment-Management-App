@@ -41,6 +41,7 @@ public class HomeController {
         if (loggedInUser != null) {
             usernameItem.setText("Tài khoản: " + loggedInUser.getUsername());
         }
+        onManageHome();
     }
 
     private void handleButtonClick(Button clickedButton) {
@@ -93,6 +94,7 @@ public class HomeController {
 
     @FXML
     private void onManageBill(){
+        handleButtonClick(billButton);
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem paymentItem = new MenuItem("Thanh toán");
@@ -198,7 +200,6 @@ public class HomeController {
             showAlert("Lỗi không xác định: " + e.getMessage());
         }
     }
-
 
     /** Account **/
     @FXML private Button accountButton;

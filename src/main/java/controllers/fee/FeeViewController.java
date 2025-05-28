@@ -123,6 +123,8 @@ public class FeeViewController {
             private final Button viewDetailButton = new Button("Xem");
 
             {
+                viewDetailButton.setStyle("-fx-background-color: dodgerblue; -fx-text-fill: white;");
+
                 viewDetailButton.setOnAction(event -> {
                     Fee fee = getTableView().getItems().get(getIndex());
                     handleViewDetails(fee);
@@ -146,6 +148,9 @@ public class FeeViewController {
             private final HBox pane = new HBox(editButton, deleteButton);
 
             {
+                editButton.setStyle("-fx-background-color: seagreen; -fx-text-fill: white;");
+                deleteButton.setStyle("-fx-background-color: crimson; -fx-text-fill: white;");
+
                 editButton.setOnAction(event -> {
                     Fee fee = getTableView().getItems().get(getIndex());
                     handleEdit(fee);
@@ -169,6 +174,7 @@ public class FeeViewController {
                 }
             }
         });
+
         currentUser = UserUtils.getCurrentUser();
         if (currentUser==null || !adminRoles.contains(currentUser.getRole())) {
             actionColumn.setVisible(false);

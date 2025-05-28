@@ -74,4 +74,9 @@ public class InvoiceController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/pending")
+    public ResponseEntity<List<Invoice>> getPendingInvoices() {
+        return ResponseEntity.ok(invoiceService.getPendingInvoices());
+    }
 }

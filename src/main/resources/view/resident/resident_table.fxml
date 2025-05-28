@@ -8,10 +8,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="579.0" prefWidth="924.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.resident.ResidentViewController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="579.0" prefWidth="925.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.resident.ResidentViewController">
     <children>
-        <HBox prefHeight="40.0" prefWidth="792.0" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quản lí cư dân">
+         <font>
+            <Font name="System Bold" size="21.0" />
+         </font>
+      </Text>
+        <HBox prefHeight="8.0" prefWidth="925.0" />
         <HBox alignment="CENTER" prefHeight="37.0" prefWidth="792.0" stylesheets="@../css/table_fee.css">
             <children>
                 <Label text="Số phòng" />
@@ -25,7 +32,7 @@
         </HBox>
         <Pane prefHeight="409.0" prefWidth="750.0" stylesheets="@../css/table_fee.css">
             <children>
-                <TableView fx:id="residentTable" layoutX="50.0" prefHeight="410.0" prefWidth="924.0">
+                <TableView fx:id="residentTable" prefHeight="410.0" prefWidth="924.0">
                     <columns>
                         <TableColumn fx:id="usernameColumn" prefWidth="83.71200752258301" style="-fx-alignment: CENTER;" text="Username" />
                         <TableColumn fx:id="hotenColumn" prefWidth="132.86400604248047" style="-fx-alignment: CENTER;" text="Họ tên" />

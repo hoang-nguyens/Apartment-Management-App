@@ -283,7 +283,7 @@ public class ContributionViewController {
         userComboBox.setConverter(new StringConverter<User>() {
             @Override
             public String toString(User user) {
-                return user != null ? user.getEmail() : "";
+                return user != null ? user.getResident().getHoTen() : "";
             }
 
             @Override

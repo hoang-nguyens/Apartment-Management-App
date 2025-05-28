@@ -1,0 +1,62 @@
+[33m02d91ac[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mTuan[m[33m, [m[1;31morigin/Tuan[m[33m)[m HEAD@{0}: rebase (abort): returning to refs/heads/Tuan
+[33m68ee1c4[m HEAD@{1}: rebase (continue): fix homepage
+[33me6ab151[m HEAD@{2}: rebase (start): checkout origin/Tuan
+[33m02d91ac[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mTuan[m[33m, [m[1;31morigin/Tuan[m[33m)[m HEAD@{3}: rebase (abort): returning to refs/heads/Tuan
+[33m97de9e3[m HEAD@{4}: rebase (pick): fix ver 1 app
+[33mb40565d[m HEAD@{5}: rebase (pick): bill, homepage, fee
+[33m3f64dd7[m HEAD@{6}: rebase (pick): update invoice
+[33mf7ec706[m HEAD@{7}: rebase (continue): fix typo
+[33mb52fc83[m HEAD@{8}: rebase (continue): fix homepage
+[33me6ab151[m HEAD@{9}: rebase (start): checkout origin/Tuan
+[33m02d91ac[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mTuan[m[33m, [m[1;31morigin/Tuan[m[33m)[m HEAD@{10}: commit: fxml gop
+[33m9a17c8e[m HEAD@{11}: commit: user noti repo
+[33m35c9cdc[m HEAD@{12}: commit: user noti controller
+[33m1691354[m HEAD@{13}: commit: user noti model
+[33mbb41963[m HEAD@{14}: commit: fxml tbao ng dung nhan
+[33mbfeea4b[m HEAD@{15}: commit: Noti Type
+[33m2ec7438[m HEAD@{16}: commit: Noti Service
+[33mb3e76cb[m HEAD@{17}: commit: Noti Repo
+[33ma06a6c5[m HEAD@{18}: commit: Controller của bảng lịch sử thông báo
+[33mc5c13da[m HEAD@{19}: commit: fxml bảng hiện lịch sử thông báo
+[33mb4ad694[m HEAD@{20}: commit: model
+[33m522f898[m HEAD@{21}: commit: sửa kích cỡ contentArea
+[33m6853fd3[m HEAD@{22}: commit: load fxml noti
+[33ma117fa8[m HEAD@{23}: commit: fxml bên trái, ô tạo notification mới
+[33m2f0d7ff[m HEAD@{24}: commit: Xóa lỗi countdown ngay từ lúc mở app
+[33m24a8f5e[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{25}: rebase (finish): returning to refs/heads/Tuan
+[33m24a8f5e[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{26}: rebase (start): checkout origin/main
+[33m63bf5f6[m HEAD@{27}: pull origin main: Fast-forward
+[33ma2642ac[m HEAD@{28}: reset: moving to origin/main
+[33me6ab151[m HEAD@{29}: commit: Them menu logout, quit & doi mau button
+[33mad98237[m HEAD@{30}: commit: Them menu logout, quit & doi mau button
+[33m9147923[m HEAD@{31}: commit: Them menu logout, quit & doi mau button
+[33m0284382[m HEAD@{32}: commit: Class trong (test chuyen trang& doi mau nut)
+[33ma70f333[m HEAD@{33}: commit: Class trong (test chuyen trang& doi mau nut)
+[33m833549a[m HEAD@{34}: commit: Doi mau cho dong bo voi phan login
+[33m171b162[m HEAD@{35}: commit: Can giua cho trang homepage
+[33m0988baf[m HEAD@{36}: commit: Doi thanh icon mau trang
+[33mb30f092[m HEAD@{37}: reset: moving to origin/test
+[33m0360058[m HEAD@{38}: merge refs/remotes/origin/test: Merge made by the 'ort' strategy.
+[33m0074edf[m HEAD@{39}: merge origin/test: updating HEAD
+[33m0074edf[m HEAD@{40}: pull origin test: updating HEAD
+[33m0074edf[m HEAD@{41}: pull origin test: updating HEAD
+[33m0074edf[m HEAD@{42}: commit (merge): merge
+[33mf99ec63[m HEAD@{43}: commit (merge): merge
+[33m7b70021[m HEAD@{44}: commit: Thêm 1 vài thứ vào gitignore
+[33m213d02d[m HEAD@{45}: commit: Thêm thời gian còn hiệu lực cho mã xác nhận
+[33m6881f33[m HEAD@{46}: commit: Sử dụng UserSevice cho các Controller
+[33m894f7e1[m HEAD@{47}: commit: Chia Controller
+[33m9a81dae[m HEAD@{48}: commit: Forgot Password + Register
+[33ma063231[m HEAD@{49}: pull origin Hoang: Fast-forward
+[33md7cd732[m HEAD@{50}: pull origin Hoang: Fast-forward
+[33m71bf297[m HEAD@{51}: commit: Switch Login -> Register
+[33mf04943f[m HEAD@{52}: commit: Login
+[33m9ebd132[m[33m ([m[1;32mHoang[m[33m)[m HEAD@{53}: rebase (finish): returning to refs/heads/Tuan
+[33m9ebd132[m[33m ([m[1;32mHoang[m[33m)[m HEAD@{54}: rebase (start): checkout Hoang
+[33m7eb95e5[m[33m ([m[1;31morigin/Toan[m[33m)[m HEAD@{55}: checkout: moving from Hoang to Tuan
+[33m9ebd132[m[33m ([m[1;32mHoang[m[33m)[m HEAD@{56}: rebase: checkout Hoang
+[33m7eb95e5[m[33m ([m[1;31morigin/Toan[m[33m)[m HEAD@{57}: checkout: moving from main to Tuan
+[33m75731ae[m[33m ([m[1;32mmain[m[33m)[m HEAD@{58}: checkout: moving from 7eb95e53fef1e65b5e8c636da5bf4d3579cccdd4 to main
+[33m7eb95e5[m[33m ([m[1;31morigin/Toan[m[33m)[m HEAD@{59}: checkout: moving from Tuan to origin/Tuan
+[33m7eb95e5[m[33m ([m[1;31morigin/Toan[m[33m)[m HEAD@{60}: checkout: moving from main to Tuan
+[33m75731ae[m[33m ([m[1;32mmain[m[33m)[m HEAD@{61}: clone: from https://github.com/hoang-nguyens/Apartment-Management-App.git

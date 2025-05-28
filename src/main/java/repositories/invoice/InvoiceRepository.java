@@ -1,5 +1,6 @@
 package repositories.invoice;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import models.apartment.Apartment;
 import models.invoice.Invoice;
 import models.user.User;
@@ -31,8 +32,9 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long>{
     );
 
     boolean existsByApartmentAndCategoryAndIssueDate(Apartment apartment, String category, LocalDate issueDate);
-    List<Invoice> findAllByDueDateBeforeAndStatusNot(LocalDate dueDate, InvoiceStatus status);
+    List<Invoice> findAllByDueDateBeforeAndStatus(LocalDate dueDate, InvoiceStatus status);
 
     List<Invoice> findAllByStatusNot(InvoiceStatus status);
-    List<Invoice> findAllByUserIdAndStatusNot(Long userId, InvoiceStatus status);
+    List<Invoice> findAllByUserIdAndStatusNotIn(Long userId, List<InvoiceStatus> statuses);
+    List<Invoice> findAllByStatus(InvoiceStatus status);
 }
