@@ -2,6 +2,7 @@ package services.invoice;
 
 import jakarta.persistence.EntityNotFoundException;
 import models.apartment.Apartment;
+import models.enums.BillPeriod;
 import models.enums.FeeType;
 import models.enums.InvoiceStatus;
 import models.fee.Fee;
@@ -9,6 +10,7 @@ import models.fee.FeeCategory;
 import models.invoice.Invoice;
 import models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import repositories.invoice.InvoiceRepository;
 import services.user.UserService;
@@ -24,6 +26,8 @@ import java.util.List;
 
 @Service
 public class InvoiceService {
+    private static final int DEFAULT_DUE_DAYS = 9;
+
     private final InvoiceRepository invoiceRepository;
     private final UserService userService;
     private final FeeService feeService;
@@ -31,9 +35,10 @@ public class InvoiceService {
     private final FeeCategoryService feeCategoryService;
 
     LocalDate today = LocalDate.now();
-    YearMonth yearMonth = YearMonth.from(today);
-    LocalDate monthlyIssueDate = yearMonth.atDay(1);
-    LocalDate monthyDueDate = yearMonth.atDay(10);
+//    YearMonth yearMonth = YearMonth.from(today);
+//    LocalDate monthlyIssueDate = yearMonth.atDay(1);
+//    LocalDate monthyDueDate = yearMonth.atDay(10);
+    LocalDate dueDate = today.plusDays(DEFAULT_DUE_DAYS);
 
     @Autowired
     public InvoiceService(InvoiceRepository invoiceRepository, UserService userService, FeeService feeService, ApartmentService apartmentService, FeeCategoryService feeCategoryService) {
@@ -48,7 +53,7 @@ public class InvoiceService {
         invoiceRepository.save(invoice);
     }
 
-    public void createMonthlyInvoices() {
+    public void createInvoices(BillPeriod billPeriod) {
         List<FeeCategory> feeCategories = feeCategoryService.getFeeCategoriesByType(FeeType.MANDATORY);
         List<String> categories = feeCategories.stream().map(FeeCategory::getName).toList();
 
@@ -61,30 +66,30 @@ public class InvoiceService {
             System.out.println("calc:" + user.getUsername());
             for (Apartment apartment : apartmentList) {
                 for (String category : categories) {
-                    createInvoice(user, category, apartment);
+                    createInvoice(user, category, apartment, billPeriod);
                 }
             }
         }
     }
 
-    public void createMonthlyInvoices(User user) {
-        List<FeeCategory> feeCategories = feeCategoryService.getFeeCategoriesByType(FeeType.MANDATORY);
-        List<String> categories = feeCategories.stream().map(FeeCategory::getName).toList();
-        List<Apartment> apartmentList = apartmentService.getAllApartmentsByOwner(user);
+//    public void createMonthlyInvoices(User user) {
+//        List<FeeCategory> feeCategories = feeCategoryService.getFeeCategoriesByType(FeeType.MANDATORY);
+//        List<String> categories = feeCategories.stream().map(FeeCategory::getName).toList();
+//        List<Apartment> apartmentList = apartmentService.getAllApartmentsByOwner(user);
+//
+//        for (Apartment apartment : apartmentList) {
+//            for (String category : categories) {
+//                createInvoice(user, category, apartment);
+//            }
+//        }
+//    }
 
-        for (Apartment apartment : apartmentList) {
-            for (String category : categories) {
-                createInvoice(user, category, apartment);
-            }
-        }
-    }
-
-    public void createInvoice(User user, String category, Apartment apartment) {
+    public void createInvoice(User user, String category, Apartment apartment, BillPeriod billPeriod) {
         if (checkExistedInvoice(apartment, category)) {
             return;
         }
         BigDecimal totalFee = BigDecimal.ZERO;
-        List<Fee> feeList = feeService.getAllActiveFeesByCategoryAndSubCategory(category, null);
+        List<Fee> feeList = feeService.getAllActiveFeesByCategoryAndBillPeriod(category, billPeriod);
         for (Fee fee : feeList) {
             BigDecimal amount = calculateAmount(user, fee, apartment);
 
@@ -95,14 +100,14 @@ public class InvoiceService {
             }
         }
         if (totalFee.compareTo(BigDecimal.ZERO) > 0) {
-            Invoice invoice = new Invoice(user, monthlyIssueDate, monthyDueDate, category, totalFee, apartment);
+            Invoice invoice = new Invoice(user, today, dueDate, category, totalFee, apartment);
             System.out.println(user.getResident().getHoTen());
             createInvoice(invoice);
         }
     }
 
     private boolean checkExistedInvoice(Apartment apartment, String category){
-        return invoiceRepository.existsByApartmentAndCategoryAndIssueDate(apartment, category, monthlyIssueDate);
+        return invoiceRepository.existsByApartmentAndCategoryAndIssueDate(apartment, category, today);
     }
 
     private BigDecimal calculateAmount(User user, Fee fee, Apartment apartment) {
@@ -125,12 +130,19 @@ public class InvoiceService {
             case VEHICLE:
                 int vehicleCount = 0;
                 if (fee.getSubCategory().toLowerCase().contains("xe máy")){
-                    vehicleCount = apartment.getMotorbikeCount();
+                    if (apartment.getMotorbikeCount() != null) {
+                        vehicleCount = apartment.getMotorbikeCount();
+                    }
                 } else if (fee.getSubCategory().toLowerCase().contains("ô tô")){
-                    vehicleCount = apartment.getCarCount();
+                    if (apartment.getCarCount() != null) {
+                        vehicleCount = apartment.getCarCount();
+                    }
                 }
                 amount = BigDecimal.valueOf(vehicleCount).multiply(fee.getAmount());
                 totalAmount = totalAmount.add(amount).setScale(0, RoundingMode.HALF_UP);
+                break;
+            case APARTMENT:
+                totalAmount = fee.getAmount();
                 break;
             default:
                 return BigDecimal.ZERO;

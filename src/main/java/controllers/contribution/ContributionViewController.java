@@ -73,15 +73,20 @@ public class ContributionViewController {
     private ObservableList<User> notContributedUsers = FXCollections.observableArrayList();
     private List<User> users;
 
+    private boolean inited=false;
 
     @FXML
     public void initialize() {
         users = userService.getAllUsersWithUserRole();
         currentUser = UserUtils.getCurrentUser();
+
         setupFeeNames();
         loadContributions();
         loadNotContributedUsers();
-        setupTableColumns();
+        if (!inited) {
+            setupTableColumns();
+            inited = false;
+        }
         if (!adminRoles.contains(currentUser.getRole())) {
             contributionsTable.setEditable(false);
             addButton.setVisible(false);
@@ -246,6 +251,7 @@ public class ContributionViewController {
 
                     row.put(feeName, matched);
                 }
+//                System.out.println(row.toString());
                 tableData.add(row);
             }
         } catch (Exception e) {
@@ -255,7 +261,7 @@ public class ContributionViewController {
     }
 
     private void loadNotContributedUsers() {
-        System.out.println(users.size());
+//        System.out.println(users.size());
         for (User user : users) {
             boolean flag = false;
             for (Map<String, Object> row : tableData) {
@@ -268,7 +274,7 @@ public class ContributionViewController {
                 notContributedUsers.add(user);
             }
         }
-        System.out.println(notContributedUsers.toString());
+//        System.out.println(notContributedUsers.toString());
     }
 
     @FXML

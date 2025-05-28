@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import models.enums.BillPeriod;
 import models.enums.InvoiceStatus;
 import models.enums.Role;
 import models.fee.FeeCategory;
@@ -42,12 +43,12 @@ import java.util.*;
 
 @Controller
 public class InvoiceViewController {
-    private final InvoiceService invoiceService;
+//    private final InvoiceService invoiceService;
     private final FeeCategoryService feeCategoryService;
     private final ResidentService residentService;
     @Autowired
-    public InvoiceViewController(InvoiceService invoiceService, FeeCategoryService feeCategoryService, ResidentService residentService) {
-        this.invoiceService = invoiceService;
+    public InvoiceViewController(FeeCategoryService feeCategoryService, ResidentService residentService) {
+//        this.invoiceService = invoiceService;
         this.feeCategoryService = feeCategoryService;
         this.residentService = residentService;
     }
@@ -99,12 +100,12 @@ public class InvoiceViewController {
         invoiceTable.setEditable(true);
 
         if (!inited) {
-            invoiceService.createMonthlyInvoices();
-            invoiceService.updateOverdueInvoice();
+//            invoiceService.createInvoices(BillPeriod.MONTHLY);
+//            invoiceService.updateOverdueInvoice();
+            setupTableColumns();
             inited = true;
         }
 //        invoiceService.createMonthlyInvoices(currentUser);
-        setupTableColumns();
         loadCategories();
         loadFeeStatus();
         loadInvoices();
