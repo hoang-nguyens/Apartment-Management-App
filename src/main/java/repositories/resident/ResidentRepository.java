@@ -5,6 +5,9 @@ import models.user.User;
 import models.enums.SoPhong;
 import models.enums.TamVangStatus;
 import models.enums.XacThuc;
+import org.hibernate.annotations.Cache;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +15,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ResidentRepository extends JpaRepository<Resident, Long> {
-
+    @Cacheable(value = "residentByUserId", key = "#user.id")
     Resident findByUser(User user);
 
 

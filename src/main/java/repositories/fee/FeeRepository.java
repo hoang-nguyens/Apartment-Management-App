@@ -1,5 +1,6 @@
 package repositories.fee;
 
+import models.enums.BillPeriod;
 import models.fee.Fee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -56,6 +57,18 @@ public interface FeeRepository extends JpaRepository<Fee, Long> {
             @Param("category") String category,
             @Param("subCategory") String subCategory
     );
+
+    @Query("""
+        SELECT f FROM Fee f
+        WHERE (:category IS NULL OR f.category = :category)
+          AND (:billPeriod IS NULL OR f.billPeriod = :billPeriod)
+          AND f.startDate <= CURRENT_DATE
+          AND (f.endDate > CURRENT_DATE OR f.endDate IS NULL)
+    """)
+    List<Fee> findByCategoryAndBillPeriodAndIsActive(
+            @Param("category") String category,
+            @Param("billPeriod")BillPeriod billPeriod
+            );
 
     List<Fee> findByCategoryNot(String category);
 }

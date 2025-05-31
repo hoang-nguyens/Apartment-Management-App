@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import models.resident.Resident;
 import models.user.User;
 import models.enums.*;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import repositories.resident.ResidentRepository;
 import repositories.user.UserRepository;
@@ -25,20 +26,20 @@ public class ResidentService {
 
     // Kiểm tra và tạo mới Resident nếu chưa có
     public Resident checkAndCreateResidentIfNotExists(Long userId) {
-        System.out.println("Kiểm tra và tạo mới Resident nếu chưa có, userId: " + userId);
+//        System.out.println("Kiểm tra và tạo mới Resident nếu chưa có, userId: " + userId);
 
         // Tìm kiếm User theo ID
         User user = userRepository.findById(userId).orElseThrow(() -> {
-            System.out.println("Không tìm thấy User với ID: " + userId);
+//            System.out.println("Không tìm thấy User với ID: " + userId);
             return new EntityNotFoundException("User not found");
         });
 
-        System.out.println("Tìm thấy User với ID: " + userId);
+//        System.out.println("Tìm thấy User với ID: " + userId);
 
         // Kiểm tra xem Resident đã tồn tại trong bảng nhan_khau chưa (dựa trên User)
         Resident resident = residentRepository.findByUser(user);
         if (resident == null) {
-            System.out.println("Không tìm thấy Resident cho User, tạo mới Resident...");
+//            System.out.println("Không tìm thấy Resident cho User, tạo mới Resident...");
 
             // Nếu chưa có, tạo mới Resident với các trạng thái mặc định
             resident = new Resident();
@@ -49,10 +50,11 @@ public class ResidentService {
             // Các thông tin khác có thể để mặc định hoặc null
 
             // Lưu vào cơ sở dữ liệu
-            resident = residentRepository.save(resident);
-            System.out.println("Resident mới đã được tạo và lưu vào cơ sở dữ liệu.");
+//            resident = residentRepository.save(resident);
+            resident = saveAndCache(resident);
+//            System.out.println("Resident mới đã được tạo và lưu vào cơ sở dữ liệu.");
         } else {
-            System.out.println("Resident đã tồn tại cho User ID: " + userId);
+//            System.out.println("Resident đã tồn tại cho User ID: " + userId);
         }
 
         return resident;
@@ -73,13 +75,13 @@ public class ResidentService {
 
         // Kiểm tra xem User đã tồn tại chưa
         User user = userRepository.findById(userId).orElseThrow(() -> {
-            System.out.println("Không tìm thấy User với ID: " + userId);
+//            System.out.println("Không tìm thấy User với ID: " + userId);
             return new EntityNotFoundException("User not found");
         });
 
         // Kiểm tra xem cccd có tồn tại trong hệ thống chưa
         if (residentRepository.findByCccd(cccd) != null) {
-            System.out.println("CCCD đã tồn tại trong hệ thống: " + cccd);
+//            System.out.println("CCCD đã tồn tại trong hệ thống: " + cccd);
             throw new IllegalArgumentException("CCCD already exists");
         }
 
@@ -143,15 +145,15 @@ public class ResidentService {
 
     //  tất cả Resident
     public List<Resident> getAllResidents() {
-        System.out.println("Lấy tất cả Resident...");
+//        System.out.println("Lấy tất cả Resident...");
         List<Resident> residents = residentRepository.findAll();
-        System.out.println("Số lượng Resident tìm thấy: " + residents.size());
+//        System.out.println("Số lượng Resident tìm thấy: " + residents.size());
         return residents;
     }
 
     // Tìm kiếm Resident theo ID
     public Resident getResidentById(Long residentId) {
-        System.out.println("Tìm kiếm Resident theo ID: " + residentId);
+//        System.out.println("Tìm kiếm Resident theo ID: " + residentId);
 
         return residentRepository.findById(residentId)
                 .orElseThrow(() -> {
@@ -168,38 +170,38 @@ public class ResidentService {
 
     // Tìm kiếm Resident theo User ID
     public Resident findResidentByUserId(Long userId) {
-        System.out.println("Tìm kiếm Resident theo User ID: " + userId);
+//        System.out.println("Tìm kiếm Resident theo User ID: " + userId);
 
         // Tìm kiếm User theo ID
         User user = userRepository.findById(userId).orElseThrow(() -> {
-            System.out.println("Không tìm thấy User với ID: " + userId);
+//            System.out.println("Không tìm thấy User với ID: " + userId);
             return new EntityNotFoundException("User not found with id " + userId);
         });
 
         // Tìm kiếm Resident theo User
         Resident resident = residentRepository.findByUser(user);
         if (resident == null) {
-            System.out.println("Không tìm thấy Resident cho User với ID: " + userId);
+//            System.out.println("Không tìm thấy Resident cho User với ID: " + userId);
             throw new EntityNotFoundException("Resident not found for user with id " + userId);
         }
 
-        System.out.println("Tìm thấy Resident cho User với ID: " + userId);
+//        System.out.println("Tìm thấy Resident cho User với ID: " + userId);
         return resident;
     }
 
     // Tìm kiếm Resident theo phòng
     public List<Resident> getResidentsByRoom(SoPhong soPhong) {
-        System.out.println("Tìm kiếm Resident theo phòng: " + soPhong);
+//        System.out.println("Tìm kiếm Resident theo phòng: " + soPhong);
         List<Resident> residents = residentRepository.findBySoPhong(soPhong);
-        System.out.println("Số lượng Resident tìm thấy: " + residents.size());
+//        System.out.println("Số lượng Resident tìm thấy: " + residents.size());
         return residents;
     }
 
     // Tìm kiếm Resident theo trạng thái tạm vắng
     public List<Resident> getResidentsByStatus(TamVangStatus trangThaiTamVang) {
-        System.out.println("Tìm kiếm Resident theo trạng thái tạm vắng: " + trangThaiTamVang);
+//        System.out.println("Tìm kiếm Resident theo trạng thái tạm vắng: " + trangThaiTamVang);
         List<Resident> residents = residentRepository.findByTrangThaiTamVang(trangThaiTamVang);
-        System.out.println("Số lượng Resident tìm thấy: " + residents.size());
+//        System.out.println("Số lượng Resident tìm thấy: " + residents.size());
         return residents;
     }
 
@@ -218,31 +220,31 @@ public class ResidentService {
     }
 
     public Resident findResidentByUsername(String username) {
-        System.out.println("Tìm kiếm Resident theo Username: " + username);
+//        System.out.println("Tìm kiếm Resident theo Username: " + username);
 
         // Tìm kiếm User theo username
         User user = userRepository.findByUsername(username).orElse(null);
         if (user == null) {
-            System.out.println("Không tìm thấy User với Username: " + username);
+//            System.out.println("Không tìm thấy User với Username: " + username);
             return null; // Trả về null nếu không tìm thấy User
         }
 
         // Tìm kiếm Resident theo User
         Resident resident = residentRepository.findByUser(user);
         if (resident == null) {
-            System.out.println("Không tìm thấy Resident cho User với Username: " + username);
+//            System.out.println("Không tìm thấy Resident cho User với Username: " + username);
             return null; // Trả về null nếu không tìm thấy Resident
         }
 
-        System.out.println("Tìm thấy Resident cho User với Username: " + username);
+//        System.out.println("Tìm thấy Resident cho User với Username: " + username);
         return resident;
     }
 
 
 
     public Resident saveResident(Resident resident) {
-        System.out.println("Bắt đầu lưu resident. ID: " + resident.getId());
-        System.out.println("Trạng thái xác thực: " + resident.getTrangThaiXacThuc());
+//        System.out.println("Bắt đầu lưu resident. ID: " + resident.getId());
+//        System.out.println("Trạng thái xác thực: " + resident.getTrangThaiXacThuc());
 
         if (resident.getId() != null && residentRepository.existsById(resident.getId())) {
             System.out.println("Resident đã tồn tại. Tiến hành cập nhật...");
@@ -263,5 +265,8 @@ public class ResidentService {
         }
     }
 
-
+    @CachePut(value = "residentByUserId", key = "#result.user.id")
+    public Resident saveAndCache(Resident resident) {
+        return residentRepository.save(resident); // Gọi method gốc
+    }
 }

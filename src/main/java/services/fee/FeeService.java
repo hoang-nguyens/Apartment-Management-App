@@ -104,6 +104,10 @@ public class FeeService {
         return feeRepository.findByCategoryAndSubCategoryAndIsActive(category, subCategory);
     }
 
+    public List<Fee> getAllActiveFeesByCategoryAndBillPeriod(String category, BillPeriod billPeriod) {
+        return feeRepository.findByCategoryAndBillPeriodAndIsActive(category, billPeriod);
+    }
+
     public List<Fee> getAllActiveForcedFees(){
         return feeRepository.findByCategoryNot("Đóng góp");
     }
